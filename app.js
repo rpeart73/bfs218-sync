@@ -1,5 +1,5 @@
 /* BFS218 Atlas: learning companion. Vanilla JS, self-contained, no build step.
-   Companion to Blackboard: no grading, no student-to-student interaction here. */
+   Companion to Blackboard: no assessment, no student-to-student interaction here. */
 (function(){
 "use strict";
 var D = window.BFS218 || {};

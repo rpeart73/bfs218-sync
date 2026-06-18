@@ -451,7 +451,7 @@ window.BFS218 = {
      "Notice that default discrimination needs no villain at all. If harm can come from a default nobody chose on purpose, then waiting to find someone to blame is exactly how the harm keeps running unchallenged.",
      "Intersectionality is not just adding categories together. The harm at the overlap is often worse than race and gender separately would predict, which is why looking at one axis at a time can make the deepest damage statistically disappear.",
      "Watch the shape of the course: it moves from naming the problem to earning hope, not assuming it. That order is a quiet argument that hope you have not worked for is just comfort, and comfort is what kept the problem invisible.",
-     "Grading you on noticing rather than the right answer is itself a lesson about technology: the dangerous systems are the ones we stopped noticing. Your real skill this term is staying awake to what has become invisible.",
+     "The focus on noticing rather than the right answer is itself a lesson about technology: the dangerous systems are the ones we stopped noticing. Your real skill this term is staying awake to what has become invisible.",
      "Pattern, not villain, is the whole strategy. Hunting for a single bad actor lets you relax once you find one; training your eye on the pattern keeps you suspicious of the calm, helpful, neutral-looking systems that never get caught.",
      "Sit with what neutral is keeping you from seeing. The feeling that a system is just neutral is not the absence of a viewpoint; it is a viewpoint so common you stopped noticing it had one, which is exactly when to look harder.",
      "Notice that all three anchors are Black women scholars naming harms that systems were built to make invisible. The reading list is itself an argument: the people a system fails most are often the ones who see it most clearly."
@@ -4428,7 +4428,7 @@ window.BFS218 = {
      "A single lens is portable in a way four checklists never are. The test is whether you reach for it without being asked, on a tool released long after this course is a distant memory.",
      "Your final task asks for less polish than honesty. A messy walkthrough that shows real change will always outweigh a smooth one that hides whether you actually learned to see.",
      "This is the whole course folded into four questions you can carry anywhere. Memorize that sequence and you no longer need the course, because you have become the thing it was trying to build.",
-     "A map that only lived inside the course would have been an assignment, not a habit. The real measure of your learning is whether you make a new entry when nobody is grading it.",
+     "A map that only lived inside the course would have been an assignment, not a habit. The real measure of your learning is whether you make a new entry when nobody is asking for it.",
      "Small and concrete wins because vague promises quietly expire. Ask the honest question: which version of your commitment would still be true a year from now when no one is checking?",
      "Sitting with the discomfort of seeing what is built to look neutral is the rare part. Most people stop at it looks fine to me, and that comfort is exactly what the New Jim Code counts on.",
      "This last question is the course's real exam, and it has no deadline. The hard moment is not spotting the harm; it is holding your read when everyone around you insists nothing is wrong.",

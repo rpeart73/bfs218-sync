@@ -46,6 +46,7 @@ echo "Derived files regenerated from the async source."
 
 if [ "${1:-}" = "--deploy" ]; then
   cd "$HERE"
+  export BFS218_SYNC_BUILD=1   # tells the sync pre-commit guard this is a legitimate derived build
   if [ -n "$(git status --porcelain)" ]; then
     git add -A
     git commit -q -m "Sync content from async source (build_from_async.sh)"

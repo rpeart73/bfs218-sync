@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# BFS218 single source (hardwired): on the sync "Field Guide", app.js,
+# data/course-data.js, and slides/ are DERIVED from the async "Atlas".
+# Editing them directly here would let the two sites drift, so this guard blocks it.
+# The sync-only skin (index.html) may be edited here freely.
+# build_from_async.sh sets BFS218_SYNC_BUILD=1 so its own derived commits pass.
+if [ "${BFS218_SYNC_BUILD:-}" != "1" ]; then
+  staged="$(git diff --cached --name-only)"
+  if echo "$staged" | grep -Eq '^(app\.js$|data/course-data\.js$|slides/)'; then
+    echo "BLOCKED (BFS218 single source): app.js / data/course-data.js / slides/ are derived from the async."
+    echo "Edit the async (Asynchronous/_app), then run: bash tools/build_from_async.sh --deploy"
+    echo "(index.html is the sync-only skin and may be edited here.)"
+    exit 1
+  fi
+fi
+exit 0

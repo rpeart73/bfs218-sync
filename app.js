@@ -1,527 +1,343 @@
-/* BFS218 Commons: live, cohort-based companion for the Online Synchronous section.
-   Companion to Blackboard. No grading. No student-to-student interaction here
-   (posting, replies, and the live discussion hand off to Blackboard). Non-extractive:
-   no attendance, no camera pressure, no talk-time, no scores, no ranking.
-   Deterministic time (never Date.now). Vanilla JS, hash router, localStorage.
-   No em or en dashes anywhere. */
+/* BFS218 Atlas: learning companion. Vanilla JS, self-contained, no build step.
+   Companion to Blackboard: no grading, no student-to-student interaction here. */
 (function(){
 "use strict";
-var C = window.COMMONS;
-var SS = C.sessions;
-var STORE = 'bfs218-commons';
+var D = window.BFS218 || {};
+var MAIN = document.getElementById('main');
+var NAV = document.getElementById('nav');
+var OVERLAY = document.getElementById('overlay');
 
-/* ---------- state ---------- */
-var state = {
-  demoState: C.course.demoState || 'upcoming',
-  route: 'commons',
-  selectedWeek: C.course.currentWeek || 5,
-  movement: 'prepare',
-  prepareDone: {}, notesValues: {}, notesSelfCheck: {},
-  pollAnswers: {}, agendaSeg: {}, deckSlide: {},
-  captionsOn: true, transcriptOpen: false,
-  appearInRoom: false,
-  reflectText: {}, lookBackText: {}, lookBackRevealed: {},
-  kitQuery: '', deletedData: {},
-  showOnboarding: true
-};
-try{ var saved = JSON.parse(localStorage.getItem(STORE)||'null'); if(saved) Object.assign(state, saved); }catch(e){}
-function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
-// preload: sessions 1 to 4 done
-if(!state._preloaded){
-  for(var i=1;i<=4;i++){ state.prepareDone[i] = {overview:1,guiding:1,purpose:1,concepts:1,readings:1}; }
-  state._preloaded = 1; save();
-}
+/* ---------- injected styles for richer components ---------- */
+var CSS = [
+"#hero{position:relative;overflow:hidden;border-radius:18px;padding:40px clamp(20px,5vw,56px);margin-bottom:26px;color:#1A1A1A;background:linear-gradient(135deg,#FBFAF7 0%,#E8EEF1 38%,#E9EFE7 62%,#ECE7F1 100%);border:1px solid var(--hair)}",
+"#hero .htag{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:#54585A}",
+"#hero h1{font-size:clamp(1.9rem,4.4vw,2.9rem);margin:.18em 0 .12em}",
+"#hero .hsub{font-size:1.15rem;color:#3a3f45}",
+"#hero .hcontour{position:absolute;inset:0;opacity:.5;pointer-events:none}",
+"#hero .hactions{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px}",
+".toolgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}",
+".toolcard{display:block;text-decoration:none;color:inherit;border:1px solid var(--hair);border-radius:14px;padding:18px;background:var(--surface);transition:transform .15s,border-color .15s}",
+".toolcard:hover{transform:translateY(-2px);border-color:#cfc9bb}",
+".toolcard .ic{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:10px}",
+".wkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}",
+".wktile{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:#1A1A1A;border:1px solid var(--hair);border-radius:12px;padding:14px;min-height:104px;transition:transform .15s}",
+".wktile:hover{transform:translateY(-2px)}",
+".wktile .wn{font-family:var(--mono);font-size:.74rem;font-weight:600}",
+".wktile b{font-size:.98rem;line-height:1.25}",
+".cmap{display:flex;gap:6px;overflow-x:auto;padding:14px 4px 8px;border:1px solid var(--hair);border-radius:12px;background:var(--surface)}",
+".cphase{display:flex;flex-direction:column;gap:6px}",
+".cphase .pl{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.04em;color:#54585A;padding:0 4px}",
+".ccols{display:flex;gap:6px}",
+".ccol{min-width:50px;display:flex;flex-direction:column;align-items:center;gap:5px;border-radius:8px;padding:6px 4px}",
+".ccol .cw{font-family:var(--mono);font-size:.66rem;color:#54585A}",
+".cpin{width:20px;height:20px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.18);cursor:pointer}",
+".cpin:focus-visible{outline:3px solid var(--focus);outline-offset:2px}",
+".cempty{width:10px;height:10px;border-radius:50%;background:#EDEAE2}",
+".glossweek{border:1px solid var(--hair);border-radius:12px;padding:6px 16px 14px;margin-bottom:14px;background:var(--surface)}",
+".cite{font-size:.85rem;color:#4A4A4A;border-left:3px solid var(--hair);padding-left:10px;margin:.5em 0 0}",
+".rlink{font-weight:600;font-size:.9rem}",
+".slideshow-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start}",
+".herogrid{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;align-items:center}",
+".heroimg img{width:100%;max-height:260px;object-fit:cover;border-radius:14px;box-shadow:0 8px 24px rgba(26,26,26,.14)}",
+"@media (max-width:760px){.herogrid{grid-template-columns:1fr}.heroimg{display:none}}",
+".slide-kp{background:var(--raised);border:1px solid var(--hair);border-radius:12px;padding:16px}",
+"@media (max-width:760px){.slideshow-grid{grid-template-columns:1fr}}",
+"@media (max-width:640px){.toolgrid{grid-template-columns:1fr}}"
+].join("\n");
+(function(){ var s=document.createElement('style'); s.textContent=CSS; document.head.appendChild(s); })();
+
+/* ---------- state (the student owns this; saved on their device) ---------- */
+var SKEY='bfs218-cartography-v1';
+function loadCarto(){ try{ var a=JSON.parse(localStorage.getItem(SKEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+function saveCarto(){ try{ localStorage.setItem(SKEY, JSON.stringify(CARTO)); }catch(e){} }
+var CARTO = loadCarto();
 
 /* ---------- helpers ---------- */
-function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
-function el(html){ var d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild; }
-function $(id){ return document.getElementById(id); }
-function announce(msg){ var r=$('liveregion'); if(r){ r.textContent=''; setTimeout(function(){ r.textContent=msg; },30); } }
-function toast(msg){
-  var o=$('overlay'); var t=el('<div class="toast" role="status">'+esc(msg)+'</div>'); o.appendChild(t);
-  setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 2600);
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function linkify(t){
+  t=String(t==null?'':t); var re=/(https?:\/\/[^\s]+|doi:\s*10\.\d{4,}\/[^\s]+|\b10\.\d{4,}\/[^\s]+)/gi, out='', last=0, m;
+  while((m=re.exec(t))){
+    out+=esc(t.slice(last,m.index));
+    var full=m[0], trail=''; var tm=full.match(/[).,;:]+$/); if(tm){ trail=tm[0]; full=full.slice(0,full.length-trail.length); }
+    var href=full; if(/^10\./.test(full)) href='https://doi.org/'+full; else if(/^doi:/i.test(full)) href='https://doi.org/'+full.replace(/^doi:\s*/i,'');
+    out+='<a href="'+esc(href)+'" target="_blank" rel="noopener">'+esc(full)+'</a>'+esc(trail);
+    last=m.index+m[0].length;
+  }
+  return out+esc(t.slice(last));
 }
-function session(n){ return SS.filter(function(s){return s.number===n;})[0] || SS[0]; }
-function phase(id){ return C.phases.filter(function(p){return p.id===id;})[0] || C.phases[0]; }
-function linkify(text){
-  return esc(text).replace(/(https?:\/\/[^\s<)]+)|(\b10\.\d{4,9}\/[^\s<)]+)/g, function(m){
-    var href = m.indexOf('http')===0 ? m : ('https://doi.org/'+m);
-    return '<a href="'+href+'" target="_blank" rel="noopener">'+m+'</a>';
-  });
-}
+function phaseOf(id){ for(var i=0;i<(D.phases||[]).length;i++){ if(D.phases[i].id===id) return D.phases[i]; } return {name:'',accent:'#5B7A8C',fill:'#eee'}; }
+function week(n){ for(var i=0;i<(D.weeks||[]).length;i++){ if(D.weeks[i].number===n) return D.weeks[i]; } return null; }
+function pad(n){ return (n<10?'0':'')+n; }
+function toast(msg){ OVERLAY.insertAdjacentHTML('beforeend','<div class="toast" role="status">'+esc(msg)+'</div>'); var t=OVERLAY.lastChild; setTimeout(function(){ if(t&&t.parentNode) t.parentNode.removeChild(t); },2600); }
+function dl(name,text){ var b=new Blob([text],{type:'application/json'}); var u=URL.createObjectURL(b); var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(u);},1000); }
+function contourSVG(){ return '<svg class="hcontour" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">'+
+  [40,90,150,220,300].map(function(y,i){ return '<path d="M0 '+y+' C 200 '+(y-30)+', 420 '+(y+34)+', 640 '+y+' S 1020 '+(y-26)+', 1200 '+(y+10)+'" fill="none" stroke="#5B7A8C" stroke-opacity="0.16" stroke-width="1.5"/>'; }).join('')+'</svg>'; }
 
-/* ---------- deterministic countdown ---------- */
-function countdown(){
-  var a = new Date(C.course.referenceNow.replace(' ','T'));
-  var b = new Date(C.course.nextSessionStart.replace(' ','T'));
-  var ms = Math.max(0, b - a);
-  var d = Math.floor(ms/86400000); ms -= d*86400000;
-  var h = Math.floor(ms/3600000); ms -= h*3600000;
-  var m = Math.floor(ms/60000);
-  return { d:d, h:h, m:m, text:(d+'d '+h+'h '+m+'m') };
+/* ---------- modal with focus trap + return ---------- */
+var lastFocus=null;
+function openModal(html){
+  lastFocus=document.activeElement;
+  OVERLAY.innerHTML='<div class="backdrop" data-close="1"><div class="modal" role="dialog" aria-modal="true">'+html+'</div></div>';
+  var m=OVERLAY.querySelector('.modal'); var f=m.querySelector('input,textarea,select,button,[href]'); if(f) f.focus(); else m.focus();
+  OVERLAY.querySelector('.backdrop').addEventListener('mousedown',function(e){ if(e.target.getAttribute('data-close')) closeModal(); });
+  document.addEventListener('keydown',modalKey);
 }
+function modalKey(e){
+  if(e.key==='Escape'){ closeModal(); return; }
+  if(e.key!=='Tab') return;
+  var m=OVERLAY.querySelector('.modal'); if(!m) return;
+  var f=m.querySelectorAll('a[href],button:not([disabled]),input,textarea,select'); if(!f.length) return;
+  var first=f[0],last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+}
+function closeModal(){ OVERLAY.innerHTML=''; document.removeEventListener('keydown',modalKey); if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
 
-/* ---------- routes / nav ---------- */
-var ROUTES = [
-  { id:'commons',    label:'The Commons',  sub:'Home' },
-  { id:'session',    label:'This Session', sub:'Prepare, gather, carry' },
-  { id:'cohort',     label:'Cohort',       sub:'Who is here' },
-  { id:'discussion', label:'Discussion',   sub:'Shared record' },
-  { id:'toolkit',    label:'Toolkit',      sub:'Glossary, your data, help' }
+/* ---------- navigation ---------- */
+var ROUTES=[
+  {sec:'Course'},
+  {id:'home',label:'Home',hash:'#/home'},
+  {id:'assignments',label:'Assignments',hash:'#/assignments'},
+  {sec:'Learning tools'},
+  {id:'glossary',label:'Glossary and Thinkers',hash:'#/glossary'},
+  {id:'cartography',label:'Living Cartography',hash:'#/cartography'},
+  {id:'cards',label:'Self-check cards',hash:'#/cards'},
+  {id:'cases',label:'Case studies',hash:'#/cases'}
 ];
-function renderNav(){
-  var html = '<div class="navsec">Live cohort</div>';
-  ROUTES.forEach(function(r){
-    var cur = state.route===r.id ? ' aria-current="page"' : '';
-    html += '<a href="#/'+r.id+'"'+cur+'>'+esc(r.label)+'<span class="ndot"></span></a>';
-  });
-  $('nav').innerHTML = html;
+function renderNav(active){
+  NAV.innerHTML=ROUTES.map(function(r){
+    if(r.sec) return '<div class="navsec">'+esc(r.sec)+'</div>';
+    return '<a href="'+r.hash+'"'+(r.id===active?' aria-current="page"':'')+'>'+esc(r.label)+'</a>';
+  }).join('');
 }
 
-/* ---------- context bar ---------- */
-function liveBits(){
-  var ds = state.demoState;
-  if(ds==='doors') return { cls:'doors', label:'Doors open', kick:'Class begins', val:'Join when ready' };
-  if(ds==='live')  return { cls:'live',  label:'Live', kick:'Segment 3 of 7', val:'In session now' };
-  if(ds==='recap') return { cls:'recap', label:'Recap ready', kick:'Last session', val:'Recap is ready' };
-  var c=countdown();
-  return { cls:'upcoming', label:'Upcoming', kick:'Next live class', val:c.text };
+/* ---------- media embeds ---------- */
+function videoBlock(wk){
+  var v=wk.video||{};
+  if(!v.url&&!v.id) return '<div class="aspect"><div class="placeholder">Your weekly video will appear here once it is posted. It loads only when a student presses play.</div></div>';
+  var poster=v.poster?'<img src="'+esc(v.poster)+'" alt="">':'';
+  return '<div class="aspect" data-video="1">'+poster+'<button class="playbtn" data-action="play-video" data-week="'+wk.number+'" aria-label="Play the Week '+wk.number+' video"><span class="circ" aria-hidden="true">&#9654;</span><span>Play the video</span><span class="muted" style="font-size:.8rem">Loads only when you click</span></button></div>';
 }
-function renderCtx(){
-  var s = session(state.selectedWeek); var p = phase(s.phaseId); var lb = liveBits();
-  var join = (state.demoState==='doors'||state.demoState==='live')
-    ? '<a class="btn btn-primary btn-sm" href="#/session" onclick="COMMONSAPP.gotoGather()">Join live</a>' : '';
-  var cdAria = state.demoState==='upcoming' ? ' aria-label="Next live class in '+esc(lb.val)+'"' : '';
-  $('ctxbar').innerHTML =
-    '<span class="ctx-phase"><span class="dot" style="background:'+p.accent+'"></span>'+esc(p.name)+'</span>'+
-    '<span class="ctx-wk">WK '+(s.number<10?'0':'')+s.number+'</span>'+
-    '<span class="ctx-kick"'+cdAria+'>'+
-      '<span class="ctx-status">'+esc(lb.kick)+'<b>'+esc(lb.val)+'</b></span>'+
-      '<span class="livepill '+lb.cls+'">'+dotIcon(lb.cls)+esc(lb.label)+'</span>'+
-      join+
-    '</span>';
+function videoEmbed(v,label){
+  if(v.provider==='youtube'||/youtu/.test(v.url||v.id||'')){ var id=v.id||(String(v.url).match(/[?&]v=([^&]+)/)||[])[1]||String(v.url).split('/').pop(); return '<iframe src="https://www.youtube-nocookie.com/embed/'+esc(id)+'?rel=0" title="'+esc(label||'Video')+'" allow="fullscreen" allowfullscreen></iframe>'; }
+  if(v.provider==='vimeo'||/vimeo/.test(v.url||'')){ var vid=v.id||String(v.url).split('/').pop(); return '<iframe src="https://player.vimeo.com/video/'+esc(vid)+'" title="'+esc(label||'Video')+'" allowfullscreen></iframe>'; }
+  return '<video controls preload="metadata" '+(v.poster?'poster="'+esc(v.poster)+'"':'')+'><source src="'+esc(v.url)+'"></video>';
 }
-function dotIcon(cls){
-  if(cls==='live'||cls==='doors') return '<span aria-hidden="true">&#9673;</span> ';
-  if(cls==='recap') return '<span aria-hidden="true">&#10003;</span> ';
-  return '<span aria-hidden="true">&#9201;</span> ';
+function readingMedia(r){ return '<div class="aspect">'+videoEmbed({provider:r.provider,url:r.url})+'</div>'; }
+
+/* ---------- slideshow ---------- */
+function kpHTML(wk,cur){
+  var s=wk.slides||{}, ins=(s.insights||[])[cur-1], count=s.count||0;
+  var h='<div class="eyebrow">The deeper point &middot; slide '+cur+' of '+count+'</div>';
+  if(!ins) return h+'<p class="muted" style="margin:0">Follow the narration for this slide.</p>';
+  return h+'<p style="margin:.2em 0 0;font-size:1.02rem;line-height:1.55">'+esc(ins)+'</p>';
+}
+function slideBlock(wk){
+  var s=wk.slides||{};
+  if(!s.available||!s.count) return '<div class="aspect"><div class="placeholder">The slideshow for this week will appear here once the deck is posted.</div></div>';
+  var dir=s.dir||('slides/week-'+pad(wk.number));
+  return '<div class="slidewrap" data-week="'+wk.number+'" data-count="'+s.count+'" data-dir="'+esc(dir)+'" tabindex="0" aria-label="Slideshow for Week '+wk.number+', use arrow keys to move">'+
+    '<div class="slideshow-grid"><div><div class="aspect"><img id="slide-img" src="'+esc(dir+'/slide-1.png')+'" alt="Slide 1 of '+s.count+'"></div>'+
+    '<div style="height:4px;background:var(--hair);border-radius:2px;margin-top:8px"><div id="slide-bar" style="height:100%;width:'+(100/s.count)+'%;background:var(--red);border-radius:2px"></div></div>'+
+    '<div class="slidebar"><button class="btn" data-action="slide-prev">Previous</button><span class="count"><span id="slide-n">1</span> / '+s.count+'</span><button class="btn" data-action="slide-next">Next</button></div></div>'+
+    '<aside class="slide-kp" id="slide-kp" aria-live="polite">'+kpHTML(wk,1)+'</aside></div></div>';
+}
+function stepSlide(wrap,dir){
+  if(!wrap) return;
+  var count=parseInt(wrap.getAttribute('data-count'),10),dirp=wrap.getAttribute('data-dir');
+  var nEl=wrap.querySelector('#slide-n'),img=wrap.querySelector('#slide-img'),bar=wrap.querySelector('#slide-bar');
+  var cur=parseInt(nEl.textContent,10)+dir; if(cur<1)cur=count; if(cur>count)cur=1;
+  nEl.textContent=cur; img.src=dirp+'/slide-'+cur+'.png'; img.alt='Slide '+cur+' of '+count; if(bar) bar.style.width=(100*cur/count)+'%';
+  var wk=week(parseInt(wrap.getAttribute('data-week'),10)); var kpEl=document.getElementById('slide-kp'); if(kpEl&&wk) kpEl.innerHTML=kpHTML(wk,cur);
 }
 
-/* ---------- demo control ---------- */
-function renderDemo(){
-  var opts=[['upcoming','Upcoming'],['doors','Doors open'],['live','Live now'],['recap','Recap ready']];
-  var html='<div class="demo" role="group" aria-label="Preview state (reviewer tool)"><div class="lab">Preview state (reviewer tool)</div><div class="row">';
-  opts.forEach(function(o){
-    html+='<button aria-pressed="'+(state.demoState===o[0])+'" onclick="COMMONSAPP.setDemo(\''+o[0]+'\')">'+esc(o[1])+'</button>';
-  });
-  html+='</div></div>';
-  $('demo').innerHTML=html;
+/* ---------- home ---------- */
+function home(){
+  var c=D.course||{},inst=D.instructor||{};
+  var toolMeta={glossary:['#5B7A8C','Glossary and Thinkers','Every concept and the people behind it, week by week','#/glossary','A'],
+    cartography:['#7C6A93','Living Cartography','Map techno-racism in your own digital life','#/cartography','M'],
+    cards:['#6E8B6A','Self-check cards','Practice recalling the ideas in your own words','#/cards','R'],
+    cases:['#B07A57','Case studies','Real Canadian examples, tied to the concepts','#/cases','C']};
+  var hero='<section id="hero">'+contourSVG()+
+    '<div style="position:relative"><div class="htag">'+esc(c.code)+' &middot; '+esc(c.institution||'Seneca Polytechnic')+' &middot; Online, self-paced</div>'+
+    '<h1>'+esc(c.title||'')+'</h1><p class="hsub">'+esc(c.subtitle||'')+'. Read, watch, and work through the course at your own pace, with tools that help the ideas take hold.</p>'+
+    '<div class="hactions"><a class="btn btn-primary" href="#/week/1">Start with Week 1</a><a class="btn" href="#/glossary">Explore the tools</a></div></div></section>';
+  var tools='<h2>Learning tools</h2><div class="toolgrid">'+Object.keys(toolMeta).map(function(k){var t=toolMeta[k];return '<a class="toolcard" href="'+t[3]+'"><div class="ic" style="background:'+t[0]+'22;color:'+t[0]+'">'+t[4]+'</div><b>'+esc(t[1])+'</b><p style="margin:.3em 0 0;color:#4A4A4A;font-size:.92rem">'+esc(t[2])+'</p></a>';}).join('')+'</div>';
+  var bands=(D.phases||[]).map(function(p){
+    var tiles=(p.weeks||[]).map(function(n){var wk=week(n);if(!wk)return '';return '<a class="wktile" href="#/week/'+n+'" style="background:'+p.fill+'"><span class="wn" style="color:'+p.accent+'">WEEK '+pad(n)+'</span><b>'+esc(wk.title||'')+'</b><span class="muted" style="font-size:.8rem">'+esc(wk.concept||'')+'</span></a>';}).join('');
+    return '<h3 style="margin:18px 0 8px;color:'+p.accent+'">'+esc(p.name)+' <span class="muted" style="font-weight:400">Weeks '+p.weeks[0]+' to '+p.weeks[p.weeks.length-1]+'</span></h3><div class="wkgrid">'+tiles+'</div>';
+  }).join('');
+  var foot='<div class="card" style="margin-top:24px"><div class="eyebrow">A companion, not the gradebook</div><p style="margin:0">This site holds the learning materials and tools. Your grades, the discussion board, and handing work in all live in Blackboard. Nothing here is graded, and nothing you do here is tracked.</p></div>';
+  return hero+tools+'<h2 style="margin-top:26px">The 14 weeks</h2>'+bands+foot;
 }
 
-/* ---------- COMMONS (home) ---------- */
-function viewCommons(){
-  var s = session(state.selectedWeek); var p = phase(s.phaseId);
-  var ds = state.demoState; var c = countdown();
-  var hero='';
-  if(ds==='live'){
-    var appearing = C.members.filter(function(m){return m.appearing;});
-    hero='<div class="hero live"><div class="eyebrow" style="color:#c6cad3">Live now</div>'+
-      '<h1>We are in session together.</h1>'+
-      '<p class="muted">'+esc(s.title)+'. The live class runs in Blackboard Collaborate.</p>'+
-      '<div class="rail" style="margin:8px 0 14px">'+avatars(appearing)+'<span class="muted" style="margin-left:6px">'+appearing.length+' here now, opted in</span></div>'+
-      '<a class="btn btn-primary" href="#/session" onclick="COMMONSAPP.gotoGather()">Join the live class in Blackboard</a></div>';
-  } else if(ds==='doors'){
-    hero='<div class="hero doors"><div class="eyebrow">Doors open</div>'+
-      '<h1>The room is open. Come in.</h1>'+
-      '<p>We start shortly. Step into the live class when you are ready.</p>'+
-      '<a class="btn btn-primary" href="#/session" onclick="COMMONSAPP.gotoGather()">Join the live class in Blackboard</a> '+
-      '<a class="btn" href="#/session">See today\'s plan</a></div>';
-  } else if(ds==='recap'){
-    hero='<div class="hero recap"><div class="eyebrow">Recap ready</div>'+
-      '<h1>Here is what we made together.</h1>'+
-      '<p class="muted">'+esc(s.title)+'. The shared record is ready to read.</p>'+
-      '<a class="btn btn-dark" href="#/discussion">Read the shared record</a></div>';
-  } else {
-    hero='<div class="hero"><div class="eyebrow">Next live class</div>'+
-      '<h1>We gather '+esc(C.course.meetingDay)+' at '+esc(C.course.meetingTime)+'.</h1>'+
-      '<p class="muted">'+esc(s.title)+'. '+esc(p.name)+' phase.</p>'+
-      '<div class="countcells" role="group" aria-label="Time until the next live class, '+esc(c.text)+'">'+
-        cell(c.d,'days')+cell(c.h,'hours')+cell(c.m,'min')+'</div>'+
-      '<a class="btn btn-primary" href="#/session">Prepare for this session</a></div>';
-  }
-  // presence rail card
-  var opted = C.members.filter(function(m){return m.appearing;});
-  var presence='<div class="card"><div class="eyebrow">Who is around</div>'+
-    '<div class="rail">'+avatars(opted)+'</div>'+
-    '<p class="muted" style="margin:10px 0 0">You see only people who chose to appear. Presence is opt in, defaults to private, and is never tracked. '+
-    '<a href="#/cohort">Change yours in Cohort</a>.</p></div>';
-  // phase journey
-  var journey='<div class="card"><div class="eyebrow">The journey, together</div>'+journeyHTML()+
-    '<p class="muted" style="margin:10px 0 0">A shared path the whole cohort walks. It is never a score on you.</p></div>';
-  // latest recap
-  var rs = session(Math.max(1, state.selectedWeek-1));
-  var moments = rs.deep.recap.moments.map(function(m){return '<li>'+esc(m)+'</li>';}).join('');
-  var recap='<div class="card"><div class="eyebrow">Latest recap</div><h3>'+esc(rs.title)+'</h3>'+
-    '<ul style="margin:.2em 0 0 1.1em">'+moments+'</ul>'+
-    '<div class="hairtop"><a href="#/discussion">Open the shared record</a></div></div>';
-  // week between us (read only)
-  var thoughts = rs.deep.recap.collective.map(function(t){return '<li style="margin-bottom:6px">'+esc(t)+'</li>';}).join('');
-  var between='<div class="card"><div class="eyebrow">The week between us</div>'+
-    '<p class="muted">Recent thoughts from the cohort, in their own words. This view is read only.</p>'+
-    '<ul style="margin:.2em 0 0 1.1em;list-style:none;padding-left:0">'+thoughts+'</ul>'+
-    '<div class="hairtop"><a class="btn btn-sm" href="#/discussion">Add your thought in Blackboard</a> '+
-    '<span class="muted" style="font-size:.85rem">Posting happens in Blackboard, not here.</span></div></div>';
-  var cont='<p class="muted" style="margin-top:8px">You belong in this room. If you missed last week, that is alright. Come as you are and we will catch you up.</p>';
-  return hero+presence+journey+'<div class="grid grid-2">'+recap+between+'</div>'+cont;
+/* ---------- week page ---------- */
+function structList(arr){
+  return (arr||[]).map(function(it){ return it.type==='head' ? '<h4 style="margin:14px 0 6px">'+esc(it.text)+'</h4>' : '<p style="margin:.45em 0">'+esc(it.text)+'</p>'; }).join('');
 }
-function cell(n,lab){ return '<div class="cell"><b>'+n+'</b><span>'+lab+'</span></div>'; }
-function avatars(list){
-  return list.map(function(m){ return '<span class="avatar'+(m.instructor?' inst':'')+'" title="'+esc(m.name)+'">'+esc(m.initials)+'</span>'; }).join('');
+function readingLink(r){
+  if(r.url) return '<a class="rlink" href="'+esc(r.url)+'" target="_blank" rel="noopener">Access Reading</a>';
+  return '<span class="muted" style="font-size:.85rem">Available through the Seneca library.</span>';
 }
-function journeyHTML(){
-  return '<div class="journey">'+C.phases.map(function(p){
-    var nodes = p.weeks.map(function(wn){
-      var done = wn < state.selectedWeek, cur = wn===state.selectedWeek;
-      var style = done ? ('background:'+p.accent+';border-color:'+p.accent) : '';
-      var cls = 'node'+(done?' done':'')+(cur?' current':'');
-      return '<a class="'+cls+'" style="'+style+'" href="#/session" onclick="COMMONSAPP.pick('+wn+')" aria-label="Session '+wn+(cur?', current':done?', done':', upcoming')+'">'+wn+'</a>';
+function weekView(n){
+  var wk=week(n); if(!wk) return '<p>Week not found.</p>';
+  var p=phaseOf(wk.phaseId);
+  function sec(id,title,inner){ return '<section id="sec-'+id+'" class="card" style="scroll-margin-top:14px" aria-labelledby="h-'+id+'"><h2 id="h-'+id+'" style="margin-top:0">'+esc(title)+'</h2>'+inner+'</section>'; }
+  function li(x){ return '<li>'+esc(x)+'</li>'; }
+  var head='<a class="btn btn-quiet" href="#/home">&#8592; All weeks</a><p class="eyebrow" style="margin-top:14px">Week '+pad(n)+' &middot; <span style="color:'+p.accent+'">'+esc(p.name)+'</span></p><h1>'+esc(wk.title||'')+'</h1><p><span class="tag" style="background:'+p.fill+'"><span class="dot" style="background:'+p.accent+'"></span>'+esc(wk.concept||'')+'</span></p>';
+  var defs=[['overview','Overview'],['purpose','Purpose and Learning Outcomes'],['guiding','Guiding Questions'],['concepts','Weekly Concepts'],['readings','Readings'],['slideshow','Interactive Slideshow'],['case','Case Study'],['reflect','Reflection Corner'],['references','References']];
+  var jump='<nav class="section-tabs" aria-label="On this page">'+defs.map(function(s){return '<button data-action="jump" data-target="sec-'+s[0]+'">'+esc(s[1])+'</button>';}).join('')+'</nav>';
+  var pu=wk.purpose||{statement:[],outcomes:[]};
+  var wcases=(D.cases||[]).filter(function(c){return (c.weeks||[]).indexOf(n)>=0;});
+  var caseInner=wcases.length?wcases.map(function(c){return '<div style="margin-bottom:14px"><div class="eyebrow">'+esc(c.concept||'')+' &middot; '+esc(c.where||'')+'</div><b>'+esc(c.title)+'</b><p style="margin:.3em 0 0">'+esc(c.summary)+'</p></div>';}).join(''):'<p class="muted">A case study for this week will appear here.</p>';
+  var s=
+    sec('overview','Overview', (wk.overview&&wk.overview.length)?structList(wk.overview):'<p class="muted">Overview coming soon.</p>')+
+    sec('purpose','Purpose and Learning Outcomes', ((pu.statement||[]).map(function(x){return '<p>'+esc(x)+'</p>';}).join(''))+((pu.outcomes&&pu.outcomes.length)?'<div class="eyebrow">By the end of this week you will be able to:</div><ul style="line-height:1.7">'+pu.outcomes.map(li).join('')+'</ul>':''))+
+    sec('guiding','Guiding Questions', (wk.guiding&&wk.guiding.length)?'<ol style="line-height:1.8">'+wk.guiding.map(li).join('')+'</ol>':'<p class="muted">Guiding questions coming soon.</p>')+
+    sec('concepts','Weekly Concepts', (wk.concepts&&wk.concepts.length)?wk.concepts.map(function(c,ci){return '<div style="margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--hair)"><h3 style="margin:0 0 .4em">'+esc((ci+1)+'. '+c.term)+'</h3>'+((c.paras||[]).map(function(x){return '<p style="margin:.5em 0">'+esc(x)+'</p>';}).join(''))+((c.cites&&c.cites.length)?'<p class="cite"><b>Reference (APA 7th):</b><br>'+c.cites.map(function(x){return esc(x);}).join('<br>')+'</p>':'')+'</div>';}).join(''):'<p class="muted">Concepts coming soon.</p>')+
+    sec('readings','Readings', (function(){var rs=wk.readings||[];if(!rs.length)return '<p class="muted">Readings will be listed here.</p>';return rs.map(function(r){if(r.type==='head')return '<h4 style="margin:16px 0 6px">'+esc(r.text)+'</h4>';if(r.type==='video')return '<div class="reading">'+(r.label?'<p style="margin:0 0 8px"><b>'+esc(r.label)+'</b></p>':'')+readingMedia(r)+'</div>';if(r.type==='cite')return '<div class="reading"><p style="margin:0 0 .4em">'+linkify(r.text)+'</p>'+readingLink(r)+'</div>';return '<p style="margin:.45em 0">'+esc(r.text)+'</p>';}).join('');})())+
+    sec('slideshow','Interactive Slideshow', slideBlock(wk)+'<h3 style="margin-top:18px">Narrated walkthrough</h3>'+videoBlock(wk)+'<div class="notebar" style="margin-top:12px"><b>Pause and notice.</b> As you move through the slides, stop on one that surprises you and ask: who does this system assume I am, and who does it leave out?</div>')+
+    sec('case','Case Study', caseInner)+
+    sec('reflect','Reflection Corner', '<p class="muted">One question to carry through the whole course. It is not a quiz. There is no right answer. It is here to make you think.</p><blockquote style="border-left:4px solid '+p.accent+';margin:14px 0 0;padding:6px 0 6px 18px;font-size:1.2rem;line-height:1.5">'+esc((D.course||{}).reflectionQuestion||'')+'</blockquote>')+
+    sec('references','References', (function(){var rf=wk.references||[];return rf.length?rf.map(function(r){return '<div class="reading"><p style="margin:0">'+linkify(r)+'</p></div>';}).join(''):'<p class="muted">References will be listed here.</p>';})());
+  var cta='<div class="card"><div class="eyebrow">Make it yours</div><p>'+esc(wk.mapPrompt||'Add a moment from your own digital life to your Living Cartography this week.')+'</p><a class="btn btn-primary" href="#/cartography?week='+n+'">Add this week to your Living Cartography</a></div>';
+  return head+jump+s+cta;
+}
+
+/* ---------- glossary and thinkers, by week ---------- */
+function glossary(){
+  var sel=(location.hash.split('?week=')[1])||'all';
+  var weekOpts='<option value="all"'+(sel==='all'?' selected':'')+'>All weeks</option>'+(D.weeks||[]).map(function(w){return '<option value="'+w.number+'"'+(String(w.number)===String(sel)?' selected':'')+'>Week '+pad(w.number)+': '+esc(w.title||'')+'</option>';}).join('');
+  var head='<h1>Glossary and Thinkers</h1><p class="lede">The language of the course in plain words, and the people behind the ideas, organized by week.</p>'+
+    '<label for="gsearch">Search every term</label><input id="gsearch" data-action="g" placeholder="Type a word, for example: coded exposure" autocomplete="off">'+
+    '<div id="gsearchout" style="margin-top:12px"></div>'+
+    '<label for="gweek" style="margin-top:16px">Or browse by week</label><select id="gweek" data-action="gweek" style="max-width:420px">'+weekOpts+'</select>'+
+    '<div id="gout" style="margin-top:16px">'+glossaryByWeek(sel)+'</div>';
+  return head;
+}
+function glossaryByWeek(sel){
+  var ws=(sel==='all')?(D.weeks||[]):[week(parseInt(sel,10))].filter(Boolean);
+  return ws.map(function(w){
+    var p=phaseOf(w.phaseId);
+    var cons=(w.concepts||[]).map(function(c){return '<div style="margin:10px 0"><b>'+esc(c.term)+'</b><p style="margin:.25em 0 .3em">'+esc((c.paras||[]).join(' '))+'</p>'+((c.cites&&c.cites.length)?'<p class="cite">'+esc(c.cites[0])+'</p>':'')+'</div>';}).join('');
+    var thinks=(D.thinkers||[]).filter(function(t){return (t.weeks||[]).indexOf(w.number)>=0;});
+    var tk=thinks.length?'<div class="eyebrow" style="margin-top:10px">Thinkers this week</div>'+thinks.map(function(t){return '<p style="margin:.2em 0"><b>'+esc(t.name)+'.</b> '+esc(t.note)+'</p>';}).join(''):'';
+    return '<div class="glossweek"><div class="eyebrow" style="color:'+p.accent+';margin-top:8px">Week '+pad(w.number)+' &middot; '+esc(w.title||'')+'</div>'+(cons||'<p class="muted">No concepts listed.</p>')+tk+'</div>';
+  }).join('');
+}
+function glossarySearch(q){
+  q=(q||'').toLowerCase().trim(); if(!q) return '';
+  var hits=(D.glossary||[]).filter(function(g){return (g.term+' '+g.def).toLowerCase().indexOf(q)>=0;});
+  if(!hits.length) return '<p class="muted">No matches. Try another word.</p>';
+  return '<div class="grid grid-2">'+hits.map(function(g){return '<div class="card"><b>'+esc(g.term)+'</b><p style="margin:.3em 0 .4em">'+esc(g.def||'')+'</p>'+(g.cite?'<p class="cite">'+esc(g.cite)+'</p>':'')+'<div class="mono" style="font-size:.72rem;color:#54585A;margin-top:6px">Weeks: '+(g.weeks||[]).map(function(n){return '<a href="#/week/'+n+'">W'+pad(n)+'</a>';}).join(', ')+'</div></div>';}).join('')+'</div>';
+}
+
+/* ---------- self-check cards ---------- */
+function cards(){
+  var pre=(location.hash.split('?week=')[1])||'';
+  var opts='<option value="">All weeks</option>'+(D.weeks||[]).map(function(w){return '<option value="'+w.number+'"'+(String(w.number)===String(pre)?' selected':'')+'>Week '+pad(w.number)+'</option>';}).join('');
+  return '<h1>Self-check cards</h1><p class="lede">Practice recalling the key ideas in your own words, then flip to check. Private study, never scored, never a test.</p>'+
+    '<label for="card-week">Show cards for</label><select id="card-week" data-action="cw" style="max-width:280px">'+opts+'</select><div id="cardgrid" style="margin-top:16px">'+cardGrid(pre)+'</div>';
+}
+function cardGrid(wk){
+  var cs=(D.cards||[]).filter(function(c){return !wk||(c.weeks||[]).indexOf(parseInt(wk,10))>=0;});
+  if(!cs.length) return '<p class="muted">No cards for this selection.</p>';
+  return '<div class="grid grid-2">'+cs.map(function(c){return '<div class="flip" data-action="flip" tabindex="0" role="button" aria-label="Flashcard: '+esc(c.front)+'. Activate to flip."><div class="flip-inner"><div class="flip-face"><div class="eyebrow">Recall</div><b style="font-size:1.1rem">'+esc(c.front)+'</b><span class="muted" style="margin-top:auto;font-size:.8rem">Click to flip</span></div><div class="flip-face flip-back"><div class="eyebrow">Definition</div><p style="margin:0">'+esc(c.back)+'</p></div></div></div>';}).join('')+'</div>';
+}
+
+/* ---------- case studies ---------- */
+function cases(){
+  return '<h1>Case studies</h1><p class="lede">Real Canadian examples of techno-racism, as worked cases you can connect to the concepts.</p>'+(D.cases||[]).map(function(c){return '<div class="card"><div class="eyebrow">'+esc(c.concept||'')+' &middot; '+esc(c.where||'')+'</div><h3 style="margin:.2em 0 .4em">'+esc(c.title)+'</h3><p style="margin:0 0 .6em">'+esc(c.summary)+'</p><div class="mono" style="font-size:.72rem;color:#54585A">Weeks: '+(c.weeks||[]).map(function(n){return '<a href="#/week/'+n+'">W'+pad(n)+'</a>';}).join(', ')+'</div></div>';}).join('');
+}
+
+function assignments(){
+  var as=D.assignments||[];
+  return '<h1>Assignments</h1><p class="lede">Your assessments for the course. You build and prepare them here, and you hand them in and get your grade in Blackboard.</p>'+as.map(function(a){return '<div class="card"><div class="eyebrow">'+esc(a.weight||'')+'</div><h3 style="margin:.1em 0 .4em">'+esc(a.name)+'</h3><p style="margin:0">'+esc(a.blurb||'')+'</p></div>';}).join('')+'<div class="card"><div class="eyebrow">Where you hand in</div><p style="margin:0">All assignment instructions, submission, and grades live in Blackboard. This page is an overview.</p></div>';
+}
+
+/* ---------- living cartography (visual + save) ---------- */
+function cartography(){
+  var pre=(location.hash.split('?week=')[1])||'';
+  return '<h1>Living Cartography</h1><p class="lede">Your own growing map of where technology touches race in your digital life. It is yours, it saves on your device, and it is never graded.</p>'+
+    '<div class="notebar"><b>Your privacy comes first.</b> You never have to share anything personal. Describe a moment in words, map a public screen, or use a general example. All three are full and equal.</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:10px;margin:14px 0"><button class="btn btn-primary" data-action="carto-add" data-week="'+esc(pre)+'">Add an entry</button><button class="btn" data-action="carto-export">Save to a file</button><button class="btn" data-action="carto-import">Load from a file</button><button class="btn btn-quiet" data-action="carto-clear">Clear my map</button><input type="file" id="carto-file" accept="application/json" hidden></div>'+
+    '<h2>Your map</h2><p class="muted" style="margin-top:-4px">Each pin is a moment you mapped. Watch your map fill across the term.</p>'+cartoMap()+
+    '<h2 style="margin-top:22px">Your entries ('+CARTO.length+')</h2>'+cartoEntries();
+}
+function cartoMap(){
+  return '<div class="cmap">'+(D.phases||[]).map(function(p){
+    var cols=(p.weeks||[]).map(function(n){
+      var es=CARTO.map(function(e,i){return {e:e,i:i};}).filter(function(o){return o.e.week===n;});
+      var pins=es.length?es.map(function(o){return '<button class="cpin" style="background:'+p.accent+'" data-action="carto-view" data-i="'+o.i+'" aria-label="Week '+n+' entry: '+esc(o.e.title)+'" title="'+esc(o.e.title)+'"></button>';}).join(''):'<span class="cempty" aria-hidden="true"></span>';
+      return '<div class="ccol" style="background:'+p.fill+'66"><span class="cw">W'+pad(n)+'</span>'+pins+'</div>';
     }).join('');
-    return '<div class="band" style="background:'+p.fill+';border-color:'+p.fill+'">'+
-      '<b style="color:'+p.label+'">'+esc(p.name)+'</b> <span class="muted" style="font-size:.85rem">Sessions '+p.weeks[0]+' to '+p.weeks[p.weeks.length-1]+'</span>'+
-      '<div class="nodes">'+nodes+'</div></div>';
+    return '<div class="cphase"><span class="pl" style="color:'+p.accent+'">'+esc(p.name)+'</span><div class="ccols">'+cols+'</div></div>';
   }).join('')+'</div>';
 }
-
-/* ---------- THIS SESSION ---------- */
-function viewSession(){
-  var s = session(state.selectedWeek); var p = phase(s.phaseId);
-  var picker = '<label for="wkpick" class="muted" style="font-weight:600;margin:0 8px 0 0;display:inline">Session</label>'+
-    '<select id="wkpick" style="width:auto;display:inline-block" onchange="COMMONSAPP.pick(parseInt(this.value,10))">'+
-    SS.map(function(x){return '<option value="'+x.number+'"'+(x.number===s.number?' selected':'')+'>'+x.number+'. '+esc(x.title)+'</option>';}).join('')+'</select>';
-  var head='<div class="card"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">'+
-    '<div><span class="tag" style="background:'+p.fill+';border-color:'+p.fill+';color:'+p.label+'">'+esc(p.name)+'</span> '+
-    '<span class="mono muted" style="font-size:.78rem">SESSION '+s.number+'</span></div>'+picker+'</div>'+
-    '<h1 style="margin-top:10px">'+esc(s.title)+'</h1>'+
-    '<div class="card tight" style="margin:6px 0 0;background:'+p.fill+';border-color:'+p.fill+'">'+
-      '<b>Key concept: '+esc(s.concept)+'</b><br><span class="muted">'+esc(s.conceptDef)+'</span></div>'+
-    (s.headsUp?'<div class="notebar"><b>A heads up.</b> '+esc(s.headsUp)+'</div>':'')+'</div>';
-  var tabs='<div class="tabs" role="tablist">'+
-    ['prepare','gather','carry'].map(function(t){
-      var lab = t==='prepare'?'Prepare':t==='gather'?'Gather (live room)':'Carry';
-      return '<button role="tab" aria-selected="'+(state.movement===t)+'" onclick="COMMONSAPP.move(\''+t+'\')">'+lab+'</button>';
-    }).join('')+'</div>';
-  var body = state.movement==='prepare'?prepareHTML(s):state.movement==='gather'?gatherHTML(s):carryHTML(s);
-  return head+tabs+'<div role="tabpanel">'+body+'</div>';
+function cartoEntries(){
+  if(!CARTO.length) return '<div class="card"><p class="muted" style="margin:0">Your map is empty. Add your first entry and a pin will appear above.</p></div>';
+  return CARTO.map(function(e,i){var p=phaseOf((week(e.week)||{}).phaseId);return '<div class="card"><div class="mono" style="font-size:.74rem;color:#54585A">W'+pad(e.week)+' &middot; '+esc(e.concept||'')+'</div><b>'+esc(e.title)+'</b><p style="margin:.4em 0">'+esc(e.note||'')+'</p><button class="btn btn-quiet" data-action="carto-del" data-i="'+i+'">Delete this entry</button></div>';}).join('');
 }
-function prepCard(s,key,title,est,inner){
-  var done = (state.prepareDone[s.number]||{})[key];
-  return '<details class="prep"'+(key==='overview'?' open':'')+'><summary>'+
-    '<span>'+esc(title)+'</span><span class="est mono">'+esc(est)+'</span>'+
-    '<span class="donechip'+(done?' on':'')+'">'+(done?'Done':'To do')+'</span></summary>'+
-    '<div class="body">'+inner+
-    '<div class="hairtop"><button class="btn btn-sm" onclick="COMMONSAPP.markPrep('+s.number+',\''+key+'\')">'+(done?'Mark as to do':'Mark done')+'</button></div>'+
-    '</div></details>';
+function cartoForm(pre){
+  var opts=(D.weeks||[]).map(function(w){return '<option value="'+w.number+'"'+(String(w.number)===String(pre)?' selected':'')+'>Week '+pad(w.number)+': '+esc(w.title||'')+'</option>';}).join('');
+  return '<h2 style="margin-top:0">Add a map entry</h2><label for="ce-week">Which week</label><select id="ce-week">'+opts+'</select><label for="ce-title">A short title</label><input id="ce-title" placeholder="For example: The autofill that assumed"><label for="ce-note">What did you notice, and how does it tie to the concept?</label><textarea id="ce-note"></textarea><label for="ce-concept">Concept (optional)</label><input id="ce-concept" placeholder="For example: coded exposure"><div style="margin-top:16px;display:flex;gap:10px"><button class="btn btn-primary" data-action="carto-save">Place this pin</button><button class="btn btn-quiet" data-action="modal-close">Cancel</button></div>';
 }
-function prepareHTML(s){
-  var pd = state.prepareDone[s.number]||{};
-  var allDone = ['overview','guiding','purpose','concepts','readings'].every(function(k){return pd[k];});
-  var ready = allDone ? '<div class="card tight" style="background:#e9efe7;border-color:#cfe0c9"><b style="color:#2f5b2a">You are ready for this session.</b> Everything below is marked done. Bring one example with you.</div>' : '';
-  var ov = '<p>'+esc(s.overview)+'</p>';
-  var gq = '<ul style="margin:0 0 0 1.1em">'+(s.guiding||[]).map(function(g){return '<li style="margin-bottom:6px">'+esc(g)+'</li>';}).join('')+'</ul>';
-  var pu = '<p>'+esc(s.purpose&&s.purpose.statement||'')+'</p>'+
-    '<p style="margin:0 0 6px"><b>By the end of this session you will be able to:</b></p>'+
-    '<ul style="margin:0 0 0 1.1em">'+((s.purpose&&s.purpose.outcomes)||[]).map(function(o){return '<li style="margin-bottom:6px">'+esc(o)+'</li>';}).join('')+'</ul>';
-  var co = (s.concepts||[]).map(function(c){
-    return '<h4 style="margin:.4em 0 .2em">'+esc(c.term)+'</h4>'+(c.paras||[]).map(function(x){return '<p>'+esc(x)+'</p>';}).join('');
-  }).join('');
-  var rd = readingsHTML(s);
-  return ready+
-    prepCard(s,'overview','Week overview','3 min',ov)+
-    prepCard(s,'guiding','Guiding questions','3 min',gq)+
-    prepCard(s,'purpose','Purpose and outcomes','2 min',pu)+
-    prepCard(s,'concepts','Key concepts','8 min',co)+
-    prepCard(s,'readings','Readings','25 min',rd);
-}
-function readingsHTML(s){
-  return (s.readings||[]).map(function(r){
-    if(r.type==='head') return '<h4 style="margin:.5em 0 .2em">'+esc(r.text)+'</h4>';
-    if(r.type==='cite'){
-      var link = r.url ? '<div style="margin-top:6px"><a class="btn btn-sm" href="'+esc(r.url)+'" target="_blank" rel="noopener">Access reading</a></div>'
-        : '<div class="muted" style="margin-top:6px;font-size:.9rem">Available through the Seneca library.</div>';
-      return '<div class="card tight" style="margin:8px 0"><span>'+linkify(r.text)+'</span>'+link+'</div>';
-    }
-    return '<p class="muted">'+linkify(r.text)+'</p>';
-  }).join('');
-}
-function gatherHTML(s){
-  var seg = state.agendaSeg[s.number]; if(seg==null) seg=2; var ag=s.deep.agenda;
-  if(seg>=ag.length) seg=ag.length-1;
-  var bar = ag.map(function(g,i){
-    var cls = i<seg?'seg done':i===seg?'seg current':'seg';
-    var w = (g.m/ag.reduce(function(a,b){return a+b.m;},0)*100);
-    var mark = i<seg?'&#10003; ':i===seg?'&#9673; ':'';
-    return '<div class="'+cls+'" style="flex:'+g.m+' 1 0" title="'+esc(g.t)+', '+g.m+' min">'+mark+esc(short(g.t))+'</div>';
-  }).join('');
-  var cur = ag[seg];
-  var room='<div class="room"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">'+
-    '<div><div class="eyebrow" style="color:#c6cad3">Live session room</div><h2 style="margin:0">'+esc(s.title)+'</h2></div>'+
-    '<span class="livepill '+(state.demoState==='live'?'live':'upcoming')+'">'+dotIcon(state.demoState==='live'?'live':'upcoming')+(state.demoState==='live'?'Live':'Room')+'</span></div>'+
-    '<p class="muted" style="margin:8px 0 0">The live class itself runs in Blackboard Collaborate. This room is your guide to it.</p>'+
-    '<a class="btn btn-primary btn-sm" style="margin-top:8px" href="'+(C.course.collaborateUrl||'#')+'"'+(C.course.collaborateUrl?' target="_blank" rel="noopener"':' onclick="COMMONSAPP.noUrl(event)"')+'>Join the live class in Blackboard</a>'+
-    '<div class="agenda" role="img" aria-label="Session agenda timeline, on segment '+(seg+1)+' of '+ag.length+'">'+bar+'</div>'+
-    '<div class="segmeta"><div><b>We are here: segment '+(seg+1)+' of '+ag.length+'.</b> '+esc(cur.t)+' <span class="muted">('+cur.m+' min)</span><br>'+
-      '<span class="muted">'+esc(cur.note)+'</span></div>'+
-      '<div style="display:flex;gap:6px"><button class="btn btn-sm btn-dark" onclick="COMMONSAPP.seg('+s.number+',-1)">Previous</button>'+
-      '<button class="btn btn-sm btn-dark" onclick="COMMONSAPP.seg('+s.number+',1)">Next</button></div></div>'+
-    deckHTML(s)+'</div>';
-  // guided notes
-  var nv = state.notesValues[s.number]||{};
-  var notes='<div class="card"><div class="eyebrow">Guided notes</div>'+
-    '<p class="muted">These are yours. They are private, never scored, and only you ever see them.</p>'+
-    s.deep.notes.map(function(q,i){
-      return '<label for="note'+s.number+'_'+i+'">'+esc(q)+'</label>'+
-      '<textarea id="note'+s.number+'_'+i+'" placeholder="Type here" oninput="COMMONSAPP.note('+s.number+','+i+',this.value)">'+esc(nv[i]||'')+'</textarea>';
-    }).join('')+
-    '<div style="margin-top:12px"><b>How is this idea sitting with you?</b> <span class="muted">(private)</span></div>'+selfCheck(s)+
-    '<div class="notebar" style="margin-bottom:0"><b>Stuck?</b> That is a normal part of learning. Reread the key concept card up top, or bring the question to the live discussion in Blackboard.</div></div>';
-  // poll
-  var poll = pollHTML(s);
-  // raise a point
-  var raise='<div class="card"><div class="eyebrow">Raise a point</div>'+
-    '<p>Want to say something to the class? The conversation happens in Blackboard Collaborate, where the cohort can hear and reply.</p>'+
-    '<a class="btn btn-sm" href="'+(C.course.collaborateUrl||'#')+'"'+(C.course.collaborateUrl?' target="_blank" rel="noopener"':' onclick="COMMONSAPP.noUrl(event)"')+'>Open the live discussion in Blackboard</a></div>';
-  return room+notes+poll+raise;
-}
-function short(t){ return t.length>22 ? t.slice(0,20)+'…' : t; }
-function selfCheck(s){
-  var opts=['Still fuzzy','Getting it','I could explain it'];
-  var cur=(state.notesSelfCheck||{})[s.number];
-  return '<div class="chips">'+opts.map(function(o){
-    return '<button class="chip" aria-pressed="'+(cur===o)+'" onclick="COMMONSAPP.selfCheck('+s.number+',\''+o+'\')">'+esc(o)+'</button>';
-  }).join('')+'</div>';
-}
-function deckHTML(s){
-  var sl=s.slides;
-  if(!sl||!sl.available){ return '<div class="deck"><div class="caption">The official deck for this session is in Blackboard.</div></div>'; }
-  var n = state.deckSlide[s.number]||0; if(n>=sl.count) n=sl.count-1;
-  var pts = (sl.points&&sl.points[n])||{points:[]};
-  var img = sl.dir+'/slide-'+(n+1)+'.png';
-  var caps = state.captionsOn ? '<div class="caption"><b>'+esc(pts.heading||('Slide '+(n+1)))+'</b><br>'+(pts.points||[]).map(esc).join(' &middot; ')+'</div>' : '';
-  var tr = state.transcriptOpen ? '<div class="caption"><b>What this slide is saying</b><br>'+esc((sl.insights&&sl.insights[n])||'')+'</div>' : '';
-  return '<div class="deck"><div class="poster"><img src="'+esc(img)+'" alt="Slide '+(n+1)+' of '+sl.count+', '+esc(pts.heading||'')+'"></div>'+
-    '<div class="deckbar"><div style="display:flex;gap:6px"><button class="btn btn-sm btn-dark" onclick="COMMONSAPP.slide('+s.number+',-1)">Prev slide</button>'+
-    '<button class="btn btn-sm btn-dark" onclick="COMMONSAPP.slide('+s.number+',1)">Next slide</button></div>'+
-    '<span class="mono" style="color:#c6cad3;font-size:.78rem">Slide '+(n+1)+' of '+sl.count+'</span>'+
-    '<div style="display:flex;gap:6px"><button class="btn btn-sm btn-dark" aria-pressed="'+state.captionsOn+'" onclick="COMMONSAPP.captions()">Captions</button>'+
-    '<button class="btn btn-sm btn-dark" aria-pressed="'+state.transcriptOpen+'" onclick="COMMONSAPP.transcript()">Transcript</button></div></div>'+
-    caps+tr+
-    '<div class="caption" style="background:#0e0f13"><a style="color:#ff9b91" href="#/session">The official deck is in Blackboard.</a></div></div>';
-}
-function pollHTML(s){
-  var poll=s.deep.poll; var ans=state.pollAnswers[s.number];
-  if(ans==null){
-    return '<div class="card"><div class="eyebrow">Live poll</div><p><b>'+esc(poll.q)+'</b></p>'+
-      '<div class="chips" style="flex-direction:column;align-items:stretch">'+
-      poll.options.map(function(o,i){return '<button class="chip" style="text-align:left" onclick="COMMONSAPP.poll('+s.number+','+i+')">'+esc(o)+'</button>';}).join('')+'</div>'+
-      '<p class="muted" style="margin:.6em 0 0">'+esc(poll.framing)+'</p></div>';
-  }
-  var dist=[34,41,18,7];
-  var bars=poll.options.map(function(o,i){
-    var pct=dist[i%dist.length];
-    var mine = i===ans ? ' <b>(your answer)</b>' : '';
-    return '<div class="bar"><div class="track"><div class="fill" style="width:'+Math.max(12,pct)+'%">'+esc(o)+mine+'</div></div><span class="mono muted">'+pct+'%</span></div>';
-  }).join('');
-  return '<div class="card"><div class="eyebrow">Live poll</div><p><b>'+esc(poll.q)+'</b></p>'+
-    '<div class="bars">'+bars+'</div>'+
-    '<p class="muted" style="margin:.4em 0 0">'+esc(poll.framing)+' This is a sample of the room.</p></div>';
-}
-function carryHTML(s){
-  var rt=state.reflectText[s.number]||'';
-  var reflect='<div class="card"><div class="eyebrow">Reflection corner</div>'+
-    '<label for="ref'+s.number+'">'+esc(s.deep.reflect)+'</label>'+
-    '<textarea id="ref'+s.number+'" placeholder="Take your time" oninput="COMMONSAPP.reflect('+s.number+',this.value)">'+esc(rt)+'</textarea>'+
-    '<p class="muted" style="margin:.4em 0 0">Yours alone. Saved on your device, sent nowhere.</p></div>';
-  var look='';
-  if(s.deep.lookBack){
-    var lb=s.deep.lookBack; var lv=state.lookBackText[s.number]||''; var rev=state.lookBackRevealed[s.number];
-    look='<div class="card"><div class="eyebrow">A look back</div><label for="lb'+s.number+'">'+esc(lb.prompt)+'</label>'+
-      '<textarea id="lb'+s.number+'" placeholder="From memory first" oninput="COMMONSAPP.lookText('+s.number+',this.value)">'+esc(lv)+'</textarea>'+
-      (rev
-        ? '<div class="notebar" style="margin-bottom:0"><b>'+esc(lb.term)+'.</b> '+esc(lb.reveal)+'</div>'
-        : '<div class="hairtop"><button class="btn btn-sm" onclick="COMMONSAPP.reveal('+s.number+')">Show me how it was put</button> <span class="muted" style="font-size:.85rem">This is never scored.</span></div>')+'</div>';
-  }
-  var submit='<div class="card"><div class="eyebrow">Submit your work</div>'+
-    '<p>Anything you hand in for a grade is submitted in Blackboard. No grades are ever shown here.</p>'+
-    '<a class="btn btn-sm" href="'+(C.course.blackboardUrl||'#')+'"'+(C.course.blackboardUrl?' target="_blank" rel="noopener"':' onclick="COMMONSAPP.noUrl(event)"')+'>Open Blackboard</a></div>';
-  var next=s.deep.carry;
-  var carry='<div class="card tight" style="background:var(--raised)"><div class="eyebrow">Carry it forward</div>'+
-    '<b>Next session: '+esc(next.title)+'</b><br><span class="muted">'+esc(next.line)+'</span></div>';
-  return reflect+look+submit+carry;
+function cartoViewModal(i){
+  var e=CARTO[i]; if(!e) return; var p=phaseOf((week(e.week)||{}).phaseId);
+  openModal('<div class="eyebrow" style="color:'+p.accent+'">Week '+pad(e.week)+' &middot; '+esc(e.concept||'')+'</div><h2 style="margin:.2em 0 .4em">'+esc(e.title)+'</h2><p>'+esc(e.note||'')+'</p><div style="margin-top:14px;display:flex;gap:10px"><button class="btn btn-quiet" data-action="modal-close">Close</button><button class="btn btn-quiet" data-action="carto-del" data-i="'+i+'">Delete</button></div>');
 }
 
-/* ---------- COHORT ---------- */
-function viewCohort(){
-  var roster=C.members.map(function(m){
-    return '<div class="card tight" style="display:flex;align-items:center;gap:12px">'+
-      '<span class="avatar'+(m.instructor?' inst':'')+'">'+esc(m.initials)+'</span>'+
-      '<div><b>'+esc(m.name)+'</b>'+(m.role?'<br><span class="muted" style="font-size:.85rem">'+esc(m.role)+'</span>':'')+'</div>'+
-      (m.instructor?'<span class="tag" style="margin-left:auto">Professor</span>':(m.appearing?'<span class="tag" style="margin-left:auto;background:#e9efe7;border-color:#cfe0c9;color:#2f5b2a">In the room</span>':''))+'</div>';
-  }).join('');
-  var toggle='<div class="card"><div class="eyebrow">Appear in the room</div>'+
-    '<p>Choose whether others can see you in the cohort presence rail. This is your setting alone. It defaults to private.</p>'+
-    '<button class="chip" aria-pressed="'+state.appearInRoom+'" onclick="COMMONSAPP.appear()">'+(state.appearInRoom?'You appear in the room':'You are private')+'</button>'+
-    '<p class="muted" style="margin:.6em 0 0">No attendance is taken. No one is counted, ranked, or scored.</p></div>';
-  var teams='<div class="card"><div class="eyebrow">Breakout teams</div>'+
-    C.teams.map(function(t){return '<div class="card tight"><b>'+esc(t.name)+'</b><br><span class="muted">'+t.members.map(esc).join(', ')+'</span></div>';}).join('')+'</div>';
-  var note='<div class="notebar"><b>About this list.</b> The cohort shown here is a sample and the names are fictional, for illustration. Your real cohort appears once the term begins.</div>';
-  return '<h1>Cohort</h1>'+note+toggle+'<div class="card"><div class="eyebrow">Who is in the room</div>'+roster+'</div>'+teams;
-}
-
-/* ---------- DISCUSSION ---------- */
-function viewDiscussion(){
-  var note='<div class="notebar"><b>This is a read only record.</b> Posting, replying, and the live conversation all happen in Blackboard. What you see here is the cohort\'s shared memory, in their own words. Names are removed.</div>';
-  var join='<a class="btn btn-primary" href="'+(C.course.discussionUrl||'#')+'"'+(C.course.discussionUrl?' target="_blank" rel="noopener"':' onclick="COMMONSAPP.noUrl(event)"')+'>Join the discussion in Blackboard</a>';
-  var secs=C.discussion.map(function(d){
-    var posts=d.posts.map(function(p){
-      var tags=p.tags.map(function(t){return '<span class="tag" style="text-transform:none;font-family:var(--sans)">'+esc(t)+'</span>';}).join(' ');
-      var replies=(p.replies||[]).map(function(r){return '<div class="card tight" style="margin:8px 0 0 22px"><span class="muted" style="font-size:.8rem">'+esc(r.label)+'</span><br>'+esc(r.text)+'</div>';}).join('');
-      return '<div class="card tight"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="muted" style="font-size:.8rem">'+esc(p.label)+'</span><span>'+tags+'</span></div><p style="margin:.4em 0 0">'+esc(p.text)+'</p>'+replies+'</div>';
-    }).join('');
-    var coll=d.collective.map(function(c){return '<li style="margin-bottom:6px">'+esc(c)+'</li>';}).join('');
-    return '<div class="card"><div class="eyebrow">Session '+d.session+'</div><h3>'+esc(d.title)+'</h3>'+
-      '<p class="muted" style="margin:0 0 6px"><b>What the cohort said, together:</b></p><ul style="margin:0 0 10px 1.1em;list-style:none;padding-left:0">'+coll+'</ul>'+posts+'</div>';
-  }).join('');
-  return '<h1>Discussion</h1>'+note+'<div style="margin-bottom:16px">'+join+'</div>'+secs;
-}
-
-/* ---------- TOOLKIT ---------- */
-function viewToolkit(){
-  return '<h1>Toolkit</h1>'+glassBox()+refuses()+glossaryBox()+helpBox();
-}
-function storedItems(){
-  var items=[]; var del=state.deletedData;
-  SS.forEach(function(s){
-    var nv=state.notesValues[s.number]||{};
-    Object.keys(nv).forEach(function(i){ if(nv[i]&&!del['note'+s.number+'_'+i]) items.push({id:'note'+s.number+'_'+i,kind:'Guided note',sess:s.number,text:nv[i]}); });
-    if(state.reflectText[s.number]&&!del['ref'+s.number]) items.push({id:'ref'+s.number,kind:'Reflection',sess:s.number,text:state.reflectText[s.number]});
-    if(state.lookBackText[s.number]&&!del['lb'+s.number]) items.push({id:'lb'+s.number,kind:'Look back',sess:s.number,text:state.lookBackText[s.number]});
-    if(state.pollAnswers[s.number]!=null&&!del['poll'+s.number]) items.push({id:'poll'+s.number,kind:'Poll answer',sess:s.number,text:s.deep.poll.options[state.pollAnswers[s.number]]});
-  });
-  return items;
-}
-function glassBox(){
-  var items=storedItems();
-  var list = items.length ? items.map(function(it){
-    return '<div class="card tight" style="display:flex;gap:10px;align-items:flex-start">'+
-      '<div style="flex:1"><span class="mono muted" style="font-size:.72rem">'+esc(it.kind)+', session '+it.sess+'</span><br>'+esc(it.text)+'</div>'+
-      '<div style="display:flex;gap:6px;flex-shrink:0"><button class="btn btn-sm" onclick="COMMONSAPP.exportOne(\''+it.id+'\')">Export</button>'+
-      '<button class="btn btn-sm" onclick="COMMONSAPP.del(\''+it.id+'\')">Delete</button></div></div>';
-  }).join('') : '<p class="muted">Nothing stored yet. Anything you type in this tool will show up here, and you can export or delete each item.</p>';
-  return '<div class="card"><div class="eyebrow">Your data</div>'+
-    '<p>This is everything this tool has stored, and it is only what you typed: your guided notes, poll answers, reflections, and look backs. It lives on your device and is sent nowhere.</p>'+
-    list+
-    (items.length?'<div class="hairtop"><button class="btn btn-sm btn-dark" onclick="COMMONSAPP.exportAll()">Export all</button></div>':'')+'</div>';
-}
-function refuses(){
-  var chips=['No attendance','No scores or grades','No ranking','No attention tracking','No camera pressure','Your data stays yours'];
-  return '<div class="card"><div class="eyebrow">How this tool was built, and what it refuses to do</div>'+
-    '<div class="refuse">'+chips.map(function(c){return '<span class="tag">&#10003; '+esc(c)+'</span>';}).join('')+'</div>'+
-    '<p class="muted" style="margin:.7em 0 0">This room practises the data dignity the course teaches. If anything here ever feels like surveillance, tell your professor. That feedback is welcome.</p></div>';
-}
-function glossaryBox(){
-  var q=(state.kitQuery||'').toLowerCase();
-  var list=C.glossary.filter(function(g){ return !q || g.term.toLowerCase().indexOf(q)>=0 || (g.def||'').toLowerCase().indexOf(q)>=0; });
-  var rows=list.map(function(g){
-    var sess = (g.sessions&&g.sessions.length)?'<span class="mono muted" style="font-size:.72rem">Sessions '+g.sessions.join(', ')+'</span>':'';
-    return '<div class="card tight"><b>'+esc(g.term)+'</b> '+sess+'<br>'+esc(g.def)+'</div>';
-  }).join('');
-  return '<div class="card"><div class="eyebrow">Glossary</div>'+
-    '<label for="kitq">Search terms</label><input id="kitq" value="'+esc(state.kitQuery||'')+'" placeholder="Type a term, for example coded exposure" oninput="COMMONSAPP.kit(this.value)">'+
-    '<div style="margin-top:10px">'+(rows||'<p class="muted">No terms match that search.</p>')+'</div></div>';
-}
-function helpBox(){
-  return '<div class="card"><div class="eyebrow">How our live class works</div>'+
-    '<p><b>When we meet.</b> '+esc(C.course.meetingLine)+'</p>'+
-    '<p><b>How to join.</b> The live class runs in Blackboard Collaborate. Use the Join live button on the Commons or in this session\'s room.</p>'+
-    '<p><b>No camera needed.</b> You never have to turn your camera on. Come as you are.</p>'+
-    '<p><b>Missed a session?</b> That is alright. The recap and the shared record are here, and you can pick up the next prep when you are ready.</p></div>';
-}
-
-/* ---------- onboarding ---------- */
-function onboarding(){
-  if(!state.showOnboarding) return;
-  var o=$('overlay');
-  var m=el('<div class="backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="obh">'+
-    '<div class="mhead"><span class="livepill doors" style="margin-bottom:8px">'+dotIcon('doors')+'Live cohort</span>'+
-    '<h1 id="obh" style="color:#fff;margin:0">Welcome to the cohort.</h1></div>'+
-    '<div class="mbody"><p class="lede">This is the live room for BFS218. '+esc(C.course.meetingLine)+'</p>'+
-    '<div class="card tight" style="display:flex;align-items:center;gap:10px"><span class="avatar inst">'+esc(C.instructor.initials)+'</span><div><b>'+esc(C.instructor.name)+'</b><br><span class="muted" style="font-size:.85rem">'+esc(C.instructor.role)+'</span></div></div>'+
-    '<p class="muted">This tool is a companion to Blackboard. The live video and anything you hand in for a grade live in Blackboard. Here you prepare, follow the live agenda, take private notes, and keep the shared record.</p>'+
-    '<button class="btn btn-primary" onclick="COMMONSAPP.enter()">Step into the Commons</button> '+
-    '<button class="btn btn-quiet" onclick="COMMONSAPP.enter()">Skip</button></div></div></div>');
-  o.appendChild(m);
-}
-
-/* ---------- render ---------- */
+/* ---------- render dispatch ---------- */
 function render(){
-  renderNav(); renderCtx(); renderDemo();
-  var v;
-  switch(state.route){
-    case 'session': v=viewSession(); break;
-    case 'cohort': v=viewCohort(); break;
-    case 'discussion': v=viewDiscussion(); break;
-    case 'toolkit': v=viewToolkit(); break;
-    default: v=viewCommons();
-  }
-  $('main').innerHTML=v;
-  document.title='BFS218 Commons: '+ROUTES.filter(function(r){return r.id===state.route;})[0].label;
+  var h=location.hash||'#/home', path=h.replace(/^#\//,'').split('?')[0], html, active;
+  if(path.indexOf('week/')===0){ active='home'; html=weekView(parseInt(path.split('/')[1],10)); }
+  else if(path==='glossary'){ active='glossary'; html=glossary(); }
+  else if(path==='cartography'){ active='cartography'; html=cartography(); }
+  else if(path==='cards'){ active='cards'; html=cards(); }
+  else if(path==='cases'){ active='cases'; html=cases(); }
+  else if(path==='assignments'){ active='assignments'; html=assignments(); }
+  else { active='home'; html=home(); }
+  renderNav(active); MAIN.innerHTML=html; MAIN.focus(); window.scrollTo(0,0);
 }
 
-/* ---------- public API (inline handlers) ---------- */
-window.COMMONSAPP = {
-  setDemo:function(s){ state.demoState=s; save(); render(); },
-  pick:function(n){ state.selectedWeek=n; state.route='session'; save(); location.hash='#/session'; render(); window.scrollTo(0,0); },
-  move:function(m){ state.movement=m; save(); render(); },
-  gotoGather:function(){ state.route='session'; state.movement='gather'; save(); setTimeout(function(){location.hash='#/session';},0); },
-  markPrep:function(n,k){ var d=state.prepareDone[n]||{}; d[k]=d[k]?0:1; state.prepareDone[n]=d; save(); render(); },
-  seg:function(n,dir){ var ag=session(n).deep.agenda; var s=state.agendaSeg[n]; if(s==null)s=2; s=Math.max(0,Math.min(ag.length-1,s+dir)); state.agendaSeg[n]=s; save(); render(); announce('Now on segment '+(s+1)+' of '+ag.length+', '+ag[s].t); },
-  slide:function(n,dir){ var sl=session(n).slides; var s=state.deckSlide[n]||0; s=Math.max(0,Math.min(sl.count-1,s+dir)); state.deckSlide[n]=s; save(); render(); },
-  captions:function(){ state.captionsOn=!state.captionsOn; save(); render(); },
-  transcript:function(){ state.transcriptOpen=!state.transcriptOpen; save(); render(); },
-  note:function(n,i,v){ var d=state.notesValues[n]||{}; d[i]=v; state.notesValues[n]=d; save(); },
-  selfCheck:function(n,v){ state.notesSelfCheck[n]=(state.notesSelfCheck[n]===v?null:v); save(); render(); },
-  poll:function(n,i){ state.pollAnswers[n]=i; save(); render(); toast('Thanks. Here is where the room sits.'); },
-  reflect:function(n,v){ state.reflectText[n]=v; save(); },
-  lookText:function(n,v){ state.lookBackText[n]=v; save(); },
-  reveal:function(n){ state.lookBackRevealed[n]=1; save(); render(); },
-  appear:function(){ state.appearInRoom=!state.appearInRoom; save(); render(); toast(state.appearInRoom?'You now appear in the room.':'You are private again.'); },
-  kit:function(v){ state.kitQuery=v; var box=$('kitq'); var pos=box?box.selectionStart:null; save(); render(); var nb=$('kitq'); if(nb){ nb.focus(); if(pos!=null){ try{nb.setSelectionRange(pos,pos);}catch(e){} } } },
-  exportOne:function(id){ var it=storedItems().filter(function(x){return x.id===id;})[0]; if(!it)return; download(id+'.txt', it.kind+' (session '+it.sess+')\n\n'+it.text); },
-  exportAll:function(){ var t=storedItems().map(function(it){return '['+it.kind+', session '+it.sess+']\n'+it.text;}).join('\n\n'); download('bfs218-commons-my-data.txt', t||'No data stored.'); },
-  del:function(id){ state.deletedData[id]=1;
-    // also clear the source so it does not regenerate
-    var mNote=id.match(/^note(\d+)_(\d+)$/); if(mNote){ var d=state.notesValues[mNote[1]]||{}; d[mNote[2]]=''; state.notesValues[mNote[1]]=d; }
-    var mRef=id.match(/^ref(\d+)$/); if(mRef){ delete state.reflectText[mRef[1]]; }
-    var mLb=id.match(/^lb(\d+)$/); if(mLb){ delete state.lookBackText[mLb[1]]; }
-    var mPoll=id.match(/^poll(\d+)$/); if(mPoll){ delete state.pollAnswers[mPoll[1]]; }
-    save(); render(); toast('Deleted. It is gone from this device.'); },
-  enter:function(){ state.showOnboarding=false; save(); var b=document.querySelector('.backdrop'); if(b)b.parentNode.removeChild(b); },
-  noUrl:function(e){ if(e)e.preventDefault(); toast('This link opens in Blackboard once your professor adds the course URL.'); }
-};
-
-function download(name, text){
-  try{ var blob=new Blob([text],{type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},100); }
-  catch(e){ toast('Export is not available in this browser.'); }
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-action]'); if(!t) return;
+  var a=t.getAttribute('data-action');
+  if(a==='play-video'){ var wk=week(parseInt(t.getAttribute('data-week'),10)); t.closest('.aspect').innerHTML=videoEmbed(wk.video,'Week '+wk.number+' video'); }
+  else if(a==='jump'){ var je=document.getElementById(t.getAttribute('data-target')); if(je) je.scrollIntoView({behavior:'smooth',block:'start'}); }
+  else if(a==='slide-prev'||a==='slide-next'){ stepSlide(t.closest('.slidewrap'),a==='slide-next'?1:-1); }
+  else if(a==='flip'){ t.classList.toggle('flipped'); }
+  else if(a==='carto-add'){ openModal(cartoForm(t.getAttribute('data-week'))); }
+  else if(a==='carto-save'){ saveEntry(); }
+  else if(a==='carto-del'){ CARTO.splice(parseInt(t.getAttribute('data-i'),10),1); saveCarto(); closeModal(); render(); toast('Entry deleted.'); }
+  else if(a==='carto-view'){ cartoViewModal(parseInt(t.getAttribute('data-i'),10)); }
+  else if(a==='carto-export'){ if(!CARTO.length){ toast('Your map is empty.'); return; } dl('my-bfs218-cartography.json', JSON.stringify(CARTO,null,2)); toast('Saved to a file you keep.'); }
+  else if(a==='carto-import'){ document.getElementById('carto-file').click(); }
+  else if(a==='carto-clear'){ if(confirm('Clear your whole map? This cannot be undone. Save to a file first if you want to keep it.')){ CARTO=[]; saveCarto(); render(); toast('Your map was cleared.'); } }
+  else if(a==='modal-close'){ closeModal(); }
+});
+document.addEventListener('keydown',function(e){
+  var f=e.target.closest&&e.target.closest('[data-action=flip]');
+  if(f&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); f.classList.toggle('flipped'); }
+  var sw=e.target.closest&&e.target.closest('.slidewrap');
+  if(sw&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){ e.preventDefault(); stepSlide(sw,e.key==='ArrowRight'?1:-1); }
+});
+document.addEventListener('input',function(e){
+  if(e.target.id==='gsearch'){ document.getElementById('gsearchout').innerHTML=glossarySearch(e.target.value); }
+});
+document.addEventListener('change',function(e){
+  if(e.target.id==='gweek'){ location.hash='#/glossary?week='+e.target.value; }
+  else if(e.target.id==='card-week'){ document.getElementById('cardgrid').innerHTML=cardGrid(e.target.value); }
+  else if(e.target.id==='carto-file'){ var fl=e.target.files[0]; if(!fl) return; var rd=new FileReader(); rd.onload=function(){ try{ var a=JSON.parse(rd.result); if(Array.isArray(a)){ CARTO=a; saveCarto(); render(); toast('Your map was loaded.'); } else toast('That file did not look like a saved map.'); }catch(err){ toast('Could not read that file.'); } }; rd.readAsText(fl); }
+});
+function saveEntry(){
+  var t=document.getElementById('ce-title').value.trim();
+  if(!t){ toast('Add a short title to place your pin.'); return; }
+  CARTO.push({week:parseInt(document.getElementById('ce-week').value,10),title:t,note:document.getElementById('ce-note').value.trim(),concept:document.getElementById('ce-concept').value.trim()});
+  saveCarto(); closeModal(); render(); toast('Pin placed. Your map grew.');
 }
 
-/* ---------- router ---------- */
-function onHash(){
-  var h=(location.hash||'#/commons').replace(/^#\//,'');
-  var id=h.split('/')[0];
-  if(!ROUTES.some(function(r){return r.id===id;})) id='commons';
-  state.route=id; render(); window.scrollTo(0,0);
-}
-window.addEventListener('hashchange', onHash);
-onHash();
-onboarding();
+window.addEventListener('hashchange',render);
+render();
 })();

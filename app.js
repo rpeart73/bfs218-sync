@@ -42,7 +42,11 @@ var CSS = [
 "@media (max-width:760px){.herogrid{grid-template-columns:1fr}.heroimg{display:none}}",
 ".slide-kp{background:var(--raised);border:1px solid var(--hair);border-radius:12px;padding:16px}",
 "@media (max-width:760px){.slideshow-grid{grid-template-columns:1fr}}",
-"@media (max-width:640px){.toolgrid{grid-template-columns:1fr}}"
+"@media (max-width:640px){.toolgrid{grid-template-columns:1fr}}",
+".cmpgrid{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start}",
+".cmppick{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:none;border-bottom:1px solid var(--raised);padding:10px 12px;background:none}",
+".cmpcol{flex:none;width:288px;background:var(--surface);border:1px solid var(--hair);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}",
+"@media (max-width:760px){.cmpgrid{grid-template-columns:1fr}}"
 ].join("\n");
 (function(){ var s=document.createElement('style'); s.textContent=CSS; document.head.appendChild(s); })();
 
@@ -51,6 +55,11 @@ var SKEY='bfs218-cartography-v1';
 function loadCarto(){ try{ var a=JSON.parse(localStorage.getItem(SKEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
 function saveCarto(){ try{ localStorage.setItem(SKEY, JSON.stringify(CARTO)); }catch(e){} }
 var CARTO = loadCarto();
+var CKEY='bfs218-compare-v1';
+function loadCmp(){ try{ var a=JSON.parse(localStorage.getItem(CKEY)||'[]'); return Array.isArray(a)?a.slice(0,3):[]; }catch(e){ return []; } }
+function saveCmp(){ try{ localStorage.setItem(CKEY, JSON.stringify(CMP)); }catch(e){} }
+var CMP = loadCmp();
+var SHOWSYN = false;
 
 /* ---------- helpers ---------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -100,7 +109,8 @@ var ROUTES=[
   {sec:'Learning tools'},
   {id:'glossary',label:'Glossary and Thinkers',hash:'#/glossary'},
   {id:'cartography',label:'Living Cartography',hash:'#/cartography'},
-  {id:'cards',label:'Self-check cards',hash:'#/cards'}
+  {id:'cards',label:'Self-check cards',hash:'#/cards'},
+  {id:'compare',label:'Compare ideas',hash:'#/compare'}
 ];
 function renderNav(active){
   NAV.innerHTML=ROUTES.map(function(r){
@@ -154,7 +164,8 @@ function home(){
   var c=D.course||{},inst=D.instructor||{};
   var toolMeta={glossary:['#5B7A8C','Glossary and Thinkers','Every concept and the people behind it, week by week','#/glossary','A'],
     cartography:['#7C6A93','Living Cartography','Map techno-racism in your own digital life','#/cartography','M'],
-    cards:['#6E8B6A','Self-check cards','Practice recalling the ideas in your own words','#/cards','R']};
+    cards:['#6E8B6A','Self-check cards','Practice recalling the ideas in your own words','#/cards','R'],
+    compare:['#3A6EA5','Compare ideas','Hold two or three concepts side by side and see how they connect','#/compare','C']};
   var hero='<section id="hero">'+contourSVG()+
     '<div style="position:relative"><div class="htag">'+esc(c.code)+' &middot; '+esc(c.institution||'Seneca Polytechnic')+' &middot; '+esc(c.mode||'Online reference')+'</div>'+
     '<h1>'+esc(c.title||'')+'</h1><p class="hsub">'+esc(c.subtitle||'')+'. Read, watch, and work through the course materials, with tools that help the ideas take hold.</p>'+
@@ -271,6 +282,39 @@ function cartoViewModal(i){
   openModal('<div class="eyebrow" style="color:'+p.accent+'">Week '+pad(e.week)+' &middot; '+esc(e.concept||'')+'</div><h2 style="margin:.2em 0 .4em">'+esc(e.title)+'</h2><p>'+esc(e.note||'')+'</p><div style="margin-top:14px;display:flex;gap:10px"><button class="btn btn-quiet" data-action="modal-close">Close</button><button class="btn btn-quiet" data-action="carto-del" data-i="'+i+'">Delete</button></div>');
 }
 
+/* ---------- compare ideas (hold concepts side by side + synthesize) ---------- */
+function allConcepts(){ var out=[]; (D.weeks||[]).forEach(function(w){ (w.concepts||[]).forEach(function(c,i){ out.push({id:'w'+w.number+'-'+i,week:w.number,term:c.term,text:(c.paras||[]).join(' '),cite:(c.cites&&c.cites[0])||'',wtitle:w.title||''}); }); }); return out; }
+function conceptById(id){ var a=allConcepts(); for(var i=0;i<a.length;i++) if(a[i].id===id) return a[i]; return null; }
+function cmpToggle(id){ var i=CMP.indexOf(id); if(i>=0){ CMP.splice(i,1); } else { if(CMP.length>=3){ toast('Compare holds three ideas at a time.'); return; } CMP.push(id); } SHOWSYN=false; saveCmp(); render(); }
+function cmpSynth(items){
+  function trim(s){ return String(s||'').replace(/\s+/g,' ').trim(); }
+  function firstSentence(s){ s=trim(s); var m=s.match(/^.*?[.!?](\s|$)/); return (m?m[0]:s).trim(); }
+  function lower(s){ return s?s.charAt(0).toLowerCase()+s.slice(1):s; }
+  var named=items.map(function(c){ return c.term+' (Week '+pad(c.week)+')'; });
+  var lead=items.length===2?('You are holding '+named[0]+' next to '+named[1]+'.'):('You are holding '+named.slice(0,-1).join(', ')+', and '+named[named.length-1]+' together.');
+  var each=items.map(function(c){ return c.term+' is about '+lower(trim(firstSentence(c.text)).replace(/\.$/,''))+'.'; }).join(' ');
+  var close='Read them together and ask where they reinforce one another, and where one names something the others leave out. That tension is the through line of the course: technology is never neutral, and neither is the data it learns from.';
+  return lead+' '+each+' '+close;
+}
+function compareView(){
+  var picked=CMP.map(conceptById).filter(Boolean), all=allConcepts();
+  var left;
+  if(picked.length){
+    var cols=picked.map(function(c){ var p=phaseOf((week(c.week)||{}).phaseId);
+      return '<div class="cmpcol"><div style="height:5px;background:'+p.accent+'"></div><div style="padding:16px 17px"><div class="eyebrow" style="color:'+p.accent+'">Week '+pad(c.week)+' &middot; '+esc(c.wtitle)+'</div><h3 style="margin:.2em 0 .5em">'+esc(c.term)+'</h3><p style="margin:0;font-size:.92rem;color:var(--ink-soft);line-height:1.55">'+esc(c.text)+'</p>'+(c.cite?'<p class="cite" style="margin-top:10px">'+esc(c.cite)+'</p>':'')+'<button class="btn btn-quiet" data-action="cmp-add" data-id="'+esc(c.id)+'" style="margin-top:10px;color:var(--red)">Remove</button></div></div>';
+    }).join('');
+    var synth=picked.length>=2?(SHOWSYN?'<div style="background:#1B2A4A;color:#fff;border-radius:14px;padding:20px 22px;margin-bottom:18px"><div style="display:flex;align-items:center;gap:9px;margin-bottom:10px"><span class="eyebrow" style="color:#F2A900;margin:0">How these connect</span><button class="btn btn-quiet" data-action="cmp-hide" style="margin-left:auto;color:#fff">Hide</button></div><p style="margin:0;font-size:1rem;line-height:1.6;color:rgba(255,255,255,.92)">'+esc(cmpSynth(picked))+'</p></div>':'<button class="btn btn-primary" data-action="cmp-synth" style="margin-bottom:18px">Synthesize their relationship</button>'):'<p class="muted" style="margin:0 0 14px">Add one more idea to compare it against this one.</p>';
+    left=synth+'<div style="display:flex;gap:16px;overflow-x:auto;padding-bottom:10px">'+cols+'</div>';
+  } else {
+    left='<div class="card" style="text-align:center;padding:42px 24px"><p class="muted" style="margin:0">Nothing selected yet. Choose two or three ideas from the list on the right.</p></div>';
+  }
+  var picklist=all.map(function(c){ var sel=CMP.indexOf(c.id)>=0; var p=phaseOf((week(c.week)||{}).phaseId);
+    return '<button class="cmppick" data-action="cmp-add" data-id="'+esc(c.id)+'" style="background:'+(sel?'#E6EAF1':'none')+'"><span class="mono" style="font-size:.66rem;color:'+p.accent+';flex:none;width:26px">W'+pad(c.week)+'</span><span style="flex:1;min-width:0;font-size:.85rem;font-weight:600;color:var(--ink)">'+esc(c.term)+'</span><span style="flex:none;font-weight:700;color:'+(sel?'#1B2A4A':'#9aa3b2')+'">'+(sel?'&#10003;':'+')+'</span></button>';
+  }).join('');
+  var head='<h1>Compare ideas</h1><p class="lede">Hold two or three of the course\'s key ideas side by side, then synthesize how they connect. Private study, saved on your device.</p>'+(picked.length?'<button class="btn btn-quiet" data-action="cmp-clear" style="color:var(--red);margin-bottom:10px">Clear all</button>':'');
+  return head+'<div class="cmpgrid"><div>'+left+'</div><aside style="position:sticky;top:72px"><div class="card" style="padding:0;overflow:hidden;max-height:calc(100vh - 120px);display:flex;flex-direction:column"><div style="padding:13px 14px;border-bottom:1px solid var(--hair)"><b>Key ideas</b><div class="muted" style="font-size:.78rem;margin-top:2px">'+picked.length+' of 3 selected &middot; tap to add or remove</div></div><div style="overflow:auto">'+picklist+'</div></div></aside></div>';
+}
+
 /* ---------- render dispatch ---------- */
 function render(){
   var h=location.hash||'#/home', path=h.replace(/^#\//,'').split('?')[0], html, active;
@@ -278,6 +322,7 @@ function render(){
   else if(path==='glossary'){ active='glossary'; html=glossary(); }
   else if(path==='cartography'){ active='cartography'; html=cartography(); }
   else if(path==='cards'){ active='cards'; html=cards(); }
+  else if(path==='compare'){ active='compare'; html=compareView(); }
   else { active='home'; html=home(); }
   renderNav(active); MAIN.innerHTML=html; MAIN.focus(); window.scrollTo(0,0);
 }
@@ -298,6 +343,10 @@ document.addEventListener('click',function(e){
   else if(a==='carto-import'){ document.getElementById('carto-file').click(); }
   else if(a==='carto-clear'){ if(confirm('Clear your whole map? This cannot be undone. Save to a file first if you want to keep it.')){ CARTO=[]; saveCarto(); render(); toast('Your map was cleared.'); } }
   else if(a==='modal-close'){ closeModal(); }
+  else if(a==='cmp-add'){ cmpToggle(t.getAttribute('data-id')); }
+  else if(a==='cmp-clear'){ CMP=[]; SHOWSYN=false; saveCmp(); render(); }
+  else if(a==='cmp-synth'){ SHOWSYN=true; render(); }
+  else if(a==='cmp-hide'){ SHOWSYN=false; render(); }
 });
 document.addEventListener('keydown',function(e){
   var f=e.target.closest&&e.target.closest('[data-action=flip]');

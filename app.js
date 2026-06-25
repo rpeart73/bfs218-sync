@@ -267,7 +267,7 @@ function cmpSynth(items){
   function trim(s){ return String(s||'').replace(/\s+/g,' ').trim(); }
   function firstSentence(s){ s=trim(s); var m=s.match(/^.*?[.!?](\s|$)/); return (m?m[0]:s).trim(); }
   function lower(s){ return s?s.charAt(0).toLowerCase()+s.slice(1):s; }
-  var named=items.map(function(c){ return c.term+' (Week '+pad(c.week)+')'; });
+  var named=items.map(function(c){ return c.term; });
   var lead=items.length===2?('You are holding '+named[0]+' next to '+named[1]+'.'):('You are holding '+named.slice(0,-1).join(', ')+', and '+named[named.length-1]+' together.');
   var each=items.map(function(c){ return c.term+' is about '+lower(trim(firstSentence(c.text)).replace(/\.$/,''))+'.'; }).join(' ');
   var close='Read them together and ask where they reinforce one another, and where one names something the others leave out. That tension is the through line of the course: technology is never neutral, and neither is the data it learns from.';
@@ -278,7 +278,7 @@ function compareView(){
   var left;
   if(picked.length){
     var cols=picked.map(function(c){ var p=phaseOf((week(c.week)||{}).phaseId);
-      return '<div class="cmpcol"><div style="height:5px;background:'+p.accent+'"></div><div style="padding:16px 17px"><div class="eyebrow" style="color:'+p.accent+'">Week '+pad(c.week)+' &middot; '+esc(c.wtitle)+'</div><h3 style="margin:.2em 0 .5em">'+esc(c.term)+'</h3><p style="margin:0;font-size:.92rem;color:var(--ink-soft);line-height:1.55">'+esc(c.text)+'</p>'+(c.cite?'<p class="cite" style="margin-top:10px">'+esc(c.cite)+'</p>':'')+'<button class="btn btn-quiet" data-action="cmp-add" data-id="'+esc(c.id)+'" style="margin-top:10px;color:var(--red)">Remove</button></div></div>';
+      return '<div class="cmpcol"><div style="height:5px;background:'+p.accent+'"></div><div style="padding:16px 17px"><h3 style="margin:0 0 .5em">'+esc(c.term)+'</h3><p style="margin:0;font-size:.92rem;color:var(--ink-soft);line-height:1.55">'+esc(c.text)+'</p>'+(c.cite?'<p class="cite" style="margin-top:10px">'+esc(c.cite)+'</p>':'')+'<button class="btn btn-quiet" data-action="cmp-add" data-id="'+esc(c.id)+'" style="margin-top:10px;color:var(--red)">Remove</button></div></div>';
     }).join('');
     var synth=picked.length>=2?(SHOWSYN?'<div style="background:#1B2A4A;color:#fff;border-radius:14px;padding:20px 22px;margin-bottom:18px"><div style="display:flex;align-items:center;gap:9px;margin-bottom:10px"><span class="eyebrow" style="color:#F2A900;margin:0">How these connect</span><button class="btn btn-quiet" data-action="cmp-hide" style="margin-left:auto;color:#fff">Hide</button></div><p style="margin:0;font-size:1rem;line-height:1.6;color:rgba(255,255,255,.92)">'+esc(cmpSynth(picked))+'</p></div>':'<button class="btn btn-primary" data-action="cmp-synth" style="margin-bottom:18px">Synthesize their relationship</button>'):'<p class="muted" style="margin:0 0 14px">Add one more idea to compare it against this one.</p>';
     left=synth+'<div style="display:flex;gap:16px;overflow-x:auto;padding-bottom:10px">'+cols+'</div>';
@@ -286,7 +286,7 @@ function compareView(){
     left='<div class="card" style="text-align:center;padding:42px 24px"><p class="muted" style="margin:0">Nothing selected yet. Choose two or three ideas from the list on the right.</p></div>';
   }
   var picklist=all.map(function(c){ var sel=CMP.indexOf(c.id)>=0; var p=phaseOf((week(c.week)||{}).phaseId);
-    return '<button class="cmppick" data-action="cmp-add" data-id="'+esc(c.id)+'" style="background:'+(sel?'#E6EAF1':'none')+'"><span class="mono" style="font-size:.66rem;color:'+p.accent+';flex:none;width:26px">W'+pad(c.week)+'</span><span style="flex:1;min-width:0;font-size:.85rem;font-weight:600;color:var(--ink)">'+esc(c.term)+'</span><span style="flex:none;font-weight:700;color:'+(sel?'#1B2A4A':'#9aa3b2')+'">'+(sel?'&#10003;':'+')+'</span></button>';
+    return '<button class="cmppick" data-action="cmp-add" data-id="'+esc(c.id)+'" style="background:'+(sel?'#E6EAF1':'none')+'"><span style="width:9px;height:9px;border-radius:50%;background:'+p.accent+';flex:none"></span><span style="flex:1;min-width:0;font-size:.85rem;font-weight:600;color:var(--ink)">'+esc(c.term)+'</span><span style="flex:none;font-weight:700;color:'+(sel?'#1B2A4A':'#9aa3b2')+'">'+(sel?'&#10003;':'+')+'</span></button>';
   }).join('');
   var head='<h1>Compare ideas</h1><p class="lede">Hold two or three of the course\'s key ideas side by side, then synthesize how they connect. Private study, saved on your device.</p>'+(picked.length?'<button class="btn btn-quiet" data-action="cmp-clear" style="color:var(--red);margin-bottom:10px">Clear all</button>':'');
   return head+'<div class="cmpgrid"><div>'+left+'</div><aside style="position:sticky;top:72px"><div class="card" style="padding:0;overflow:hidden;max-height:calc(100vh - 120px);display:flex;flex-direction:column"><div style="padding:13px 14px;border-bottom:1px solid var(--hair)"><b>Key ideas</b><div class="muted" style="font-size:.78rem;margin-top:2px">'+picked.length+' of 3 selected &middot; tap to add or remove</div></div><div style="overflow:auto">'+picklist+'</div></div></aside></div>';

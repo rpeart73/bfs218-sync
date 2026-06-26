@@ -152,8 +152,9 @@ window.BFS218 = {
     "tanksley2023",
     "costanza2020"
    ],
-   "url": "https://www.ruhabenjamin.com/race-after-technology",
-   "fulltext": false
+   "url": "https://seneca.primo.exlibrisgroup.com/discovery/search?vid=01SENC_INST:01SENC_NDE&tab=Everything&offset=0&lang=en&query=any%2Ccontains%2CRace%20After%20Technology%20Abolitionist%20Tools%20Benjamin",
+   "fulltext": false,
+   "senecaLib": true
   },
   {
    "id": "crenshaw1991",
@@ -203,8 +204,9 @@ window.BFS218 = {
     "benjamin2019",
     "devlin2023"
    ],
-   "url": "https://nyupress.org/9781479837243/algorithms-of-oppression/",
-   "fulltext": false
+   "url": "https://seneca.primo.exlibrisgroup.com/discovery/search?vid=01SENC_INST:01SENC_NDE&tab=Everything&offset=0&lang=en&query=any%2Ccontains%2CAlgorithms%20of%20Oppression%20How%20Search%20Engines%20Noble",
+   "fulltext": false,
+   "senecaLib": true
   },
   {
    "id": "buolamwini2018",
@@ -335,8 +337,9 @@ window.BFS218 = {
     "robertson2020",
     "opc2021"
    ],
-   "url": "https://onlinelibrary.wiley.com/doi/10.1111/imig.13187",
-   "fulltext": false
+   "url": "https://seneca.primo.exlibrisgroup.com/discovery/search?vid=01SENC_INST:01SENC_NDE&tab=Everything&offset=0&lang=en&query=any%2Ccontains%2CDigital%20Border%20Technologies%20Techno-Racism%20Molnar",
+   "fulltext": false,
+   "senecaLib": true
   },
   {
    "id": "mohamed2020",

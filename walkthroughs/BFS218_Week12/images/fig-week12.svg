@@ -16,7 +16,7 @@
   <!-- Layer 2: Institutions and frameworks -->
   <rect x="180" y="240" width="420" height="58" rx="10" fill="#f5f7f9" stroke="#cfd4db" stroke-width="1.5"/>
   <text x="390" y="266" text-anchor="middle" font-size="17" font-weight="600" fill="#15171C">Institutions and frameworks</text>
-  <text x="390" y="287" text-anchor="middle" font-size="13" fill="#474C57">Ortiz DIA: build justice in from the start</text>
+  <text x="390" y="287" text-anchor="middle" font-size="13" fill="#474C57">Build justice in from the start</text>
 
   <!-- Layer 1 (bottom): The single system -->
   <rect x="180" y="308" width="420" height="58" rx="10" fill="#f5f7f9" stroke="#cfd4db" stroke-width="1.5"/>
@@ -34,5 +34,5 @@
   <polygon points="623,138 630,122 637,138" fill="#8a909c"/>
   <text x="648" y="245" text-anchor="middle" font-size="13" fill="#666" transform="rotate(90 648 245)">Where lasting change comes from</text>
 
-  <text x="40" y="406" font-size="13" fill="#666">Attard-Frost (2023); United Nations (2020); Ortiz (2024).</text>
+  <text x="40" y="406" font-size="13" fill="#666">Attard-Frost (2023); United Nations (2020).</text>
 </svg>

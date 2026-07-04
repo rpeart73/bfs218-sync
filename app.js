@@ -1231,7 +1231,7 @@
     var vid = VID ? '<section id="wk-vid" class="node"><h2 class="wk-sec">This week in 80 seconds</h2>'
       + '<video controls preload="none" playsinline poster="./' + VID.poster + '" style="width:100%;max-width:300px;display:block;border-radius:12px;border:1px solid var(--border);background:#000">'
       + '<source src="./' + VID.file + '" type="video/mp4">'
-      + '<track kind="captions" srclang="en" label="English" src="./' + VID.vtt + '" default>'
+      + '<track kind="captions" srclang="en" label="English" src="./' + VID.vtt + '">'
       + '</video>'
       + (VID.summary ? '<p style="margin:13px 0 0;font-size:.95rem;color:var(--ink-dim);line-height:1.6;max-width:60ch">' + esc(VID.summary) + '</p>' : '')
       + '<p style="margin:9px 0 0;font-size:.75rem;color:var(--ink-faint)">Made with NotebookLM from this week\'s readings; reviewed by your instructor.</p>'

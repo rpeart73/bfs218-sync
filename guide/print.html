@@ -5,20 +5,50 @@
 <title>BFS218 Student Guide (Online Synchronous, print)</title>
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
-  doc-page:not(:defined){visibility:hidden}
+  @page {
+    size: letter;
+    margin: 0.5in 0.5in 0.85in 0.5in;
+    @bottom-left {
+      content: "BFS218 · Field Guide Site Guide";
+      font-family: 'Space Mono', monospace; font-size: 7.5pt;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #6B615A; margin-bottom: .3in;
+    }
+    @bottom-center {
+      content: "Seneca Polytechnic · Fall 2026";
+      font-family: 'Space Mono', monospace; font-size: 7.5pt;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #6B615A; margin-bottom: .3in;
+    }
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: 'Space Mono', monospace; font-size: 7.5pt;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #6B615A; margin-bottom: .3in;
+    }
+  }
   body{margin:0}
   ::selection{background:#F7C7C0;color:#1C1714}
   .shot-btn{all:unset;display:block;width:100%;height:100%}
+  /* bottom:0 exactly: any negative offset overflows the page fragment and
+     Chromium paints the rule at the TOP of the following page */
+  .pgrule{position:fixed;bottom:0;left:0;right:0;border-top:1.5px solid #ED3326}
+  :where(h1,h2,h3){text-wrap:balance}
+  :where(p,li,blockquote,figcaption){text-wrap:pretty}
+  h2{break-after:avoid;break-inside:avoid}
+  h2 + p{break-after:avoid}
+  div[style*="letter-spacing:.2em"]{break-after:avoid}
+  div[style*="border:1.5px solid #E7DED2"]{break-inside:avoid}
+  figure,img,svg,tr{break-inside:avoid}
+  p,li{orphans:3;widows:3}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 </style>
-<script src="assets/doc-page.js"></script>
 </head>
 <body>
-<doc-page size="letter" margin="0.5in" style="--sr:#ED3326;font-family:'Newsreader',Georgia,serif;color:#241d19">
+<div class="pgrule"></div>
+<div style="--sr:#ED3326;font-family:'Newsreader',Georgia,serif;color:#241d19">
 
-<div slot="footer" style="display:flex;justify-content:space-between;align-items:center;padding:6px 2px;border-top:1.5px solid #ED3326;font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.06em;color:#6B615A;text-transform:uppercase">
-  <span>BFS218 · Field Guide Site Guide</span>
-  <span>Seneca Polytechnic · Fall 2026</span>
-</div>
+
 
 <!-- ===================== COVER ===================== -->
 <div style="position:relative;overflow:hidden;border-radius:20px;background:#D42315;background-image:linear-gradient(150deg,#DB2617 0%,#E22C1D 55%,#B01909 100%);color:#fff;padding:40px 40px 34px">
@@ -330,6 +360,6 @@
 </section>
 
 
-</doc-page>
+</div>
 </body>
 </html>

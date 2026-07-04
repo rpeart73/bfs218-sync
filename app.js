@@ -1227,6 +1227,15 @@
       + '<div style="font-size:1.08rem;font-weight:600;color:var(--ink);border-left:3px solid var(--red);padding-left:14px;margin:16px 0">' + esc(journeyQ(w)) + '</div>'
       + '<div style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint)">' + ic('clock', 13) + ' ' + esc(d.time) + '</div>'
       + '</div></section>';
+    var VID = window.BFS218_VIDEOS && window.BFS218_VIDEOS[w];
+    var vid = VID ? '<section id="wk-vid" class="node"><h2 class="wk-sec">This week in 80 seconds</h2>'
+      + '<video controls preload="none" playsinline poster="./' + VID.poster + '" style="width:100%;max-width:300px;display:block;border-radius:12px;border:1px solid var(--border);background:#000">'
+      + '<source src="./' + VID.file + '" type="video/mp4">'
+      + '<track kind="captions" srclang="en" label="English" src="./' + VID.vtt + '" default>'
+      + '</video>'
+      + (VID.summary ? '<p style="margin:13px 0 0;font-size:.95rem;color:var(--ink-dim);line-height:1.6;max-width:60ch">' + esc(VID.summary) + '</p>' : '')
+      + '<p style="margin:9px 0 0;font-size:.75rem;color:var(--ink-faint)">Made with NotebookLM from this week\'s readings; reviewed by your instructor.</p>'
+      + '</section>' : '';
     var pre = sec('pre', 'Before you begin', '<p class="wk-hint">A quick read on where your understanding sits right now, no grade. Rate each idea, then meet them again at the end to see how far your thinking moves.</p>' + wkChecks(w, 'pre', d));
     var purpose = '<section id="wk-learn" class="node"><h2 class="wk-sec">Purpose</h2><p style="margin:0">' + esc(d.purpose) + '</p></section>';
     var outcomes = sec('out', 'Learning outcomes', '<p style="margin:0 0 8px;font-size:.9rem">By the end of this week, you will be able to:</p>' + d.outcomes.map(function (o) { return '<div class="wk-oc"><span class="b"></span>' + esc(o) + '</div>'; }).join(''));
@@ -1248,9 +1257,9 @@
       + (next != null ? '<button onclick="SOC.station(' + next + ')" style="flex:1;min-width:180px;text-align:right;border:1px solid var(--border);background:#fff;border-radius:12px;padding:13px 16px;cursor:pointer"><div class="mono" style="font-size:.66rem;color:var(--red)">NEXT &rarr;</div><div style="font-size:.92rem;font-weight:700;color:var(--ink);margin-top:2px">Week ' + next + ': ' + esc(weekTitle(next)) + '</div></button>' : '')
       + '</div>';
     var rail = '<aside class="wk-rail"><div class="wk-railbox"><div class="wk-railh">IN THIS WEEK</div>'
-      + [['ov', 'Overview'], ['pre', 'Before you begin'], ['learn', 'Purpose &amp; outcomes'], ['read', 'Readings']].concat(d.deck ? [['watch', 'Walkthrough']] : []).concat([['do', 'The activity'], ['reflect', 'Reflection &amp; save']]).map(function (it) { return '<a href="#wk-' + it[0] + '"><span class="s"></span>' + it[1] + '</a>'; }).join('')
+      + [['ov', 'Overview']].concat(VID ? [['vid', 'This week in 80 seconds']] : []).concat([['pre', 'Before you begin'], ['learn', 'Purpose &amp; outcomes'], ['read', 'Readings']]).concat(d.deck ? [['watch', 'Walkthrough']] : []).concat([['do', 'The activity'], ['reflect', 'Reflection &amp; save']]).map(function (it) { return '<a href="#wk-' + it[0] + '"><span class="s"></span>' + it[1] + '</a>'; }).join('')
       + '<div class="wk-railt">' + ic('clock', 12) + ' ' + esc(d.time.split('(')[0].trim()) + '</div></div></aside>';
-    return '<div class="rise wk-grid"><section>' + hero + pre + purpose + outcomes + guiding + concepts + terms + readings + watch + act + reflect + navRow + '</section>' + rail + '</div>';
+    return '<div class="rise wk-grid"><section>' + hero + vid + pre + purpose + outcomes + guiding + concepts + terms + readings + watch + act + reflect + navRow + '</section>' + rail + '</div>';
   }
   /* ---------- generic week activities: match / scenario / toggle / assemble / lab ---------- */
   function actCard(inner) { return '<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin:0 0 12px">' + inner + '</div>'; }

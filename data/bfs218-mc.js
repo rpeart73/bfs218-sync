@@ -258,11 +258,11 @@ window.BFS218_MC = {
    "options": [
     "The digital divide",
     "The benevolence trap",
-    "Benjamin's idea of the coded gaze",
+    "Benjamin's idea of engineered inequity",
     "The OCAP principles of data governance"
    ],
    "answer": 2,
-   "why": "The abstract states the study grounds Benjamin's idea of the coded gaze with measured evidence.",
+   "why": "The study gives measured evidence for Benjamin's engineered inequity: facial analysis that fails darker-skinned women is inequality built into a shipped product, not a quirky flaw.",
    "skill": "significance",
    "diff": 2
   }

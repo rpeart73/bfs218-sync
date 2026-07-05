@@ -98,7 +98,7 @@ window.BFS218 = {
   "4": "Default Discrimination",
   "5": "Coded Exposure",
   "6": "Algorithms in Canada",
-  "7": "Assembling the Anatomy",
+  "7": "Study Week",
   "8": "Indigenous Data Sovereignty",
   "9": "Technological Benevolence",
   "10": "Algorithmic Gatekeeping",

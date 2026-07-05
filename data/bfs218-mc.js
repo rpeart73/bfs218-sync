@@ -1045,15 +1045,15 @@ window.BFS218_MC = {
    "diff": 1
   },
   {
-   "q": "How many significant gaps in the proposed AIDA does Attard-Frost's brief identify?",
+   "q": "Which of these does Attard-Frost's brief name as a significant gap in the proposed AIDA?",
    "options": [
-    "Three, grouped under a single recommendation",
-    "Five, each with a corresponding recommendation",
-    "One, with no recommendation",
-    "Ten, with no recommendations"
+    "It bans all AI research outright",
+    "Weak specificity about which AI systems it covers and how",
+    "It applies only to companies outside Canada",
+    "It gives the public too much say over the law"
    ],
    "answer": 1,
-   "why": "The brief identifies five significant gaps in the proposed Artificial Intelligence and Data Act, with five corresponding recommendations.",
+   "why": "Attard-Frost names weak specificity, weak transparency, and too little public engagement among the significant gaps in the proposed Artificial Intelligence and Data Act.",
    "skill": "concepts",
    "diff": 1
   },

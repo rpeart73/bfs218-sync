@@ -19,5 +19,7 @@ window.BFS218_VIDEOS = {
  10: { file: "videos/BFS218_Week10.mp4", poster: "videos/BFS218_Week10.jpg", vtt: "videos/BFS218_Week10.vtt",
       summary: "How algorithms increasingly decide who gets through the gate to opportunity in school and work, and how bias can ride along in the prediction." },
  11: { file: "videos/BFS218_Week11.mp4", poster: "videos/BFS218_Week11.jpg", vtt: "videos/BFS218_Week11.vtt",
-      summary: "How people are building fairer alternatives by putting the communities most affected at the centre of the design." }
+      summary: "How people are building fairer alternatives by putting the communities most affected at the centre of the design." },
+ 12: { file: "videos/BFS218_Week12.mp4", poster: "videos/BFS218_Week12.jpg",
+      summary: "Why the rules for AI are still catching up, and one concrete gap between what the technology already does and what current law actually covers." }
 };

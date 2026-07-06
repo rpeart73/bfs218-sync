@@ -950,6 +950,50 @@
     }).join('');
     return '<div style="display:flex;gap:14px;flex-wrap:wrap">' + cols + '</div>';
   }
+  function audit3dDots(g, run) {
+    var fail = gsFails(g), dots = '';
+    for (var i = 0; i < GS.perGroup; i++) {
+      var isFail = run && i < fail;
+      dots += '<span class="audit-dot' + (isFail ? ' fail' : '') + '" style="--z:' + ((i % 5) * 2) + 'px;--d:' + ((i * 0.035).toFixed(2)) + 's" aria-hidden="true"></span>';
+    }
+    return dots;
+  }
+  function audit3dBench(run) {
+    return '<div class="audit-bench" aria-label="Balanced benchmark with four groups, 25 markers per group">'
+      + GS.groups.map(function (g) {
+        return '<div class="audit-tray"><div class="audit-tray-label">' + esc(g.short) + '</div><div class="audit-dots">' + audit3dDots(g, run) + '</div>'
+          + (run ? '<div class="audit-tray-count">' + gsFails(g) + ' of ' + GS.perGroup + ' failed</div>' : '<div class="audit-tray-count">25 markers</div>') + '</div>';
+      }).join('')
+      + '</div>';
+  }
+  function auditSliceStep(slice, id, title, body) {
+    var active = slice === id;
+    return '<button onclick="SOC.auditSlice(\'' + id + '\')" aria-pressed="' + active + '" class="audit-step' + (active ? ' on' : '') + '"><span>' + esc(title) + '</span><small>' + esc(body) + '</small></button>';
+  }
+  function audit3dScene(run, slice, sys) {
+    var auditedCount = Object.keys(state.auditedSystems || {}).length;
+    var label = run ? ('Auditing ' + sys.name) : 'Ready to audit';
+    var status = run ? (auditedCount + ' of 3 systems audited') : 'Run the first benchmark';
+    var steps = auditSliceStep(slice, 'overall', 'Overall', 'One number looks safe')
+      + auditSliceStep(slice, 'gender', 'Gender', 'A gap begins to show')
+      + auditSliceStep(slice, 'skin', 'Skin type', 'The gap gets sharper')
+      + auditSliceStep(slice, 'intersectional', 'Intersectional', 'The harm is finally visible');
+    return '<section class="audit-lab" aria-label="Immersive coded gaze audit lab">'
+      + '<div class="audit-stage">'
+      + '<div class="audit-wall"><div class="audit-wall-kicker">AUDIT LAB</div><h2>Slice the results until the hidden harm appears.</h2><p>' + esc(auditInsight(slice)) + '</p><div id="bfs-slicebtns" class="audit-steps">' + steps + '</div></div>'
+      + '<div class="audit-table">'
+      + audit3dBench(run)
+      + '<div class="audit-systems">' + GS.systems.map(function (s, i) {
+        var active = run && sys.id === s.id;
+        var done = state.auditedSystems && state.auditedSystems[s.id];
+        return '<button onclick="SOC.auditSystem(' + i + ')" class="audit-system' + (active ? ' active' : '') + (done ? ' done' : '') + '"><span>' + esc(s.name) + '</span><b>' + s.rate.dw.toFixed(1) + '%</b><small>darker-skinned women</small></button>';
+      }).join('') + '</div>'
+      + '<div class="audit-console"><div><div class="audit-console-label">' + esc(label) + '</div><div class="audit-console-note">' + esc(status) + '</div></div>'
+      + (run ? '<button onclick="SOC.nextSystem()">Audit next system</button>' : '<button onclick="SOC.runAudit()">Run audit</button>') + '</div>'
+      + '</div></div>'
+      + '<div class="audit-readout"><div><h3>What the lab is showing</h3><p>The benchmark is balanced. The reporting is not. Overall accuracy hides the harm, single-axis slices only partly expose it, and the intersectional slice shows who the system fails most.</p></div><div id="bfs-bars">' + auditBars(slice) + '</div></div>'
+      + '</section>';
+  }
   function auditSliceBtns(active) {
     var defs = [['overall', 'Overall'], ['gender', 'By gender'], ['skin', 'By skin type'], ['intersectional', 'Intersectional']];
     return '<div id="bfs-slicebtns" style="display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px">' + defs.map(function (d) {
@@ -968,13 +1012,10 @@
     var openBtn = '<button onclick="SOC.read(\'buolamwini2018\')" style="margin-top:2px;background:none;border:none;color:#1552D8;font-size:.8125rem;font-weight:600;padding:0;cursor:pointer">Open Gender Shades (Buolamwini and Gebru, 2018) &#8599;</button>';
     var predict = '<div style="background:#F7F8FA;border:1px solid #DEE3EA;border-radius:12px;padding:14px 16px;margin:16px 0 0"><div class="mono" style="font-size:.6875rem;letter-spacing:.05em;color:#6B7280;margin-bottom:6px">PREDICT FIRST</div><p style="font-size:.9rem;line-height:1.55;color:#15171C;margin:0">You are about to audit three real facial-analysis systems against a benchmark balanced by gender and skin type. Before you run it: which group do you expect them to fail the most, and why?</p></div>';
     var method = '<p style="font-size:.78rem;line-height:1.5;color:#6b7280;margin:14px 0 0">This re-enacts Buolamwini and Gebru\'s published audit of three commercial systems (IBM, Microsoft, and Face++). The systems, the balanced benchmark, and the results are theirs; you are walking through what they found, not running a live classifier. Each marker is one benchmark face the system was tested on; red means the system got it wrong. The markers are neutral and do not depict anyone.</p>';
-    var grid = '<div style="background:#fff;border:1px solid #DEE3EA;border-radius:12px;padding:16px 18px;margin:14px 0 0"><div class="mono" style="font-size:.6875rem;letter-spacing:.05em;color:#6B7280;margin-bottom:12px">THE BALANCED BENCHMARK &middot; 25 FACES PER GROUP' + (run ? ' &middot; AUDITING ' + esc(sys.name.toUpperCase()) : '') + '</div><div id="bfs-grid">' + auditGrid(run) + '</div></div>';
-    var runBtn = '<div style="margin:14px 0 0;display:flex;gap:12px;flex-wrap:wrap;align-items:center">' + (run
-      ? '<button onclick="SOC.nextSystem()" style="background:var(--red);border:none;color:#fff;border-radius:10px;padding:10px 18px;font-size:.9rem;font-weight:600;cursor:pointer">Audit the next system &#8594;</button><span style="font-size:.8125rem;color:#6b7280">' + auditedCount + ' of 3 systems audited</span>'
-      : '<button onclick="SOC.runAudit()" style="background:var(--red);border:none;color:#fff;border-radius:10px;padding:11px 20px;font-size:.95rem;font-weight:600;cursor:pointer">Run the audit on the first system</button>') + '</div>';
+    var grid = audit3dScene(run, slice, sys);
     var summary = run ? '<div style="background:' + (auditedCount >= 3 ? '#15171C' : '#F7F8FA') + ';color:' + (auditedCount >= 3 ? '#fff' : '#15171C') + ';border:1px solid ' + (auditedCount >= 3 ? '#15171C' : '#DEE3EA') + ';border-radius:12px;padding:14px 16px;margin:14px 0 0;font-size:.875rem;line-height:1.55">' + (auditedCount >= 3 ? 'You audited all three: IBM, Microsoft, and Face++. Every one failed darker-skinned women the most. The coded gaze is an industry pattern, not one bad product.' : esc(sys.name) + ' failed darker-skinned women the most. Audit the next system and watch whether the pattern repeats. (' + auditedCount + ' of 3 audited.)') + '</div>' : '';
     var results = run
-      ? '<div style="background:#fff;border:1px solid #DEE3EA;border-top:4px solid #DA291C;border-radius:12px;padding:16px 18px;margin:14px 0 0"><div class="mono" style="font-size:.6875rem;letter-spacing:.05em;color:#6B7280;margin-bottom:10px">NOW, HOW DO YOU REPORT IT?</div>' + auditSliceBtns(slice) + '<div id="bfs-bars">' + auditBars(slice) + '</div><p id="bfs-insight" style="font-size:.875rem;line-height:1.55;color:#474C57;margin:14px 0 0">' + esc(auditInsight(slice)) + '</p></div>'
+      ? '<p id="bfs-insight" style="font-size:.875rem;line-height:1.55;color:#474C57;margin:14px 0 0">' + esc(auditInsight(slice)) + '</p>'
       : '<p style="font-size:.85rem;color:#6b7280;margin:14px 0 0">Run the audit, then slice the results to see what a single number hides.</p>';
     var check = studioCheck('BFS218|sandbox', {
       q: 'You ran a balanced benchmark and the system failed darker-skinned women far more than anyone else, with no racist rule written into it. Which concept names a harm like that, built into a system through its design and data rather than through intent?',
@@ -988,7 +1029,7 @@
       + '<div class="mono" style="font-size:.6875rem;letter-spacing:.06em;color:var(--red);font-weight:600;margin-bottom:6px">BIAS AUDIT</div>'
       + '<h1 style="font-size:1.75rem;font-weight:600;margin:0 0 8px">Audit the coded gaze</h1>'
       + '<p style="font-size:.9375rem;line-height:1.55;color:#474C57;margin:0 0 4px;">You are the auditor. Run a balanced benchmark on a facial-analysis system, then find the bias its makers missed, the way Buolamwini and Gebru did.</p>'
-      + openBtn + predict + method + grid + runBtn + summary + results + auditFallbackTable() + check + chain + save
+      + openBtn + predict + method + grid + summary + results + auditFallbackTable() + check + chain + save
       + '</section>';
   }
   function cardsScreen() {
@@ -1499,6 +1540,7 @@
     return { html: kc, items: kcItems.concat(shortItems) };
   }
   function visualOverviewSection(w, d) {
+    if (courseCode() === 'BFS218' && w === 5) return visualPilotWeek5(w, d);
     var weekNum = (w < 10 ? '0' : '') + w;
     var src = './assets/topic-pictures/bfs218-week' + weekNum + '-storyboard.webp';
     var frames = ['Situation', 'System', 'Pressure point', 'Impact path', 'Critical lens', 'Accountability', 'Redesign'];
@@ -1508,6 +1550,20 @@
       + '<p class="wk-hint">A stitched seven-frame story for this week: the issue, the system, the pressure point, the impact path, the course lens, the accountability move, and the redesign.</p>'
       + '<figure class="wk-visual"><img src="' + src + '" alt="' + esc(alt) + '" loading="lazy" decoding="async"><figcaption>Read the visual as one process story, from the first panel through the final redesign.</figcaption></figure>'
       + '<div class="wk-visual-frames" aria-label="Visual overview frame guide">' + frameGuide + '</div>'
+      + '</section>';
+  }
+  function visualPilotWeek5(w, d) {
+    var src = './assets/topic-pictures/bfs218-week05-pilot-overview.jpg';
+    var alt = 'Bright visual overview of a coded gaze audit: overall accuracy looks safe, then gender, skin type, and intersectional slices reveal concentrated failures for darker-skinned women.';
+    var cards = [
+      ['What looks safe', 'The system begins with one overall accuracy score. That number can make the product look reliable because it averages everyone together.'],
+      ['What the audit does', 'The same benchmark is sliced by gender, then skin type, then both together. Each slice asks a sharper question about who the system fails.'],
+      ['What it reveals', 'The intersectional view shows the hidden pattern: darker-skinned women carry the highest error rate. The harm was in the system, not in one bad result.']
+    ].map(function (c, i) { return '<div class="wk-visual-card"><div class="mono">STEP ' + (i + 1) + '</div><h3>' + esc(c[0]) + '</h3><p>' + esc(c[1]) + '</p></div>'; }).join('');
+    return '<section id="wk-visual" class="node wk-visual-pilot"><h2 class="wk-sec">A Visual Overview</h2>'
+      + '<p class="wk-hint">Pilot format: one clear image, then a plain explanation of what the image is asking you to see.</p>'
+      + '<figure class="wk-visual"><img src="' + src + '" alt="' + esc(alt) + '" loading="eager" decoding="sync" fetchpriority="high"><figcaption>This image is conveying one move: do not stop at the overall score. Keep slicing the audit until the hidden pattern becomes visible.</figcaption></figure>'
+      + '<div class="wk-visual-explain">' + cards + '</div>'
       + '</section>';
   }
   function weekPage(w, d) {
@@ -2461,8 +2517,9 @@
       senecaDoc(cc || 'Course', 'Self-Check Studio', sub, sections, (cc || 'Course') + '_self_check_studio');
     },
     runAudit: function () { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; state.auditRun = true; state.auditSystem = 0; state.auditedSystems = state.auditedSystems || {}; state.auditedSystems[GS.systems[0].id] = true; if (!state.auditSlice) state.auditSlice = 'overall'; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
+    auditSystem: function (idx) { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; state.auditRun = true; state.auditSystem = idx; state.auditedSystems = state.auditedSystems || {}; state.auditedSystems[auditSys().id] = true; if (!state.auditSlice) state.auditSlice = 'overall'; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
     nextSystem: function () { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; state.auditSystem = ((state.auditSystem || 0) + 1) % GS.systems.length; state.auditedSystems = state.auditedSystems || {}; state.auditedSystems[auditSys().id] = true; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
-    auditSlice: function (s) { state.auditSlice = s; var b = document.getElementById('bfs-bars'); if (b) b.innerHTML = auditBars(s); var i = document.getElementById('bfs-insight'); if (i) i.textContent = auditInsight(s); var sb = document.getElementById('bfs-slicebtns'); if (sb) sb.outerHTML = auditSliceBtns(s); },
+    auditSlice: function (s) { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; state.auditSlice = s; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
     saveSandbox: function () {
       var gs = rec('buolamwini2018'), sel = state.mcSel['BFS218|sandbox'];
       var sections = [

@@ -1036,13 +1036,13 @@
   function auditModelHtml(run, slice, sys) {
     var idx = Math.max(0, GS.systems.map(function (s) { return s.id; }).indexOf(sys.id));
     var view = state.auditView || 'errors';
-    var aria = 'Semi-manipulable 3D model of the Gender Shades audit for ' + sys.name + '. It shows two transparent system cubes, four benchmark trays, and red failure pins concentrated in the darker-skinned women tray after the audit runs.';
-    return '<div class="audit-model-shell">'
+    var aria = 'Semi-manipulable 3D model of the Gender Shades audit for ' + sys.name + '. It shows a scanner, four benchmark trays, and red failure pins concentrated in the darker-skinned women tray after the audit runs.';
+    return '<div class="audit-model-stack"><div class="audit-model-shell">'
       + '<canvas class="audit-model-canvas" role="img" aria-label="' + esc(aria) + '" data-audit-model="week5" data-run="' + (run ? '1' : '0') + '" data-slice="' + esc(slice) + '" data-system-index="' + idx + '" data-view="' + esc(view) + '"></canvas>'
-      + '<div class="audit-model-hint"><b>3D audit model</b><span>Drag or touch to rotate. Use the controls to inspect the pipeline and the failure pattern.</span></div>'
+      + '<div class="audit-model-hint"><b>How to read the model</b><span>Each tray is 25 benchmark faces. Red pins are errors. Rotate the model, then use the slice buttons to test what the average hides.</span></div>'
       + auditModelControls(view)
       + '<div class="audit-model-fallback" hidden>The 3D model could not load. The data table below still shows the audit results.</div>'
-      + '</div>';
+      + '</div><div class="audit-model-guide"><b>Use it in order</b><ol><li>Run the audit: red pins appear where the system misclassifies benchmark faces.</li><li>Switch systems: IBM, Microsoft, and Face++ repeat the same pattern at different levels.</li><li>Change the slice: overall looks safe; intersectional shows who is carrying the error.</li></ol></div></div>';
   }
   function loadThree() {
     if (!threePromise) threePromise = import('./assets/lib/three.module.min.js');
@@ -1268,14 +1268,15 @@
       + auditSliceStep(slice, 'intersectional', 'Intersectional', 'The harm is finally visible');
     return '<section class="audit-lab" aria-label="Immersive coded gaze audit lab">'
       + '<div class="audit-stage">'
-      + '<div class="audit-wall"><div class="audit-wall-kicker">AUDIT LAB</div><h2>Slice the results until the hidden harm appears.</h2><p>' + esc(auditInsight(slice)) + '</p><div id="bfs-slicebtns" class="audit-steps">' + steps + '</div></div>'
-      + '<div class="audit-table">'
+      + '<div class="audit-wall"><div class="audit-wall-kicker">AUDIT LAB</div><h2>Slice the results until the hidden harm appears.</h2><p>' + esc(auditInsight(slice)) + '</p><div class="audit-wall-guide"><b>What you are doing</b><span>Do not judge the system by the average. Use the model to inspect where errors cluster, then use the slice buttons to decide which report would expose or hide the harm.</span></div><div id="bfs-slicebtns" class="audit-steps">' + steps + '</div></div>'
+      + '<div class="audit-workspace"><div class="audit-table">'
       + auditModelHtml(run, slice, sys)
       + '<div class="audit-systems">' + GS.systems.map(function (s, i) {
         var active = run && sys.id === s.id;
         var done = state.auditedSystems && state.auditedSystems[s.id];
         return '<button onclick="SOC.auditSystem(' + i + ')" class="audit-system' + (active ? ' active' : '') + (done ? ' done' : '') + '"><span>' + esc(s.name) + '</span><b>' + s.rate.dw.toFixed(1) + '%</b><small>darker-skinned women</small></button>';
       }).join('') + '</div>'
+      + '</div>'
       + '<div class="audit-console"><div><div class="audit-console-label">' + esc(label) + '</div><div class="audit-console-note">' + esc(status) + '</div></div>'
       + (run ? '<button onclick="SOC.nextSystem()">Audit next system</button>' : '<button onclick="SOC.runAudit()">Run audit</button>') + '</div>'
       + '</div></div>'
@@ -1841,16 +1842,16 @@
       + '</section>';
   }
   function visualPilotWeek5(w, d) {
-    var src = './assets/topic-pictures/bfs218-week05-3d-audit-overview.webp';
-    var alt = '3D-rendered diorama of a coded gaze audit: transparent benchmark and system cubes connect to four test trays, with red failure pins concentrated in one tray.';
+    var src = './assets/topic-pictures/bfs218-week05-3d-audit-turntable.webp';
+    var alt = '3D-rendered coded gaze audit turntable: a circular scanner, four transparent benchmark trays, and concentrated red error pins showing an intersectional failure pattern.';
     var cards = [
-      ['The machine', 'The orange cube stands for a commercial facial-analysis system sold as neutral and technical.'],
-      ['The benchmark', 'The teal cube and four trays stand for a balanced audit set, tested across gender and skin-type groups.'],
-      ['The finding', 'The red pins show misclassification. Their concentration in one tray is the point: the harm appears when the audit is sliced intersectionally.']
+      ['The scanner', 'The ring and scanner stand for a system being audited, not trusted just because it looks technical.'],
+      ['The slices', 'The four trays stand for the benchmark split into groups. The audit asks whether every group is being seen equally well.'],
+      ['The evidence', 'The red pins are errors. Their concentration in one tray is the point: the harm appears when the audit is sliced intersectionally.']
     ].map(function (c, i) { return '<div class="wk-visual-card"><div class="mono">STEP ' + (i + 1) + '</div><h3>' + esc(c[0]) + '</h3><p>' + esc(c[1]) + '</p></div>'; }).join('');
     return '<section id="wk-visual" class="node wk-visual-pilot"><h2 class="wk-sec">A Visual Overview</h2>'
       + '<p class="wk-hint">Pilot format: one 3D-rendered scene that turns the audit into physical objects before you manipulate the model in the activity.</p>'
-      + '<figure class="wk-visual wk-visual-3d"><img src="' + src + '" alt="' + esc(alt) + '" loading="eager" decoding="sync" fetchpriority="high"><figcaption>Read the image as a process: dataset, system, benchmark trays, then the concentrated failure pattern the overall score hides.</figcaption></figure>'
+      + '<figure class="wk-visual wk-visual-3d"><img src="' + src + '" alt="' + esc(alt) + '" loading="eager" decoding="sync" fetchpriority="high"><figcaption>Read the image as a process: run the scanner, compare the trays, then ask why one group carries so many more red error pins.</figcaption></figure>'
       + '<div class="wk-visual-explain">' + cards + '</div>'
       + '</section>';
   }

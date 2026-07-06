@@ -374,9 +374,10 @@
   }
   function rgVideoCover(r) {
     var v = r.video;
+    var thumb = v.thumb || ('https://i.ytimg.com/vi/' + v.yt + '/maxresdefault.jpg');
     return '<div class="rgvideo" style="position:relative;width:100%;aspect-ratio:16/9;background:#15171C;overflow:hidden">'
       + '<button onclick="SOC.playVideo(this,\'' + v.yt + '\')" aria-label="Play a talk by ' + esc(v.scholar || r.authors) + '" style="position:absolute;inset:0;width:100%;height:100%;border:none;padding:0;cursor:pointer;background:none">'
-      + '<img src="https://i.ytimg.com/vi/' + v.yt + '/maxresdefault.jpg" onerror="this.onerror=null;this.src=\'https://i.ytimg.com/vi/' + v.yt + '/hqdefault.jpg\'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" />'
+      + '<img src="' + esc(thumb) + '" onerror="this.onerror=null;this.src=\'https://i.ytimg.com/vi/' + v.yt + '/hqdefault.jpg\'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" />'
       + '<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span style="display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:999px;background:rgba(218,41,28,.94);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.45)">' + ic('play', 24) + '</span></span>'
       + '<span style="position:absolute;left:0;right:0;bottom:0;padding:22px 13px 10px;background:linear-gradient(transparent,rgba(0,0,0,.9));color:#fff;text-align:left">'
       + '<span class="mono" style="display:block;font-size:.6rem;letter-spacing:.08em;color:#f3b0a8;font-weight:600;margin-bottom:2px">WATCH</span>'

@@ -431,6 +431,7 @@ window.BFS218 = {
    "assigned": "Executive Summary and Part I",
    "video": {
     "yt": "Dh7TKrVvnvM",
+    "thumb": "https://i.ytimg.com/vi/Dh7TKrVvnvM/hqdefault.jpg",
     "title": "To Surveil and Predict: A Human Rights Analysis of Algorithmic Policing in Canada",
     "channel": "Centre for Ethics",
     "scholar": "Kate Robertson and Cynthia Khoo (Citizen Lab)"

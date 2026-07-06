@@ -12,15 +12,41 @@
   var HAS_EYE = !!(D.course && D.course.frame);
 
   var SKEY = 'bfs218corpus.' + (location.pathname.split('/')[1] || 'local') + '.v2';
+  var VKEY = SKEY + '.view.v1';
+  var HKEY = SKEY + '.hardResetNext';
   function load() { try { var o = JSON.parse(localStorage.getItem(SKEY) || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
   function persist() { try { localStorage.setItem(SKEY, JSON.stringify({ saved: state.saved, cmpNotes: state.cmpNotes, rcNotes: state.rcNotes, sgNotes: state.sgNotes, sgTick: state.sgTick, wkCheck: state.wkCheck, wkReflect: state.wkReflect, act: state.act, kcShort: state.kcShort, kcShortRate: state.kcShortRate, kcHist: state.kcHist, careerReflect: state.careerReflect })); } catch (e) {} }
+  function navWasReload() {
+    try {
+      var n = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (n && n.type) return n.type === 'reload';
+    } catch (e) {}
+    try { return !!(performance.navigation && performance.navigation.type === 1); } catch (e2) { return false; }
+  }
+  function loadView() { try { var o = JSON.parse(sessionStorage.getItem(VKEY) || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
+  function clearView() { try { sessionStorage.removeItem(VKEY); sessionStorage.removeItem(HKEY); } catch (e) {} }
+  function shouldResumeView(v) {
+    var hard = false;
+    try { hard = sessionStorage.getItem(HKEY) === '1'; sessionStorage.removeItem(HKEY); } catch (e) {}
+    if (hard) { clearView(); return false; }
+    return !!(v && v.screen && navWasReload());
+  }
+  function cleanScreen(s) {
+    return ['journey', 'library', 'station', 'detail', 'readings', 'compare', 'reading', 'glossary', 'career', 'cards', 'sandbox', 'activity'].indexOf(s) >= 0 ? s : 'journey';
+  }
+  function cleanWeek(w) {
+    w = Number(w);
+    return (isFinite(w) && w >= 1 && w <= 20) ? w : null;
+  }
   var saved0 = load();
+  var view0 = loadView();
+  var resumeView0 = shouldResumeView(view0);
 
   var state = {
-    screen: 'journey',
+    screen: resumeView0 ? cleanScreen(view0.screen) : 'journey',
     navOpen: false,
-    journeyWeek: null,
-    stationWeek: null,
+    journeyWeek: resumeView0 ? cleanWeek(view0.journeyWeek) : null,
+    stationWeek: resumeView0 ? cleanWeek(view0.stationWeek) : null,
     sgNotes: (saved0.sgNotes || {}),
     sgTick: (saved0.sgTick || {}),
     wkCheck: (saved0.wkCheck && typeof saved0.wkCheck === 'object') ? saved0.wkCheck : {},
@@ -51,15 +77,73 @@
     kcShortShown: {},
     kcShortRate: (saved0.kcShortRate && typeof saved0.kcShortRate === 'object') ? saved0.kcShortRate : {},
     kcHist: (saved0.kcHist && typeof saved0.kcHist === 'object') ? saved0.kcHist : {},
-    careerField: '',
+    careerField: resumeView0 ? (view0.careerField || '') : '',
     careerReflect: (saved0.careerReflect && typeof saved0.careerReflect === 'object') ? saved0.careerReflect : {},
     libScroll: 0,
     toast: null,
-    cardWeek: null,
+    cardWeek: resumeView0 ? cleanWeek(view0.cardWeek) : null,
     glossWeek: 'all',
     glossSearch: '',
+    auditView: resumeView0 ? (view0.auditView || 'errors') : 'errors',
   };
-  var refocusSearch = false, focusTarget = null, toastTimer = null;
+  if (resumeView0) {
+    state.activityReturn = cleanWeek(view0.activityReturn);
+    state.detailId = view0.detailId || null;
+    state.activeTypes = Array.isArray(view0.activeTypes) ? view0.activeTypes : [];
+    state.activeWeek = cleanWeek(view0.activeWeek);
+    state.search = view0.search || '';
+    state.savedView = !!view0.savedView;
+    state.rcReading = view0.rcReading || null;
+    state.lens = view0.lens || state.lens || 'thematic';
+    state.compareIds = Array.isArray(view0.compareIds) ? view0.compareIds : [];
+    state.showSynthesis = !!view0.showSynthesis;
+    state.galWeek = cleanWeek(view0.galWeek);
+    state.galTopic = view0.galTopic || null;
+    state.glossWeek = view0.glossWeek || state.glossWeek || 'all';
+    state.glossSearch = view0.glossSearch || '';
+    state.auditRun = !!view0.auditRun;
+    state.auditSystem = Number(view0.auditSystem) || 0;
+    state.auditSlice = view0.auditSlice || 'overall';
+    state.auditView = view0.auditView || state.auditView || 'errors';
+    state.auditedSystems = (view0.auditedSystems && typeof view0.auditedSystems === 'object') ? view0.auditedSystems : {};
+  }
+  function saveView() {
+    try {
+      sessionStorage.setItem(VKEY, JSON.stringify({
+        screen: state.screen,
+        journeyWeek: state.journeyWeek,
+        stationWeek: state.stationWeek,
+        activityReturn: state.activityReturn,
+        detailId: state.detailId,
+        cardWeek: state.cardWeek,
+        careerField: state.careerField,
+        activeTypes: state.activeTypes || [],
+        activeWeek: state.activeWeek,
+        search: state.search || '',
+        savedView: !!state.savedView,
+        rcReading: state.rcReading,
+        lens: state.lens || 'thematic',
+        compareIds: state.compareIds || [],
+        showSynthesis: !!state.showSynthesis,
+        galWeek: state.galWeek,
+        galTopic: state.galTopic,
+        glossWeek: state.glossWeek || 'all',
+        glossSearch: state.glossSearch || '',
+        auditRun: !!state.auditRun,
+        auditSystem: state.auditSystem || 0,
+        auditSlice: state.auditSlice || 'overall',
+        auditView: state.auditView || 'errors',
+        auditedSystems: state.auditedSystems || {}
+      }));
+    } catch (e) {}
+  }
+  window.addEventListener('keydown', function (e) {
+    var k = String(e.key || '').toLowerCase();
+    if (((e.ctrlKey || e.metaKey) && e.shiftKey && k === 'r') || (e.ctrlKey && k === 'f5')) {
+      try { sessionStorage.setItem(HKEY, '1'); sessionStorage.removeItem(VKEY); } catch (err) {}
+    }
+  }, true);
+  var refocusSearch = false, focusTarget = null, toastTimer = null, auditRenderStamp = 0, threePromise = null;
 
   /* ---------- helpers ---------- */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -942,6 +1026,210 @@
     }).join('');
     return '<div role="img" aria-label="Misclassification rate, ' + esc(slice) + ' view. ' + esc(data.map(function (d) { return d[0] + ' ' + d[1].toFixed(1) + ' percent'; }).join('. ')) + '.">' + bars + '</div>';
   }
+  function auditModelControls(active) {
+    var defs = [['errors', 'Failure pattern'], ['pipeline', 'Audit pipeline'], ['orbit', 'Free rotate']];
+    return '<div class="audit-model-controls" aria-label="3D model view controls">' + defs.map(function (d) {
+      var on = active === d[0];
+      return '<button onclick="SOC.auditView(\'' + d[0] + '\')" aria-pressed="' + on + '" class="' + (on ? 'on' : '') + '">' + esc(d[1]) + '</button>';
+    }).join('') + '</div>';
+  }
+  function auditModelHtml(run, slice, sys) {
+    var idx = Math.max(0, GS.systems.map(function (s) { return s.id; }).indexOf(sys.id));
+    var view = state.auditView || 'errors';
+    var aria = 'Semi-manipulable 3D model of the Gender Shades audit for ' + sys.name + '. It shows two transparent system cubes, four benchmark trays, and red failure pins concentrated in the darker-skinned women tray after the audit runs.';
+    return '<div class="audit-model-shell">'
+      + '<canvas class="audit-model-canvas" role="img" aria-label="' + esc(aria) + '" data-audit-model="week5" data-run="' + (run ? '1' : '0') + '" data-slice="' + esc(slice) + '" data-system-index="' + idx + '" data-view="' + esc(view) + '"></canvas>'
+      + '<div class="audit-model-hint"><b>3D audit model</b><span>Drag or touch to rotate. Use the controls to inspect the pipeline and the failure pattern.</span></div>'
+      + auditModelControls(view)
+      + '<div class="audit-model-fallback" hidden>The 3D model could not load. The data table below still shows the audit results.</div>'
+      + '</div>';
+  }
+  function loadThree() {
+    if (!threePromise) threePromise = import('./assets/lib/three.module.min.js');
+    return threePromise;
+  }
+  function initAuditModels() {
+    var canvases = Array.prototype.slice.call(document.querySelectorAll('canvas[data-audit-model="week5"]'));
+    if (!canvases.length) return;
+    loadThree().then(function (THREE) {
+      canvases.forEach(function (canvas) { initAuditModel(THREE, canvas, auditRenderStamp); });
+    }).catch(function () {
+      canvases.forEach(function (canvas) {
+        var fb = canvas.parentNode && canvas.parentNode.querySelector('.audit-model-fallback');
+        if (fb) fb.hidden = false;
+      });
+    });
+  }
+  function initAuditModel(THREE, canvas, stamp) {
+    if (!canvas || canvas.__auditInit) return;
+    canvas.__auditInit = true;
+    canvas.__auditStamp = stamp;
+    var shell = canvas.parentNode, run = canvas.getAttribute('data-run') === '1';
+    var slice = canvas.getAttribute('data-slice') || 'overall';
+    var sys = GS.systems[Number(canvas.getAttribute('data-system-index')) || 0] || GS.systems[0];
+    var view = canvas.getAttribute('data-view') || 'errors';
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    if (THREE.SRGBColorSpace) renderer.outputColorSpace = THREE.SRGBColorSpace;
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(40, 16 / 9, 0.1, 80);
+    camera.position.set(4.9, 3.5, 6.5);
+    camera.lookAt(0, 0.45, 0.35);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xb8c4d0, 2.6));
+    var sun = new THREE.DirectionalLight(0xffffff, 3.1); sun.position.set(3.6, 6.5, 4.8); scene.add(sun);
+    var fill = new THREE.DirectionalLight(0xe7f7ff, 1.1); fill.position.set(-4, 3, -3); scene.add(fill);
+    var root = new THREE.Group(); root.scale.set(0.82, 0.82, 0.82); root.position.set(0, -0.02, 0.02); scene.add(root);
+    var mats = {
+      floor: new THREE.MeshStandardMaterial({ color: 0xe9eef2, roughness: 0.72, metalness: 0.02 }),
+      teal: new THREE.MeshPhysicalMaterial({ color: 0x00aeb3, transparent: true, opacity: 0.36, roughness: 0.18, metalness: 0.05, transmission: 0.18 }),
+      orange: new THREE.MeshPhysicalMaterial({ color: 0xff8a1d, transparent: true, opacity: 0.38, roughness: 0.16, metalness: 0.05, transmission: 0.18 }),
+      tray: new THREE.MeshPhysicalMaterial({ color: 0x9fdde0, transparent: true, opacity: 0.28, roughness: 0.22, metalness: 0.03, transmission: 0.18 }),
+      trayHot: new THREE.MeshPhysicalMaterial({ color: 0xff9d80, transparent: true, opacity: 0.46, roughness: 0.2, metalness: 0.03, transmission: 0.16 }),
+      token: new THREE.MeshStandardMaterial({ color: 0xe9dfcc, roughness: 0.55, metalness: 0.02 }),
+      red: new THREE.MeshStandardMaterial({ color: 0xda291c, emissive: 0x8f120b, emissiveIntensity: 0.35, roughness: 0.35 }),
+      dark: new THREE.MeshStandardMaterial({ color: 0x1b2a4a, roughness: 0.38, metalness: 0.25 }),
+      suit: new THREE.MeshStandardMaterial({ color: 0xff7a18, roughness: 0.42, metalness: 0.05 }),
+      suit2: new THREE.MeshStandardMaterial({ color: 0x00aeb3, roughness: 0.42, metalness: 0.05 }),
+      glassLine: new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.52 }),
+      cable: new THREE.MeshStandardMaterial({ color: 0x222831, roughness: 0.6, metalness: 0.12 }),
+      beam: new THREE.MeshBasicMaterial({ color: 0xffcc66, transparent: true, opacity: 0.22, side: THREE.DoubleSide })
+    };
+    function addMesh(parent, geo, mat, pos, rot, scale) {
+      var m = new THREE.Mesh(geo, mat);
+      if (pos) m.position.set(pos[0], pos[1], pos[2]);
+      if (rot) m.rotation.set(rot[0], rot[1], rot[2]);
+      if (scale) m.scale.set(scale[0], scale[1], scale[2]);
+      parent.add(m);
+      return m;
+    }
+    function edges(parent, mesh, color, opacity) {
+      var e = new THREE.EdgesGeometry(mesh.geometry);
+      var l = new THREE.LineSegments(e, new THREE.LineBasicMaterial({ color: color || 0xffffff, transparent: true, opacity: opacity == null ? 0.48 : opacity }));
+      l.position.copy(mesh.position); l.rotation.copy(mesh.rotation); l.scale.copy(mesh.scale); parent.add(l); return l;
+    }
+    root.add(new THREE.GridHelper(7, 10, 0xd6dde5, 0xd6dde5));
+    addMesh(root, new THREE.BoxGeometry(7.3, 0.08, 5.3), mats.floor, [0, -0.07, 0], null, null);
+    var dataCube = addMesh(root, new THREE.BoxGeometry(1.35, 1.35, 1.35), mats.teal, [-2.25, 0.72, -1.18]);
+    var sysCube = addMesh(root, new THREE.BoxGeometry(1.35, 1.35, 1.35), mats.orange, [2.25, 0.72, -1.18]);
+    edges(root, dataCube, 0x00f2ff, 0.68); edges(root, sysCube, 0xffbd69, 0.74);
+    for (var chip = 0; chip < 9; chip++) {
+      addMesh(root, new THREE.BoxGeometry(0.08 + (chip % 3) * 0.025, 0.02, 0.42), mats.dark, [-2.58 + (chip % 3) * 0.25, 0.75 + Math.floor(chip / 3) * 0.15, -1.86 + (chip % 2) * 0.16]);
+      addMesh(root, new THREE.BoxGeometry(0.08 + (chip % 2) * 0.02, 0.02, 0.36), mats.dark, [2.02 + (chip % 3) * 0.2, 0.75 + Math.floor(chip / 3) * 0.13, -1.85 + (chip % 2) * 0.18]);
+    }
+    function cable(a, b, c) {
+      var curve = new THREE.CatmullRomCurve3([new THREE.Vector3(a[0], a[1], a[2]), new THREE.Vector3(c[0], c[1], c[2]), new THREE.Vector3(b[0], b[1], b[2])]);
+      addMesh(root, new THREE.TubeGeometry(curve, 28, 0.025, 8, false), mats.cable);
+    }
+    cable([-1.55, 0.5, -1.15], [-0.55, 0.25, -0.45], [-1.15, 0.62, -0.1]);
+    cable([1.55, 0.5, -1.15], [0.55, 0.25, -0.45], [1.1, 0.62, -0.1]);
+    cable([2.35, 0.22, -0.5], [1.42, 0.16, 1.2], [2.0, 0.18, 0.6]);
+    var trayGeo = new THREE.BoxGeometry(1.35, 0.1, 1.05);
+    var headGeo = new THREE.SphereGeometry(0.055, 14, 10);
+    var neckGeo = new THREE.CylinderGeometry(0.026, 0.034, 0.09, 10);
+    var pinGeo = new THREE.CylinderGeometry(0.021, 0.021, 0.42, 10);
+    var pinTopGeo = new THREE.SphereGeometry(0.04, 12, 8);
+    var trayPos = { lm: [-0.78, 0.08, 0.08], lw: [0.78, 0.08, 0.08], dm: [-0.78, 0.08, 1.28], dw: [0.78, 0.08, 1.28] };
+    function visibleFor(g) {
+      if (slice === 'overall') return true;
+      if (slice === 'gender') return g.gender === 'women';
+      if (slice === 'skin') return g.skin === 'darker';
+      return g.id === 'dw';
+    }
+    GS.groups.forEach(function (g) {
+      var p = trayPos[g.id], hot = (g.id === 'dw' && (slice === 'intersectional' || view === 'errors'));
+      var tray = addMesh(root, trayGeo, hot ? mats.trayHot : mats.tray, p);
+      tray.material.opacity = visibleFor(g) ? tray.material.opacity : 0.16;
+      edges(root, tray, hot ? 0xda291c : 0x31aeb7, hot ? 0.9 : 0.48);
+      var fail = run ? gsFails(g) : 0;
+      for (var i = 0; i < GS.perGroup; i++) {
+        var col = i % 5, row = Math.floor(i / 5);
+        var x = p[0] - 0.43 + col * 0.215, z = p[2] - 0.32 + row * 0.16;
+        addMesh(root, neckGeo, mats.token, [x, 0.19, z]);
+        addMesh(root, headGeo, mats.token, [x, 0.27, z]);
+        if (i < fail) {
+          addMesh(root, pinGeo, mats.red, [x, 0.5, z]);
+          addMesh(root, pinTopGeo, mats.red, [x, 0.73, z]);
+        }
+      }
+      if (hot && run) {
+        addMesh(root, new THREE.TorusGeometry(0.78, 0.018, 10, 80), mats.red, [p[0], 0.83, p[2]], [Math.PI / 2, 0, 0]);
+      }
+    });
+    if (slice === 'overall') {
+      addMesh(root, new THREE.BoxGeometry(3.25, 0.04, 2.55), new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.22, roughness: 0.08, transmission: 0.1 }), [0, 0.88, 0.68]);
+    }
+    var person = new THREE.Group(); root.add(person); person.position.set(-0.25, 0.05, -0.45); person.rotation.y = -0.7;
+    addMesh(person, new THREE.CylinderGeometry(0.11, 0.14, 0.38, 14), mats.suit, [0, 0.38, 0]);
+    addMesh(person, new THREE.SphereGeometry(0.12, 16, 10), mats.suit2, [0, 0.66, 0]);
+    addMesh(person, new THREE.CylinderGeometry(0.035, 0.035, 0.34, 10), mats.suit, [-0.12, 0.22, 0.05], [0.85, 0.1, 0.2]);
+    addMesh(person, new THREE.CylinderGeometry(0.035, 0.035, 0.34, 10), mats.suit, [0.12, 0.22, -0.02], [0.9, -0.2, -0.2]);
+    addMesh(person, new THREE.BoxGeometry(0.18, 0.11, 0.12), mats.dark, [0.19, 0.42, 0.18], [0, 0.3, 0]);
+    addMesh(person, new THREE.ConeGeometry(0.18, 0.8, 24, 1, true), mats.beam, [0.38, 0.4, 0.48], [Math.PI / 2, 0.2, 0]);
+    var target = { x: view === 'pipeline' ? -0.08 : -0.2, y: view === 'pipeline' ? -0.82 : -0.45 };
+    if (view === 'orbit') target.y = -0.55;
+    var cur = { x: target.x, y: target.y }, dragging = false, last = null;
+    function beginDrag(x, y) { dragging = true; last = { x: x, y: y }; }
+    function isModelControl(e) { return !!(e.target && e.target.closest && e.target.closest('.audit-model-controls')); }
+    function moveDrag(x, y) {
+      if (!dragging || !last) return;
+      target.y += (x - last.x) * 0.014;
+      target.x += (y - last.y) * 0.008;
+      target.x = Math.max(-0.65, Math.min(0.35, target.x));
+      last = { x: x, y: y };
+      canvas.setAttribute('data-dragged', '1');
+    }
+    function onPointer(e) { if (isModelControl(e)) return; beginDrag(e.clientX, e.clientY); if (e.currentTarget && e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId); }
+    function movePointer(e) { moveDrag(e.clientX, e.clientY); }
+    function upPointer() { dragging = false; last = null; }
+    function onMouseDown(e) { if (isModelControl(e)) return; beginDrag(e.clientX, e.clientY); }
+    function onMouseMove(e) { moveDrag(e.clientX, e.clientY); }
+    function onTouchStart(e) { if (isModelControl(e)) return; if (e.touches && e.touches[0]) { e.preventDefault(); beginDrag(e.touches[0].clientX, e.touches[0].clientY); } }
+    function onTouchMove(e) { if (e.touches && e.touches[0]) { e.preventDefault(); moveDrag(e.touches[0].clientX, e.touches[0].clientY); } }
+    canvas.addEventListener('pointerdown', onPointer);
+    canvas.addEventListener('pointermove', movePointer);
+    canvas.addEventListener('pointerup', upPointer);
+    canvas.addEventListener('pointercancel', upPointer);
+    canvas.addEventListener('mousedown', onMouseDown);
+    shell.addEventListener('pointerdown', onPointer);
+    shell.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', upPointer);
+    canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+    canvas.addEventListener('touchend', upPointer);
+    shell.addEventListener('touchstart', onTouchStart, { passive: false });
+    shell.addEventListener('touchmove', onTouchMove, { passive: false });
+    shell.addEventListener('touchend', upPointer);
+    var reduced = false;
+    try { reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    function resize() {
+      var w = Math.max(320, shell.clientWidth || canvas.clientWidth || 720);
+      var h = Math.max(300, Math.round(w * 0.58));
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    var ro = window.ResizeObserver ? new ResizeObserver(resize) : null;
+    if (ro) ro.observe(shell);
+    function animate() {
+      if (!canvas.isConnected || canvas.__auditStamp !== auditRenderStamp) {
+        if (ro) ro.disconnect();
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', upPointer);
+        renderer.dispose();
+        return;
+      }
+      if (!dragging && view === 'orbit' && !reduced) target.y += 0.002;
+      cur.x += (target.x - cur.x) * 0.08;
+      cur.y += (target.y - cur.y) * 0.08;
+      root.rotation.x = cur.x;
+      root.rotation.y = cur.y;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
   function auditGrid(run) {
     var cols = GS.groups.map(function (g) {
       var fail = gsFails(g), dots = '';
@@ -982,7 +1270,7 @@
       + '<div class="audit-stage">'
       + '<div class="audit-wall"><div class="audit-wall-kicker">AUDIT LAB</div><h2>Slice the results until the hidden harm appears.</h2><p>' + esc(auditInsight(slice)) + '</p><div id="bfs-slicebtns" class="audit-steps">' + steps + '</div></div>'
       + '<div class="audit-table">'
-      + audit3dBench(run)
+      + auditModelHtml(run, slice, sys)
       + '<div class="audit-systems">' + GS.systems.map(function (s, i) {
         var active = run && sys.id === s.id;
         var done = state.auditedSystems && state.auditedSystems[s.id];
@@ -1553,16 +1841,16 @@
       + '</section>';
   }
   function visualPilotWeek5(w, d) {
-    var src = './assets/topic-pictures/bfs218-week05-pilot-overview.jpg';
-    var alt = 'Bright visual overview of a coded gaze audit: overall accuracy looks safe, then gender, skin type, and intersectional slices reveal concentrated failures for darker-skinned women.';
+    var src = './assets/topic-pictures/bfs218-week05-3d-audit-overview.webp';
+    var alt = '3D-rendered diorama of a coded gaze audit: transparent benchmark and system cubes connect to four test trays, with red failure pins concentrated in one tray.';
     var cards = [
-      ['What looks safe', 'The system begins with one overall accuracy score. That number can make the product look reliable because it averages everyone together.'],
-      ['What the audit does', 'The same benchmark is sliced by gender, then skin type, then both together. Each slice asks a sharper question about who the system fails.'],
-      ['What it reveals', 'The intersectional view shows the hidden pattern: darker-skinned women carry the highest error rate. The harm was in the system, not in one bad result.']
+      ['The machine', 'The orange cube stands for a commercial facial-analysis system sold as neutral and technical.'],
+      ['The benchmark', 'The teal cube and four trays stand for a balanced audit set, tested across gender and skin-type groups.'],
+      ['The finding', 'The red pins show misclassification. Their concentration in one tray is the point: the harm appears when the audit is sliced intersectionally.']
     ].map(function (c, i) { return '<div class="wk-visual-card"><div class="mono">STEP ' + (i + 1) + '</div><h3>' + esc(c[0]) + '</h3><p>' + esc(c[1]) + '</p></div>'; }).join('');
     return '<section id="wk-visual" class="node wk-visual-pilot"><h2 class="wk-sec">A Visual Overview</h2>'
-      + '<p class="wk-hint">Pilot format: one clear image, then a plain explanation of what the image is asking you to see.</p>'
-      + '<figure class="wk-visual"><img src="' + src + '" alt="' + esc(alt) + '" loading="eager" decoding="sync" fetchpriority="high"><figcaption>This image is conveying one move: do not stop at the overall score. Keep slicing the audit until the hidden pattern becomes visible.</figcaption></figure>'
+      + '<p class="wk-hint">Pilot format: one 3D-rendered scene that turns the audit into physical objects before you manipulate the model in the activity.</p>'
+      + '<figure class="wk-visual wk-visual-3d"><img src="' + src + '" alt="' + esc(alt) + '" loading="eager" decoding="sync" fetchpriority="high"><figcaption>Read the image as a process: dataset, system, benchmark trays, then the concentrated failure pattern the overall score hides.</figcaption></figure>'
       + '<div class="wk-visual-explain">' + cards + '</div>'
       + '</section>';
   }
@@ -2319,6 +2607,7 @@
   function render() {
     if (state.screen !== 'compare' && render._prev !== undefined && render._prev !== state.screen && (state.compareIds.length || state.showSynthesis)) { state.compareIds = []; state.showSynthesis = false; }
     render._prev = state.screen;
+    auditRenderStamp++;
     var toast = state.toast ? '<div role="status" style="position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:80;background:#15171C;color:#fff;font-size:.9375rem;font-weight:500;padding:12px 20px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.24);display:flex;align-items:center;gap:10px"><span style="display:flex;color:#F2A900">' + ic('check', 16, 2.2) + '</span>' + esc(state.toast) + '</div>' : '';
     document.getElementById('app').innerHTML =
       '<div style="min-height:100vh;display:flex;flex-direction:column;background:#F7F8FA">' + header()
@@ -2336,6 +2625,8 @@
       if (ft) { if (!ft.hasAttribute('tabindex')) ft.setAttribute('tabindex', '-1'); ft.focus(); }
       focusTarget = null;
     }
+    saveView();
+    initAuditModels();
   }
   function topScroll() { var m = document.getElementById('soc-main'); if (m) m.scrollTop = 0; }
 
@@ -2520,6 +2811,7 @@
     auditSystem: function (idx) { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; state.auditRun = true; state.auditSystem = idx; state.auditedSystems = state.auditedSystems || {}; state.auditedSystems[auditSys().id] = true; if (!state.auditSlice) state.auditSlice = 'overall'; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
     nextSystem: function () { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; state.auditSystem = ((state.auditSystem || 0) + 1) % GS.systems.length; state.auditedSystems = state.auditedSystems || {}; state.auditedSystems[auditSys().id] = true; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
     auditSlice: function (s) { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; state.auditSlice = s; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
+    auditView: function (v) { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; state.auditView = v || 'errors'; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
     saveSandbox: function () {
       var gs = rec('buolamwini2018'), sel = state.mcSel['BFS218|sandbox'];
       var sections = [

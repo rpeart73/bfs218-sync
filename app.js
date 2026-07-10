@@ -2167,6 +2167,36 @@
       + '</svg>';
   }
   function journeyIntro() { return 'Follow one question through the whole course, week by week. Each week sets up what to read, why it matters, and one thing to do with it. Start at the top, or pick up where you left off.'; }
+  function syncWeekRhythm(cw) {
+    if (cw.phase === 'before') {
+      return '<section class="node sync-rhythm"><div class="mono sr-kick">AROUND YOUR FIRST CLASS</div>'
+        + '<h2 class="sr-h">Classes begin the week of September 8.</h2>'
+        + '<p class="sr-p">Week 1 is your landing week: look around the site, read How This Site Works, and arrive at the first class knowing where everything lives. From Week 2 on, this panel tells you what to do before and after each class.</p>'
+        + '<div class="sr-cta"><button type="button" class="primary" onclick="SOC.station(1)">Open Week 1</button></div></section>';
+    }
+    if (cw.phase === 'after') {
+      return '<section class="node sync-rhythm"><div class="mono sr-kick">THE TERM IS COMPLETE</div>'
+        + '<h2 class="sr-h">Classes have wrapped.</h2>'
+        + '<p class="sr-p">Everything stays here for review: the walkthroughs, readings, and your notes. Thank you for the term.</p></section>';
+    }
+    var w = cw.week, recs = recordsForWeek(w), n = recs.length;
+    var hasDeck = (w >= 2 && w <= 12);
+    var before = ''
+      + (n ? '<li><b>Do the readings</b><span>' + n + (n === 1 ? ' reading sets up' : ' readings set up') + ' what class works through together.</span></li>' : '<li><b>Read the week overview</b><span>Know the guiding question before you arrive.</span></li>')
+      + (hasDeck ? '<li><b>Skim the walkthrough</b><span>Ten minutes now makes the live discussion land deeper.</span></li>' : '')
+      + '<li><b>Carry one question in</b><span>The guiding question is on the week page. Bring your version of it.</span></li>';
+    var after = ''
+      + '<li><b>Run the activity</b><span>Practice what class opened up, while it is fresh.</span></li>'
+      + '<li><b>Take the Knowledge Check</b><span>Find out what actually landed. Never graded.</span></li>'
+      + '<li><b>Write and download your notes</b><span>Two minutes of reflection, then Generate Your Weekly Notes.</span></li>';
+    return '<section class="node sync-rhythm"><div class="sr-top"><div><div class="mono sr-kick">AROUND THIS WEEK\'S CLASS</div>'
+      + '<h2 class="sr-h">Week ' + w + ': ' + esc(weekTitle(w)) + '</h2></div>'
+      + '<button type="button" class="sr-open" onclick="SOC.station(' + w + ')">Open Week ' + w + ' ' + ic('chevron', 15, 2.4) + '</button></div>'
+      + '<div class="sr-cols">'
+      + '<div class="sr-col"><div class="sr-col-h sr-before">BEFORE CLASS</div><ul>' + before + '</ul></div>'
+      + '<div class="sr-col"><div class="sr-col-h sr-after">AFTER CLASS</div><ul>' + after + '</ul></div>'
+      + '</div></section>';
+  }
   function journeyHome() {
     var ws = journeyWeeks(), cur = currentJourneyWeek(), started = !!state.journeyWeek;
     var title = (D.course && (D.course.name || D.course.code)) || 'Your course';
@@ -2186,7 +2216,7 @@
     var thisWeek = '<button type="button" class="jnow" onclick="SOC.station(' + cw.week + ')"><div class="jnow-l"><span class="mono jnow-tag">' + (cw.phase === 'before' ? 'COURSE BEGINS' : (cw.phase === 'after' ? 'FINAL WEEK' : 'THIS WEEK')) + '</span><b>Week ' + cw.week + ': ' + esc(weekTitle(cw.week)) + '</b><span class="jnow-date">' + esc(weekDate(cw.week)) + '</span></div><span class="jnow-go">Open' + ic('chevron', 16, 2.4) + '</span></button>';
     var meter = '<div class="jprog"><div class="jprog-bar"><span style="width:' + Math.round(100 * doneN / (ws.length || 1)) + '%"></span></div><span class="jprog-txt">' + doneN + ' of ' + ws.length + ' weeks started</span></div>';
     var frame = '<section class="node home-frame" aria-label="How to read this course" style="border-left:4px solid #1B2A4A;border-radius:0 14px 14px 0;margin:0 0 16px">' + '<div class="mono" style="font-size:.7rem;letter-spacing:.08em;color:#1B2A4A;font-weight:700;margin-bottom:8px">HOW TO READ THIS COURSE</div>' + '<p style="font-size:1rem;line-height:1.62;color:var(--ink);margin:0">Techno-racism is not the problem of a single group, and it is not a simple story of one side against another. Digital systems sort everyone: who is seen clearly and who is blurred, who is trusted by default and who has to prove themselves, who a tool was built for and who it was not. That sorting falls hardest on communities already marked: Black and Indigenous peoples, Muslim and Asian communities, women, disabled people, and language minorities, often several of these at once. It also quietly hands advantages to others. Part of the work this term is to see the whole picture, including where you and your own community sit in it. The honest view is not black and white. It is grey, and it includes everyone.</p>' + '</section>';
-    return '<div class="rise">' + hero + frame + homeIntroCollapsible() + compassPanel() + lensHomeIntro() + thisWeek + spineHead + meter + journeyStations(cw.week) + '</div>';
+    return '<div class="rise">' + hero + syncWeekRhythm(cw) + frame + homeIntroCollapsible() + compassPanel() + lensHomeIntro() + thisWeek + spineHead + meter + journeyStations(cw.week) + '</div>';
   }
   function journeyStations(cur) {
     var ws = journeyWeeks();

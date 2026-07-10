@@ -1,0 +1,102 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//BFS218//Companion//EN
+CALSCALE:GREGORIAN
+X-WR-CALNAME:BFS218 Synchronous Key Dates (Fall 2026)
+X-WR-TIMEZONE:America/Toronto
+BEGIN:VEVENT
+UID:bfs218-sync-1@rpeart73.github.io
+DTSTART;VALUE=DATE:20260914
+DTEND;VALUE=DATE:20260915
+SUMMARY:BFS218: Map Exchange begins (weekly\, Weeks 2 to 12)
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-2@rpeart73.github.io
+DTSTART;VALUE=DATE:20260914
+DTEND;VALUE=DATE:20260915
+SUMMARY:BFS218: Coded Encounter opens on Blackboard
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-3@rpeart73.github.io
+DTSTART;VALUE=DATE:20261002
+DTEND;VALUE=DATE:20261003
+SUMMARY:BFS218: Coded Encounter (due\, end of Week 4)
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 deadline in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-4@rpeart73.github.io
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261006
+SUMMARY:BFS218: Canadian Case File opens on Blackboard
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-5@rpeart73.github.io
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:BFS218: Personal Cartography opens on Blackboard
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-6@rpeart73.github.io
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:BFS218: Canadian Case File (due\, end of Week 8)
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 deadline in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-7@rpeart73.github.io
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:BFS218: Design the Repair opens on Blackboard
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-8@rpeart73.github.io
+DTSTART;VALUE=DATE:20261204
+DTEND;VALUE=DATE:20261205
+SUMMARY:BFS218: Design the Repair (due\, end of Week 12)
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 deadline in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-9@rpeart73.github.io
+DTSTART;VALUE=DATE:20261204
+DTEND;VALUE=DATE:20261205
+SUMMARY:BFS218: Map Exchange close (due\, end of Week 12)
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 deadline in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-10@rpeart73.github.io
+DTSTART;VALUE=DATE:20261207
+DTEND;VALUE=DATE:20261208
+SUMMARY:BFS218: Personal Cartography (due by December 7\, 2026)
+DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 deadline in 2 days
+END:VALARM
+END:VEVENT
+END:VCALENDAR

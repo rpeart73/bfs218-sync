@@ -1569,7 +1569,7 @@
       var lastW = visited[visited.length - 1], lastTs = 0;
       visited.forEach(function (w) { if (vweeks[w].last && vweeks[w].last > lastTs) lastTs = vweeks[w].last; });
       if (lastTs && (Date.now() - lastTs) > 7 * 86400000) {
-        recs.push({ t: 'Ease back in', b: 'It has been more than a week since your last visit. Ten minutes back in your most recent week rebuilds momentum faster than starting something new.', go: 'SOC.station(' + lastW + ')', gl: 'Reopen Week ' + lastW });
+        recs.push({ t: 'Ease back in', b: 'It has been more than a week since your last visit. Reopening your most recent week can rebuild momentum without asking you to start something new.', go: 'SOC.station(' + lastW + ')', gl: 'Reopen Week ' + lastW });
       }
       if (window.BFS218_EXPERIMENTS) {
         for (var i = visited.length - 1; i >= 0; i--) {
@@ -1593,7 +1593,7 @@
       }
       var refl = state.wkReflect && String(state.wkReflect[lastW] || '').trim();
       if (!refl && recs.length < 3) {
-        recs.push({ t: 'Close the loop on Week ' + lastW, b: 'A one-minute written reflection is the difference between having seen an idea and being able to use it.', go: 'SOC.jumpWeek(' + lastW + ', \'reflect\')', gl: 'Write it' });
+        recs.push({ t: 'Close the loop on Week ' + lastW, b: 'A short written reflection helps turn an idea you have seen into one you can use.', go: 'SOC.jumpWeek(' + lastW + ', \'reflect\')', gl: 'Write it' });
       }
       if (!recs.length) {
         var nextW = null;
@@ -2183,12 +2183,12 @@
     var hasDeck = (w >= 2 && w <= 12);
     var before = ''
       + (n ? '<li><b>Do the readings</b><span>' + n + (n === 1 ? ' reading sets up' : ' readings set up') + ' what class works through together.</span></li>' : '<li><b>Read the week overview</b><span>Know the guiding question before you arrive.</span></li>')
-      + (hasDeck ? '<li><b>Skim the walkthrough</b><span>Ten minutes now makes the live discussion land deeper.</span></li>' : '')
+      + (hasDeck ? '<li><b>Skim the walkthrough</b><span>Preview the core pattern so the live discussion can go deeper.</span></li>' : '')
       + '<li><b>Carry one question in</b><span>The guiding question is on the week page. Bring your version of it.</span></li>';
     var after = ''
       + '<li><b>Run the activity</b><span>Practice what class opened up, while it is fresh.</span></li>'
       + '<li><b>Take the Knowledge Check</b><span>Find out what actually landed. Never graded.</span></li>'
-      + '<li><b>Write and download your notes</b><span>Two minutes of reflection, then Generate Your Weekly Notes.</span></li>';
+      + '<li><b>Write and download your notes</b><span>Reflect in writing, then generate your weekly notes.</span></li>';
     return '<section class="node sync-rhythm"><div class="sr-top"><div><div class="mono sr-kick">AROUND THIS WEEK\'S CLASS</div>'
       + '<h2 class="sr-h">Week ' + w + ': ' + esc(weekTitle(w)) + '</h2></div>'
       + '<button type="button" class="sr-open" onclick="SOC.station(' + w + ')">Open Week ' + w + ' ' + ic('chevron', 15, 2.4) + '</button></div>'

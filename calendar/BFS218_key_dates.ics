@@ -89,14 +89,119 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-10@rpeart73.github.io
-DTSTART;VALUE=DATE:20261207
-DTEND;VALUE=DATE:20261208
-SUMMARY:BFS218: Personal Cartography (due by December 7\, 2026)
+DTSTART;VALUE=DATE:20261213
+DTEND;VALUE=DATE:20261214
+SUMMARY:BFS218: Personal Cartography (due by December 13\, 2026)
 DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
 BEGIN:VALARM
 TRIGGER:-P2D
 ACTION:DISPLAY
 DESCRIPTION:BFS218 deadline in 2 days
 END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w1-20260908@rpeart73.github.io
+DTSTART;VALUE=DATE:20260908
+DTEND;VALUE=DATE:20260909
+SUMMARY:BFS218 Week 1: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w2-20260914@rpeart73.github.io
+DTSTART;VALUE=DATE:20260914
+DTEND;VALUE=DATE:20260915
+SUMMARY:BFS218 Week 2: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w3-20260921@rpeart73.github.io
+DTSTART;VALUE=DATE:20260921
+DTEND;VALUE=DATE:20260922
+SUMMARY:BFS218 Week 3: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w4-20260928@rpeart73.github.io
+DTSTART;VALUE=DATE:20260928
+DTEND;VALUE=DATE:20260929
+SUMMARY:BFS218 Week 4: asynchronous independent learning
+DESCRIPTION:No lecture. Apply the early foundations independently and practise reading an ordinary digital system through the course lens.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w5-20261005@rpeart73.github.io
+DTSTART;VALUE=DATE:20261005
+DTEND;VALUE=DATE:20261006
+SUMMARY:BFS218 Week 5: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w6-20261013@rpeart73.github.io
+DTSTART;VALUE=DATE:20261013
+DTEND;VALUE=DATE:20261014
+SUMMARY:BFS218 Week 6: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w7-20261019@rpeart73.github.io
+DTSTART;VALUE=DATE:20261019
+DTEND;VALUE=DATE:20261020
+SUMMARY:BFS218 Week 7: live class
+DESCRIPTION:Our class meets live. Use this cumulative review before Study Week.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-study-week-20261026@rpeart73.github.io
+DTSTART;VALUE=DATE:20261026
+DTEND;VALUE=DATE:20261031
+SUMMARY:BFS218 Study Week: no class and no new module
+DESCRIPTION:Study Week runs Monday to Friday\, October 26 to 30. There is no class and no new module.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w8-20261102@rpeart73.github.io
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:BFS218 Week 8: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w9-20261109@rpeart73.github.io
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:BFS218 Week 9: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w10-20261116@rpeart73.github.io
+DTSTART;VALUE=DATE:20261116
+DTEND;VALUE=DATE:20261117
+SUMMARY:BFS218 Week 10: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w11-20261123@rpeart73.github.io
+DTSTART;VALUE=DATE:20261123
+DTEND;VALUE=DATE:20261124
+SUMMARY:BFS218 Week 11: asynchronous independent learning
+DESCRIPTION:No lecture. Use this deliberate synthesis point to connect the second-half work and prepare one repair question for the final substantive live class.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w12-20261130@rpeart73.github.io
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:BFS218 Week 12: final substantive live class
+DESCRIPTION:Our class meets live for the final substantive class. Bring the repair question prepared in Week 11.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w13-20261207@rpeart73.github.io
+DTSTART;VALUE=DATE:20261207
+DTEND;VALUE=DATE:20261208
+SUMMARY:BFS218 Week 13: asynchronous office hours and supported completion
+DESCRIPTION:No lecture. The usual class window becomes office hours for focused final-work support and consultation. Office hours are not recorded.
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-mode-w14-20261214@rpeart73.github.io
+DTSTART;VALUE=DATE:20261214
+DTEND;VALUE=DATE:20261215
+SUMMARY:BFS218 Week 14: asynchronous office hours and course closure
+DESCRIPTION:No lecture. Optional office hours support feedback and final questions. No graded work is due. Office hours are not recorded.
 END:VEVENT
 END:VCALENDAR

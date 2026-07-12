@@ -3212,14 +3212,36 @@
         + '<a href="' + esc(source.transcriptUrl || source.url) + '" target="_blank" rel="noopener" class="wk-cta" style="text-decoration:none;background:#fff;color:#15171C;border:1px solid #15171C">Read the text version</a></div>'
         + '<p style="margin:10px 0 0;font-size:.78rem;color:var(--ink-faint)">Playback stays with the publisher. This site does not track what you play, and the audio does not replace the assigned reading.</p></section>';
     }
-    return '<section id="wk-audio" class="node"><h2 class="wk-sec">Listen to this week</h2>'
-      + '<p class="wk-hint">Made for your ears: about ' + (ep.minutes || 10) + ' minutes covering this week\'s question, core concept, and readings. ' + esc(ep.blurb || '') + '</p>'
-      + '<audio controls preload="none" style="width:100%" src="' + esc(ep.file) + '">Your browser cannot play this audio. Use the download link below.</audio>'
-      + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">'
-      + '<a href="' + esc(ep.file) + '" download class="wk-cta" style="text-decoration:none">Download for offline listening</a>'
-      + (ep.transcript ? '<a href="' + esc(ep.transcript) + '" target="_blank" rel="noopener" class="wk-cta" style="text-decoration:none;background:#fff;color:#1B2A4A;border:1px solid #1B2A4A">Read the transcript</a>' : '')
+    var aid = String(w);
+    var amin = ep.minutes || 10;
+    var atitle = ep.title || ((window.BFS218 && window.BFS218.weeks && window.BFS218.weeks[w]) ? ('Week ' + w + ': ' + window.BFS218.weeks[w]) : ('Week ' + w));
+    var LA = (window.BFS218_AUDIO_LANGS || {})[w] || {};
+    var langOpts = Object.keys(LA).map(function (k) { return '<option value="' + esc(k) + '">' + esc(LA[k].name) + '</option>'; }).join('');
+    return '<section id="wk-audio" class="node">'
+      + '<div class="au-kicker mono">The professor\'s lecture</div>'
+      + '<h2 class="wk-sec">Listen to this week</h2>'
+      + '<p class="wk-hint">This is the whole week in your professor\'s own voice, about ' + amin + ' minutes: the week\'s question, the core idea, and how the readings fit together. Play it to catch up if you missed the week, or if you take things in better by ear. It does not replace the readings; those still carry the citations and evidence your graded work needs. ' + esc(ep.blurb || '') + '</p>'
+      + '<div class="au-player">'
+      + '<audio id="au-el-' + aid + '" preload="metadata" src="' + esc(ep.file) + '"></audio>'
+      + '<div class="au-head">'
+      + '<button type="button" class="au-play" id="au-play-' + aid + '" onclick="SOC.auToggle(\'' + aid + '\')" aria-label="Play the lecture">'
+      + '<svg class="au-ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>'
+      + '<svg class="au-ico-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>'
+      + '</button>'
+      + '<div class="au-headmeta"><div class="au-title">' + esc(atitle) + '</div><div class="au-by">In your professor\'s voice, about ' + amin + ' min</div></div>'
       + '</div>'
-      + '<p style="margin:10px 0 0;font-size:.78rem;color:var(--ink-faint)">Download before you travel; the subway has no signal. This episode teaches the week\'s ideas in audio form, and the readings still carry the citations and evidence your graded work needs.</p>'
+      + '<div class="au-scrub"><span class="au-time" id="au-cur-' + aid + '">0:00</span>'
+      + '<input class="au-seek" id="au-seek-' + aid + '" type="range" min="0" max="1000" value="0" step="1" oninput="SOC.auSeek(\'' + aid + '\',this.value)" aria-label="Seek through the lecture">'
+      + '<span class="au-time au-time-dur" id="au-dur-' + aid + '">--:--</span></div>'
+      + '<div class="au-ctrls">'
+      + '<button type="button" class="au-btn" onclick="SOC.auSkip(\'' + aid + '\',-10)" aria-label="Back 10 seconds"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 6 5 12l6 6z"/><path d="M19 6l-6 6 6 6z"/></svg>10s</button>'
+      + '<button type="button" class="au-btn" onclick="SOC.auSkip(\'' + aid + '\',10)" aria-label="Forward 10 seconds">10s<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 6l6 6-6 6z"/><path d="M5 6l6 6-6 6z"/></svg></button>'
+      + '<button type="button" class="au-btn au-spd" id="au-spd-' + aid + '" onclick="SOC.auSpeed(\'' + aid + '\')" aria-label="Change playback speed">1×</button>'
+      + '<a class="au-btn" href="' + esc(ep.file) + '" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>Download</a>'
+      + (ep.transcript ? '<button type="button" class="au-btn au-btn-ghost" onclick="SOC.auTranscript(\'' + aid + '\')">Transcript</button>' : '')
+      + '</div></div>'
+      + (langOpts ? '<div class="rl-row au-lang-row"><b>Language</b><select class="rl-voice" id="au-lang-' + aid + '" onchange="SOC.auLang(\'' + aid + '\', this.value)" aria-label="Choose the lecture language"><option value="en">English (my voice)</option>' + langOpts + '</select></div>' : '')
+      + '<p class="au-foot">Download it before you travel; the subway has no signal. This is a teaching companion, not a substitute for the assigned readings.</p>'
       + '</section>';
   }
   function visualOverviewSection(w, d) {
@@ -8849,6 +8871,135 @@
       senecaDoc(cc || 'Course', 'Self-Check Studio', sub, sections, (cc || 'Course') + '_self_check_studio');
     },
     runAudit: function () { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; keepAuditActivity(); state.auditRun = true; state.auditSystem = 0; state.auditedSystems = state.auditedSystems || {}; state.auditedSystems[GS.systems[0].id] = true; if (!state.auditSlice) state.auditSlice = 'overall'; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
+    auEl: function (id) { return document.getElementById('au-el-' + id); },
+    auFmt: function (t) { t = Math.max(0, Math.floor(t || 0)); var m = Math.floor(t / 60), s = t % 60; return m + ':' + (s < 10 ? '0' : '') + s; },
+    auIcon: function (id, playing) { var b = document.getElementById('au-play-' + id); if (b) { b.classList.toggle('is-playing', !!playing); b.setAttribute('aria-label', playing ? 'Pause the lecture' : 'Play the lecture'); } },
+    auBind: function (id) { var a = this.auEl(id); if (!a || a.dataset.auBound) return; a.dataset.auBound = '1'; var self = this; var seek = document.getElementById('au-seek-' + id), cur = document.getElementById('au-cur-' + id), dur = document.getElementById('au-dur-' + id); function setDur() { if (dur && a.duration && isFinite(a.duration)) dur.textContent = self.auFmt(a.duration); } a.addEventListener('loadedmetadata', setDur); setDur(); a.addEventListener('timeupdate', function () { if (cur) cur.textContent = self.auFmt(a.currentTime); if (seek && a.duration) { var pc = (a.currentTime / a.duration) * 100; seek.value = String(Math.round(pc * 10)); seek.style.background = 'linear-gradient(90deg,#DA291C ' + pc + '%,#E7D3D0 ' + pc + '%)'; } }); a.addEventListener('ended', function () { self.auIcon(id, false); if (seek) { seek.value = '0'; seek.style.background = ''; } if (cur) cur.textContent = '0:00'; }); },
+    auToggle: function (id) { var a = this.auEl(id); if (!a) return; this.auBind(id); if (a.paused) { var p = a.play(); if (p && p.catch) p.catch(function () {}); this.auIcon(id, true); } else { a.pause(); this.auIcon(id, false); } },
+    auSeek: function (id, v) { var a = this.auEl(id); if (!a || !a.duration) return; a.currentTime = (Number(v) / 1000) * a.duration; },
+    auSkip: function (id, d) { var a = this.auEl(id); if (!a) return; this.auBind(id); var t = a.currentTime + d; a.currentTime = Math.min(Math.max(0, t), a.duration || t); },
+    auSpeed: function (id) { var a = this.auEl(id); if (!a) return; var steps = [1, 1.25, 1.5, 1.75, 2]; var i = steps.indexOf(a.playbackRate); i = (i + 1) % steps.length; a.playbackRate = steps[i]; var l = document.getElementById('au-spd-' + id); if (l) l.textContent = steps[i] + '×'; var l2 = document.getElementById('au-tr-spd'); if (l2) l2.textContent = steps[i] + '×'; },
+    auTranscript: function (id) {
+      var self = this, a = this.auEl(id);
+      var ep = (window.BFS218_AUDIO || {})[id] || {};
+      function build(paras) {
+        if (document.getElementById('au-tr-modal')) return;
+        var chars = 0, wi = 0, starts = [];
+        var body = paras.map(function (para) {
+          return '<p>' + para.split(/\s+/).filter(Boolean).map(function (w) {
+            starts.push(chars); chars += w.length + 1;
+            return '<span class="au-word" id="au-w-' + (wi++) + '">' + esc(w) + '</span>';
+          }).join(' ') + '</p>';
+        }).join('');
+        var box = document.createElement('div');
+        box.id = 'au-tr-modal'; box.className = 'au-modal';
+        box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Lecture transcript');
+        box.innerHTML = '<div class="au-modal-card"><div class="au-modal-head"><div><div class="au-kicker mono">Transcript, follow along</div><b>' + esc(ep.title || 'This week') + '</b></div>'
+          + '<button type="button" class="au-modal-x" onclick="SOC.auTrClose()" aria-label="Close transcript">×</button></div>'
+          + '<div class="au-modal-body" id="au-tr-body">' + body + '</div>'
+          + '<div class="au-modal-foot"><button type="button" class="au-play au-tr-play" id="au-tr-play" onclick="SOC.auToggle(\'' + id + '\')" aria-label="Play or pause"><svg class="au-ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="au-ico-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>'
+          + '<button type="button" class="au-tr-ctrl" id="au-tr-spd" onclick="SOC.auSpeed(\'' + id + '\')" aria-label="Playback speed">1×</button>'
+          + '<button type="button" class="au-tr-ctrl" onclick="SOC.auTrFont()" aria-label="Change text size">A+</button>'
+          + (ep.transcript ? '<a class="au-tr-ctrl" href="' + esc(ep.transcript) + '" download>Download</a>' : '')
+          + '<span class="au-tr-hint">Play and the words follow along. Click a word to jump. Space plays or pauses.</span></div></div>';
+        document.body.appendChild(box);
+        box.addEventListener('click', function (e) { if (e.target === box) SOC.auTrClose(); });
+        var cur = -1;
+        var T = ((window.BFS218_AUDIO_TIMINGS || {})[id]) || null, useT = !!(T && T.length === wi);
+        function tick() {
+          if (!a) return;
+          var lo = 0, t = a.currentTime;
+          if (useT) { for (var i = 0; i < T.length; i++) { if (T[i] <= t) lo = i; else break; } }
+          else { if (!a.duration || !starts.length) return; var target = (t / a.duration) * chars; for (var i = 0; i < starts.length; i++) { if (starts[i] <= target) lo = i; else break; } }
+          if (lo !== cur) {
+            var pv = document.getElementById('au-w-' + cur); if (pv) pv.classList.remove('au-word-on');
+            var k, e2;
+            if (lo > cur) { for (k = Math.max(0, cur); k < lo; k++) { e2 = document.getElementById('au-w-' + k); if (e2) e2.classList.add('au-word-read'); } }
+            else { for (k = lo; k <= cur; k++) { e2 = document.getElementById('au-w-' + k); if (e2) e2.classList.remove('au-word-read'); } }
+            var el = document.getElementById('au-w-' + lo);
+            if (el) { el.classList.add('au-word-on'); el.classList.remove('au-word-read'); var bd = document.getElementById('au-tr-body'); if (bd) { var br = el.getBoundingClientRect(), pr = bd.getBoundingClientRect(); bd.scrollTop += (br.top - pr.top) - bd.clientHeight / 2 + br.height / 2; } }
+            cur = lo;
+          }
+        }
+        function pico() { var b = document.getElementById('au-tr-play'); if (b) b.classList.toggle('is-playing', !!(a && !a.paused)); }
+        var raf = 0;
+        function loop() { tick(); raf = (a && !a.paused) ? requestAnimationFrame(loop) : 0; }
+        function onPlay() { pico(); if (!raf) raf = requestAnimationFrame(loop); }
+        function onKey(e) { if (!document.getElementById('au-tr-modal')) return; if (e.key === ' ' || e.key === 'Spacebar' || e.keyCode === 32) { e.preventDefault(); SOC.auToggle(id); } else if (e.key === 'Escape') { SOC.auTrClose(); } }
+        self._tr = { a: a, tick: tick, pico: pico, onPlay: onPlay, onKey: onKey, stop: function () { if (raf) cancelAnimationFrame(raf); raf = 0; } };
+        document.addEventListener('keydown', onKey);
+        var spl = document.getElementById('au-tr-spd'); if (spl && a) spl.textContent = (a.playbackRate || 1) + '×';
+        var trbody = document.getElementById('au-tr-body');
+        if (trbody) trbody.addEventListener('click', function (e) { var w = e.target.closest ? e.target.closest('.au-word') : null; if (!w || !a) return; var idx = +w.id.replace('au-w-', ''); var nt = useT ? T[idx] : (a.duration ? (starts[idx] / chars) * a.duration : null); if (nt != null && isFinite(nt)) { a.currentTime = nt; tick(); } });
+        if (a) { self.auBind(id); a.addEventListener('timeupdate', tick); a.addEventListener('play', onPlay); a.addEventListener('pause', pico); if (!a.paused) onPlay(); }
+        pico(); tick();
+        setTimeout(function () { var x = box.querySelector('.au-modal-x'); if (x) x.focus(); }, 0);
+      }
+      self._trCache = self._trCache || {};
+      if (self._trCache[id]) { build(self._trCache[id]); return; }
+      if (!ep.transcript) return;
+      fetch(ep.transcript).then(function (r) { return r.text(); }).then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var ps = Array.prototype.map.call(doc.querySelectorAll('main p'), function (p) { return p.textContent.trim(); }).filter(function (t) { return t.length > 30; });
+        if (!ps.length) ps = Array.prototype.map.call(doc.querySelectorAll('p'), function (p) { return p.textContent.trim(); }).filter(function (t) { return t.length > 30; });
+        self._trCache[id] = ps; build(ps);
+      }).catch(function () { window.open(ep.transcript, '_blank'); });
+    },
+    auTrClose: function () {
+      var box = document.getElementById('au-tr-modal'); if (box) box.remove();
+      var tr = this._tr; if (tr) { if (tr.stop) tr.stop(); if (tr.onKey) document.removeEventListener('keydown', tr.onKey); if (tr.a) { tr.a.removeEventListener('timeupdate', tr.tick); tr.a.removeEventListener('play', tr.onPlay); tr.a.removeEventListener('pause', tr.pico); } }
+      this._tr = null;
+    },
+    auTrFont: function () { var b = document.getElementById('au-tr-body'); if (!b) return; var n = ((+b.getAttribute('data-fs') || 0) + 1) % 3; b.setAttribute('data-fs', n); b.classList.remove('au-fs1', 'au-fs2'); if (n === 1) b.classList.add('au-fs1'); else if (n === 2) b.classList.add('au-fs2'); },
+    auLang: function (id, lang) {
+      try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {}
+      if (this.auTrClose) this.auTrClose();
+      if (!lang || lang === 'en') return;
+      var L = ((window.BFS218_AUDIO_LANGS || {})[id] || {})[lang];
+      if (!L || !L.paras || !L.paras.length) return;
+      var a = this.auEl(id); if (a && !a.paused) { a.pause(); this.auIcon(id, false); }
+      this.auTrLang(id, L, lang);
+    },
+    auTrLang: function (id, L, lang) {
+      var self = this;
+      var old = document.getElementById('au-tr-modal'); if (old) old.remove();
+      var rtl = /^(ar|ur|fa|he)/.test(lang);
+      var body = L.paras.map(function (para, i) { return '<p id="au-lp-' + i + '" class="au-lpara">' + esc(para) + '</p>'; }).join('');
+      var box = document.createElement('div');
+      box.id = 'au-tr-modal'; box.className = 'au-modal'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Lecture in ' + L.name);
+      box.innerHTML = '<div class="au-modal-card"><div class="au-modal-head"><div><div class="au-kicker mono">' + esc(L.name) + '</div><b>' + esc(L.title || '') + '</b></div><button type="button" class="au-modal-x" onclick="SOC.auTrClose()" aria-label="Close">×</button></div>'
+        + '<div class="au-modal-body' + (rtl ? ' au-rtl' : '') + '" id="au-tr-body" lang="' + esc(L.lang || lang) + '">' + body + '</div>'
+        + '<div class="au-modal-foot"><button type="button" class="au-play au-tr-play" id="au-tr-play" onclick="SOC.auLangPlay(\'' + id + '\')" aria-label="Play or pause"><svg class="au-ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="au-ico-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button><span class="au-tr-hint">Read aloud by your device in ' + esc(L.name) + '. If nothing plays, your device has no voice for this language yet; you can add one in its settings.</span></div></div>';
+      document.body.appendChild(box);
+      box.addEventListener('click', function (e) { if (e.target === box) SOC.auTrClose(); });
+      self._lang = { paras: L.paras, code: (L.lang || lang), i: 0, reading: false };
+      var onKey = function (e) { if (!document.getElementById('au-tr-modal')) return; if (e.key === ' ' || e.keyCode === 32) { e.preventDefault(); SOC.auLangPlay(id); } else if (e.key === 'Escape') { SOC.auTrClose(); } };
+      self._tr = { onKey: onKey, stop: function () { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {} if (self._lang) self._lang.reading = false; } };
+      document.addEventListener('keydown', onKey);
+      setTimeout(function () { var x = box.querySelector('.au-modal-x'); if (x) x.focus(); }, 0);
+    },
+    auLangPlay: function (id) {
+      var self = this, u = this._lang; if (!u) return;
+      if (u.reading) { try { window.speechSynthesis.cancel(); } catch (e) {} u.reading = false; this._langIcon(false); return; }
+      if (!('speechSynthesis' in window)) return;
+      u.reading = true; this._langIcon(true); u.i = 0;
+      var voices = (window.speechSynthesis.getVoices() || []);
+      var want = String(u.code).toLowerCase(), primary = want.split('-')[0];
+      var voice = voices.filter(function (v) { return String(v.lang).toLowerCase() === want; })[0]
+        || voices.filter(function (v) { return String(v.lang).toLowerCase().split('-')[0] === primary; })[0] || null;
+      function speak() {
+        if (!u.reading || u.i >= u.paras.length) { u.reading = false; self._langIcon(false); return; }
+        self._langHi(u.i);
+        var utt = new SpeechSynthesisUtterance(u.paras[u.i]);
+        if (voice) { utt.voice = voice; utt.lang = voice.lang; } else { utt.lang = u.code; }
+        utt.onend = function () { u.i++; setTimeout(speak, 60); };
+        utt.onerror = function () { u.reading = false; self._langIcon(false); };
+        try { window.speechSynthesis.speak(utt); } catch (e) { u.reading = false; self._langIcon(false); }
+      }
+      speak();
+    },
+    _langHi: function (i) { Array.prototype.forEach.call(document.querySelectorAll('.au-lpara'), function (p, k) { p.classList.toggle('au-lpara-on', k === i); }); var el = document.getElementById('au-lp-' + i), bd = document.getElementById('au-tr-body'); if (el && bd) { var br = el.getBoundingClientRect(), pr = bd.getBoundingClientRect(); bd.scrollTop += (br.top - pr.top) - bd.clientHeight / 2 + br.height / 2; } },
+    _langIcon: function (on) { var b = document.getElementById('au-tr-play'); if (b) b.classList.toggle('is-playing', !!on); },
     auditSystem: function (idx) { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; keepAuditActivity(); state.auditRun = true; state.auditSystem = idx; state.auditedSystems = state.auditedSystems || {}; state.auditedSystems[auditSys().id] = true; if (!state.auditSlice) state.auditSlice = 'overall'; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
     nextSystem: function () { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; keepAuditActivity(); state.auditSystem = ((state.auditSystem || 0) + 1) % GS.systems.length; state.auditedSystems = state.auditedSystems || {}; state.auditedSystems[auditSys().id] = true; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },
     auditSlice: function (s) { var m = document.getElementById('soc-main'), top = m ? m.scrollTop : 0; keepAuditActivity(); state.auditSlice = s; render(); var m2 = document.getElementById('soc-main'); if (m2) m2.scrollTop = top; },

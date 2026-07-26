@@ -1,0 +1,101 @@
+{
+ "code": "BFS218",
+ "recorded": {
+  "journey": {
+   "dur": 77,
+   "kb": 929,
+   "beats": 8,
+   "cues": 8
+  },
+  "station": {
+   "dur": 289,
+   "kb": 2721,
+   "beats": 10,
+   "cues": 10
+  },
+  "site": {
+   "dur": 99,
+   "kb": 1245,
+   "beats": 10,
+   "cues": 10
+  },
+  "pathways": {
+   "dur": 61,
+   "kb": 1062,
+   "beats": 7,
+   "cues": 7
+  },
+  "readings": {
+   "dur": 68,
+   "kb": 1159,
+   "beats": 8,
+   "cues": 8
+  },
+  "compare": {
+   "dur": 71,
+   "kb": 1469,
+   "beats": 8,
+   "cues": 8
+  },
+  "walkthroughs": {
+   "dur": 61,
+   "kb": 530,
+   "beats": 7,
+   "cues": 7
+  },
+  "lectures": {
+   "dur": 59,
+   "kb": 697,
+   "beats": 7,
+   "cues": 7
+  },
+  "videos": {
+   "dur": 56,
+   "kb": 1178,
+   "beats": 7,
+   "cues": 7
+  },
+  "glossary": {
+   "dur": 43,
+   "kb": 1229,
+   "beats": 6,
+   "cues": 6
+  },
+  "cards": {
+   "dur": 53,
+   "kb": 1013,
+   "beats": 7,
+   "cues": 7
+  },
+  "assignments": {
+   "dur": 91,
+   "kb": 1242,
+   "beats": 10,
+   "cues": 10
+  },
+  "career": {
+   "dur": 69,
+   "kb": 1019,
+   "beats": 8,
+   "cues": 8
+  },
+  "calendar": {
+   "dur": 61,
+   "kb": 891,
+   "beats": 7,
+   "cues": 7
+  },
+  "review": {
+   "dur": 70,
+   "kb": 1090,
+   "beats": 8,
+   "cues": 8
+  },
+  "outcomes": {
+   "dur": 61,
+   "kb": 814,
+   "beats": 7,
+   "cues": 7
+  }
+ }
+}

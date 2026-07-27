@@ -3,7 +3,7 @@ window.BFS218 = {
   "code": "BFS218",
   "name": "Racism and the Digital Age: Understanding Techno-Racism",
   "frame": "",
-  "mode": "Synchronous · Live online classes",
+  "mode": "Synchronous · Live online classes", "schedule": "SYB · Tue 12:00-1:00", "scheduleDetail": "Section SYB (LEC 9008). Timetabled Tuesday 10:45 to 1:25. Our live class runs Tuesdays 12:00 to 1:00. Some weeks are asynchronous with no live class, and those weeks are marked below.",
   "blackboardNote": "A companion to Blackboard. Official records, discussion, and submission live in Blackboard."
  },
  "themes": {

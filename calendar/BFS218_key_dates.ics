@@ -1,232 +1,294 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//BFS218//Companion//EN
+PRODID:-//BFS218 Companion//Key Dates//EN
 CALSCALE:GREGORIAN
+METHOD:PUBLISH
 X-WR-CALNAME:BFS218 Synchronous Key Dates (Fall 2026)
 X-WR-TIMEZONE:America/Toronto
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-1@rpeart73.github.io
-DTSTART;VALUE=DATE:20260914
-DTEND;VALUE=DATE:20260915
-SUMMARY:BFS218: Map Exchange begins (weekly\, Weeks 2 to 12)
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-2@rpeart73.github.io
-DTSTART;VALUE=DATE:20261019
-DTEND;VALUE=DATE:20261020
-SUMMARY:BFS218: Compass Check opens on Blackboard
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-3@rpeart73.github.io
-DTSTART;VALUE=DATE:20261023
-DTEND;VALUE=DATE:20261024
-SUMMARY:BFS218: Compass Check (due\, end of Week 7)
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218 deadline in 2 days
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-4@rpeart73.github.io
-DTSTART;VALUE=DATE:20261005
-DTEND;VALUE=DATE:20261006
-SUMMARY:BFS218: Canadian Case File opens on Blackboard
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-5@rpeart73.github.io
-DTSTART;VALUE=DATE:20261102
-DTEND;VALUE=DATE:20261103
-SUMMARY:BFS218: Personal Cartography opens on Blackboard
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-6@rpeart73.github.io
-DTSTART;VALUE=DATE:20261106
-DTEND;VALUE=DATE:20261107
-SUMMARY:BFS218: Canadian Case File (due\, end of Week 8)
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218 deadline in 2 days
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-7@rpeart73.github.io
-DTSTART;VALUE=DATE:20261109
-DTEND;VALUE=DATE:20261110
-SUMMARY:BFS218: Design the Repair opens on Blackboard
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-8@rpeart73.github.io
-DTSTART;VALUE=DATE:20261204
-DTEND;VALUE=DATE:20261205
-SUMMARY:BFS218: Design the Repair (due\, end of Week 12)
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218 deadline in 2 days
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-9@rpeart73.github.io
-DTSTART;VALUE=DATE:20261204
-DTEND;VALUE=DATE:20261205
-SUMMARY:BFS218: Map Exchange close (due\, end of Week 12)
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218 deadline in 2 days
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-10@rpeart73.github.io
-DTSTART;VALUE=DATE:20261213
-DTEND;VALUE=DATE:20261214
-SUMMARY:BFS218: Personal Cartography (due by December 13\, 2026)
-DESCRIPTION:Details and submission on Blackboard. Guidance on the companion site: https://rpeart73.github.io/bfs218-sync/?screen=assignments
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218 deadline in 2 days
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w1-20260908@rpeart73.github.io
 DTSTART;VALUE=DATE:20260908
 DTEND;VALUE=DATE:20260909
 SUMMARY:BFS218 Week 1: live class
-DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+DESCRIPTION:Our class meets live. Use the week page before class and return
+  after class for the captioned recording when it is posted.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-mode-w2-20260914@rpeart73.github.io
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-map-begins@rpeart73.github.io
+SEQUENCE:2
 DTSTART;VALUE=DATE:20260914
 DTEND;VALUE=DATE:20260915
+SUMMARY:BFS218: Map Exchange begins
+DESCRIPTION:Contribute weekly from Weeks 2 to 12. Blackboard controls acces
+ s and submission.
+URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg=m
+ ap-exchange
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-mode-w2-20260914@rpeart73.github.io
+SEQUENCE:1
+DTSTART;VALUE=DATE:20260915
+DTEND;VALUE=DATE:20260916
 SUMMARY:BFS218 Week 2: live class
-DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+DESCRIPTION:Our class meets live. Use the week page before class and return
+  after class for the captioned recording when it is posted.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w3-20260921@rpeart73.github.io
-DTSTART;VALUE=DATE:20260921
-DTEND;VALUE=DATE:20260922
+SEQUENCE:1
+DTSTART;VALUE=DATE:20260922
+DTEND;VALUE=DATE:20260923
 SUMMARY:BFS218 Week 3: live class
-DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+DESCRIPTION:Our class meets live. Use the week page before class and return
+  after class for the captioned recording when it is posted.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w4-20260928@rpeart73.github.io
-DTSTART;VALUE=DATE:20260928
-DTEND;VALUE=DATE:20260929
-SUMMARY:BFS218 Week 4: asynchronous independent learning
-DESCRIPTION:No lecture. Apply the early foundations independently and practise reading an ordinary digital system through the course lens.
+SEQUENCE:1
+DTSTART;VALUE=DATE:20260929
+DTEND;VALUE=DATE:20260930
+SUMMARY:BFS218 Week 4: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return
+  after class for the reflection.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w5-20261005@rpeart73.github.io
-DTSTART;VALUE=DATE:20261005
-DTEND;VALUE=DATE:20261006
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261006
+DTEND;VALUE=DATE:20261007
 SUMMARY:BFS218 Week 5: live class
-DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+DESCRIPTION:Our class meets live. Use the week page before class and return
+  after class for the captioned recording when it is posted.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w6-20261013@rpeart73.github.io
 DTSTART;VALUE=DATE:20261013
 DTEND;VALUE=DATE:20261014
-SUMMARY:BFS218 Week 6: live class
-DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+SUMMARY:BFS218 Week 6: asynchronous independent learning
+DESCRIPTION:No lecture this week. Use the flexible class time to work throu
+ gh the week page independently and at your own pace.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
-UID:bfs218-sync-mode-w7-20261019@rpeart73.github.io
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-map-checkpoint@rpeart73.github.io
+SEQUENCE:2
+DTSTART;VALUE=DATE:20261016
+DTEND;VALUE=DATE:20261017
+SUMMARY:BFS218: Map Exchange Week 6 checkpoint calendar anchor
+DESCRIPTION:The active brief specifies a Week 6 checkpoint but not a calend
+ ar day. This end-of-week anchor is a planning aid. Blackboard confirms the
+  exact deadline.
+URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg=m
+ ap-exchange
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 Map Exchange Week 6 checkpoint approaching
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-compass-open@rpeart73.github.io
+SEQUENCE:2
 DTSTART;VALUE=DATE:20261019
 DTEND;VALUE=DATE:20261020
-SUMMARY:BFS218 Week 7: live class
-DESCRIPTION:Our class meets live. Use this cumulative review before Study Week.
+SUMMARY:BFS218: Compass Check opens on Blackboard
+DESCRIPTION:Available after the Week 6 material. Complete the standard 90-m
+ inute Blackboard window or your approved accommodated time by October 23.
+URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg=c
+ ompass-check
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-mode-w7-20261019@rpeart73.github.io
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261020
+DTEND;VALUE=DATE:20261021
+SUMMARY:BFS218 Week 7: live class
+DESCRIPTION:Our class meets live. Use this cumulative review before Study W
+ eek.
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-compass-due@rpeart73.github.io
+SEQUENCE:2
+DTSTART;VALUE=DATE:20261023
+DTEND;VALUE=DATE:20261024
+SUMMARY:BFS218: Compass Check due (20 percent)
+DESCRIPTION:Due by 11:59 p.m. Eastern before Study Week. Blackboard is the
+  official submission record.
+URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg=c
+ ompass-check
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 Compass Check deadline in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-study-week-20261026@rpeart73.github.io
 DTSTART;VALUE=DATE:20261026
 DTEND;VALUE=DATE:20261031
 SUMMARY:BFS218 Study Week: no class and no new module
-DESCRIPTION:Study Week runs Monday to Friday\, October 26 to 30. There is no class and no new module.
+DESCRIPTION:Study Week runs Monday to Friday\, October 26 to 30. No assessm
+ ent is due.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w8-20261102@rpeart73.github.io
-DTSTART;VALUE=DATE:20261102
-DTEND;VALUE=DATE:20261103
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
 SUMMARY:BFS218 Week 8: live class
-DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+DESCRIPTION:Our class meets live. Use the week page before class and return
+  after class for the captioned recording when it is posted.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-case-due@rpeart73.github.io
+SEQUENCE:2
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:BFS218: Canadian Case File Week 8 due-date calendar anchor
+DESCRIPTION:The active brief specifies Week 8 but not a calendar day. This
+  end-of-week anchor is a planning aid. Blackboard confirms the exact deadl
+ ine and submission settings.
+URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg=c
+ ase-file
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 Canadian Case File Week 8 deadline approaching
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w9-20261109@rpeart73.github.io
-DTSTART;VALUE=DATE:20261109
-DTEND;VALUE=DATE:20261110
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261110
+DTEND;VALUE=DATE:20261111
 SUMMARY:BFS218 Week 9: live class
-DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+DESCRIPTION:Our class meets live. Use the week page before class and return
+  after class for the captioned recording when it is posted.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w10-20261116@rpeart73.github.io
-DTSTART;VALUE=DATE:20261116
-DTEND;VALUE=DATE:20261117
-SUMMARY:BFS218 Week 10: live class
-DESCRIPTION:Our class meets live. Use the week page before class and return after class for the captioned recording when it is posted.
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261117
+DTEND;VALUE=DATE:20261118
+SUMMARY:BFS218 Week 10: asynchronous independent learning
+DESCRIPTION:No lecture this week. Use the flexible class time to work throu
+ gh the week page independently and at your own pace.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w11-20261123@rpeart73.github.io
-DTSTART;VALUE=DATE:20261123
-DTEND;VALUE=DATE:20261124
-SUMMARY:BFS218 Week 11: asynchronous independent learning
-DESCRIPTION:No lecture. Use this deliberate synthesis point to connect the second-half work and prepare one repair question for the final substantive live class.
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261124
+DTEND;VALUE=DATE:20261125
+SUMMARY:BFS218 Week 11: live class
+DESCRIPTION:Our class meets live. Use the week page before class and return
+  after class for the reflection.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w12-20261130@rpeart73.github.io
-DTSTART;VALUE=DATE:20261130
-DTEND;VALUE=DATE:20261201
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
 SUMMARY:BFS218 Week 12: final substantive live class
-DESCRIPTION:Our class meets live for the final substantive class. Bring the repair question prepared in Week 11.
+DESCRIPTION:Our class meets live for the final substantive class. Bring the
+  repair question prepared in Week 11.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-repair-due@rpeart73.github.io
+SEQUENCE:2
+DTSTART;VALUE=DATE:20261204
+DTEND;VALUE=DATE:20261205
+SUMMARY:BFS218: Design the Repair Week 12 due-date calendar anchor
+DESCRIPTION:The active brief specifies Week 12 but not a calendar day. This
+  end-of-week anchor is a planning aid. Blackboard confirms the exact deadl
+ ine and submission settings.
+URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg=r
+ epair
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 Design the Repair Week 12 deadline approaching
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-map-close@rpeart73.github.io
+SEQUENCE:2
+DTSTART;VALUE=DATE:20261204
+DTEND;VALUE=DATE:20261205
+SUMMARY:BFS218: Map Exchange Week 12 close calendar anchor
+DESCRIPTION:The active brief specifies a Week 12 close but not a calendar d
+ ay. This end-of-week anchor is a planning aid. Blackboard confirms the exa
+ ct deadline.
+URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg=m
+ ap-exchange
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 Map Exchange Week 12 close approaching
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w13-20261207@rpeart73.github.io
-DTSTART;VALUE=DATE:20261207
-DTEND;VALUE=DATE:20261208
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261208
+DTEND;VALUE=DATE:20261209
 SUMMARY:BFS218 Week 13: asynchronous office hours and supported completion
-DESCRIPTION:No lecture. The usual class window becomes office hours for focused final-work support and consultation. Office hours are not recorded.
+DESCRIPTION:No lecture. The usual class window becomes office hours for foc
+ used final-work support and consultation. Office hours are not recorded.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260708T120000Z
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-cartography-due@rpeart73.github.io
+SEQUENCE:2
+DTSTART;VALUE=DATE:20261213
+DTEND;VALUE=DATE:20261214
+SUMMARY:BFS218: Personal Cartography final project due (20 percent)
+DESCRIPTION:Due by 11:59 p.m. Eastern in the Week 13 supported-completion p
+ eriod. Nothing is due in Week 14. Blackboard is the official submission re
+ cord.
+URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg=c
+ artography
+BEGIN:VALARM
+TRIGGER:-P2D
+ACTION:DISPLAY
+DESCRIPTION:BFS218 Personal Cartography deadline in 2 days
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
 UID:bfs218-sync-mode-w14-20261214@rpeart73.github.io
-DTSTART;VALUE=DATE:20261214
-DTEND;VALUE=DATE:20261215
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261215
+DTEND;VALUE=DATE:20261216
 SUMMARY:BFS218 Week 14: asynchronous office hours and course closure
-DESCRIPTION:No lecture. Optional office hours support feedback and final questions. No graded work is due. Office hours are not recorded.
+DESCRIPTION:No lecture. Optional office hours support feedback and final qu
+ estions. No graded work is due. Office hours are not recorded.
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20260827T120000Z
+UID:bfs218-sync-term-end@rpeart73.github.io
+DTSTART;VALUE=DATE:20261216
+DTEND;VALUE=DATE:20261217
+SUMMARY:BFS218: last day of the term
+DESCRIPTION:The Fall 2026 term ends. No graded work is due in Week 14.
 END:VEVENT
 END:VCALENDAR

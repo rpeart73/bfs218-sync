@@ -1360,7 +1360,7 @@ window.BFS218_KC_W349_ADDITIONS = {
 // options, null at the correct index).
 window.NUMERACY_ADDITIONS = {
   BFS218: {
-    // Corpus: BFS218/Asynchronous/_app/data/corpus-data.js
+    // Corpus: data/corpus-data.js
     "5": [
       {
         // Grounding: corpus-data.js line 360 (buolamwini2018 abstract): "error rates up to 34.7 percent, while the maximum error for lighter-skinned men was 0.8 percent"; three commercial systems tested.

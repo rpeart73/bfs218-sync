@@ -1,10 +1,10 @@
 # BFS218 Synchronous Companion Site
 
-Instructor-created companion site for the synchronous online section of **BFS218: Racism and the Digital Age (Understanding Techno-Racism)** at Seneca Polytechnic. Our class meets live each week; this site carries everything before and after it.
+Instructor-created companion site for the synchronous online section of **BFS218: Racism and the Digital Age (Understanding Techno-Racism)** at Seneca Polytechnic. The class meets live in most weeks, with Weeks 6 and 10 designated for asynchronous learning; this site carries the work before, during, and after each week.
 
 A student-facing weekly learning pathway on the shared corpus engine: search and filter the course readings, move through the course by week, drill into one source, browse the glossary and key thinkers, and run self-check cards. Weekly pages carry the overview, purpose, outcomes, guiding questions, concepts, readings, an immersive weekly experience, and an activity. The repo also serves the legacy weekly presentation routes at `/walkthroughs/`.
 
-It is a **companion to Blackboard**, not a replacement. Official course records, discussion, grades, and submission live in Blackboard. No accounts, no grading, no student-to-student interaction, no analytics, no PDFs, and no reproduced reading text. Reading links point outward (open access, publisher, Seneca Library, or Blackboard).
+It is a **companion to Blackboard**, not a replacement. Official course records, discussion, grades, and submission live in Blackboard. The site has no accounts, grading, student-to-student interaction, analytics, or reproduced reading text. It does provide a downloadable student-guide PDF. Reading links point outward (open access, publisher, Seneca Library, or Blackboard).
 
 ## Canonical public site
 This repository serves the synchronous section site (planned URL `https://rpeart73.github.io/bfs218-sync/`). The asynchronous section lives at `https://rpeart73.github.io/bfs218-async/`. Shared curriculum data cascades from the course master via `_shared/cascade.sh`; presentation stays forked per section.

@@ -19,9 +19,9 @@ window.BFS218_OUTCOMES = {
     14
    ],
    "assessments": [
-    "Map Exchange",
-    "Compass Check: Scenario Decisions and Your Mirror",
-    "Canadian Case File",
+    "Live Systems Notebook",
+    "Decision Lab: Scenario Choices and Reflection",
+    "Canadian Technology Hearing",
     "Personal Cartography final project"
    ]
   },
@@ -45,10 +45,10 @@ window.BFS218_OUTCOMES = {
     14
    ],
    "assessments": [
-    "Map Exchange",
-    "Compass Check: Scenario Decisions and Your Mirror",
-    "Canadian Case File",
-    "Design the Repair",
+    "Live Systems Notebook",
+    "Decision Lab: Scenario Choices and Reflection",
+    "Canadian Technology Hearing",
+    "Design the Repair Studio",
     "Personal Cartography final project"
    ]
   },
@@ -66,8 +66,8 @@ window.BFS218_OUTCOMES = {
     14
    ],
    "assessments": [
-    "Canadian Case File",
-    "Design the Repair"
+    "Canadian Technology Hearing",
+    "Design the Repair Studio"
    ]
   },
   {
@@ -81,7 +81,7 @@ window.BFS218_OUTCOMES = {
     14
    ],
    "assessments": [
-    "Design the Repair",
+    "Design the Repair Studio",
     "Personal Cartography final project"
    ]
   },
@@ -104,8 +104,8 @@ window.BFS218_OUTCOMES = {
     14
    ],
    "assessments": [
-    "Map Exchange",
-    "Compass Check: Scenario Decisions and Your Mirror",
+    "Live Systems Notebook",
+    "Decision Lab: Scenario Choices and Reflection",
     "Personal Cartography final project"
    ]
   }

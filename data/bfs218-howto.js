@@ -55,8 +55,8 @@ window.BFS218_HOWTO = {
      "detail": "If the week has an audio lecture, Listen to this week plays it with a follow-along transcript. Reading Rescue in the Readings section gives you the shortest honest path back in when you are behind."
     },
     {
-     "do": "Run the activity, then take the Knowledge Check with honest confidence.",
-     "detail": "There are three sets: A and B are multiple choice, C brings scenarios and short writing. Answer, mark how sure you were, then reveal. Confident misses are the most valuable thing to review."
+     "do": "Enter the activity room, follow its route, then take the Knowledge Check with honest confidence.",
+     "detail": "Every activity room uses a different sequence: a 3D scene, decision, experiment, design comparison, or assembly bench. Follow the numbered route, then use Sets A, B, and C to check what you can explain. Confident misses are the most valuable thing to review."
     },
     {
      "do": "Close with the reflection and Generate Your Weekly Notes.",
@@ -285,11 +285,11 @@ window.BFS218_HOWTO = {
   },
   "assignments": {
    "title": "How to use Starting Your Assignment",
-   "intro": "The five assessments build one Personal Cartography across the term. These pages explain the arc, the rooms, the marking, the dates, and the AI rules, so the blank page never wins.",
+   "intro": "The six assessment guides cover seven graded components and build toward one Personal Cartography across the term. These pages explain the arc, the rooms, the marking, the dates, and the AI rules, so the blank page never wins.",
    "steps": [
     {
      "do": "Read the overview first.",
-     "detail": "Five assignments, each worth 20 percent, move through one arc: notice, interpret, investigate, repair, and integrate."
+     "detail": "Seven graded components move through one arc: notice, interpret, investigate, repair, integrate, and reflect. The weights total 100 percent."
     },
     {
      "do": "Open one assignment room at a time.",
@@ -301,11 +301,11 @@ window.BFS218_HOWTO = {
     },
     {
      "do": "Confirm dates on the release page.",
-     "detail": "It lists when each Blackboard dropbox opens and when work is due. Nothing is due in Study Week or Week 14."
+     "detail": "It lists when each Blackboard dropbox opens and when work is due. Nothing is due in Study Week. The Final Learning Reflection is due in Week 14."
     },
     {
      "do": "Open the Assignment Start Lab when you want a working session.",
-     "detail": "It turns your assignment, progress, sticking point, and available time into a personal start plan you can print or save. For Compass Check it builds readiness steps only and never generates or rehearses graded answers."
+     "detail": "It turns your assignment, progress, sticking point, and available time into a personal start plan you can print or save. For Decision Lab, it helps you organize your own recorded choices, concepts, trade-offs, revision, and follow-up preparation without reproducing the graded scenarios."
     },
     {
      "do": "Read the AI page before you disclose.",
@@ -359,7 +359,7 @@ window.BFS218_HOWTO = {
     },
     {
      "do": "Scan the term at a glance.",
-     "detail": "All five 20 percent assessment guides are visible from day one. Compass Check is due in Week 7, Canadian Case File in Week 8, Design the Repair and the Map Exchange close in Week 12, and Personal Cartography on December 13 in Week 13. Blackboard controls access and remains the official source."
+     "detail": "All six assessment guides are visible from day one. Live Systems Notebook sets are due October 18 and November 29; Decision Lab is due October 23; Canadian Technology Hearing is due November 6; Design the Repair Studio is due December 4; Personal Cartography is due December 11; and the Final Learning Reflection is due December 15. Blackboard controls access and remains the official source."
     },
     {
      "do": "Subscribe on your phone.",

@@ -124,7 +124,7 @@ DTSTAMP:20260902T160000Z
 SEQUENCE:3
 UID:bfs218-sync-w14@rpeart73.github.io
 DTSTART;VALUE=DATE:20261213
-DTEND;VALUE=DATE:20261214
+DTEND;VALUE=DATE:20261217
 SUMMARY:BFS218 Week 14: asynchronous course closure
 DESCRIPTION:Follow the independent or supported route on the week page.
 END:VEVENT

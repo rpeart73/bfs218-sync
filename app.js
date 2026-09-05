@@ -3915,22 +3915,27 @@
       }
       return '<article class="bfs-evidence bfs-evidence-fallback" data-bfs-evidence-visual data-week="' + w + '" data-context="' + esc(context) + '"><div class="mono">TEXT VIEW</div><h3>' + esc(spec.title || weekTitle(w)) + '</h3><p>' + esc(spec.scene || spec.visualDescription || '') + '</p><ol>' + (spec.steps || []).slice(0, 3).map(function (step) { return '<li><b>' + esc(step[0] || '') + ':</b> ' + esc(step[1] || '') + '</li>'; }).join('') + '</ol><p><b>Evidence boundary:</b> ' + esc(spec.evidenceNote || 'Use this as a teaching organizer, not as evidence of a real deployment or measured result.') + '</p></article>';
     }
-    if (context === 'activity' && ((w === 2 && spec.kind === 'mechanismatch') || (w === 3 && spec.kind === 'decisionpath'))) {
-      return '<div class="wk-model-frame wk-model-frame-guided wk-model-frame-w' + w + '">' + causalStoryHtml(w, spec, view) + '</div>';
-    }
     var documentary = context !== 'activity' && documentaryThreeKind(spec.kind);
     var viewOrder = ['observe', 'path', 'risk'];
     var viewIndex = Math.max(0, viewOrder.indexOf(view));
     var activeStep = (spec.steps || [])[viewIndex] || [];
     var renderAsset = context === 'activity' && window.BFS218_HOLO && window.BFS218_HOLO.activityAsset ? window.BFS218_HOLO.activityAsset(spec.kind) : null;
-    var gestureHelp = spec.kind === 'mechanismatch'
-      ? 'Pull the file toward the lens, sweep the lens across the process, and turn the gear. Each gesture reveals the matching reasoning step below.'
-      : spec.kind === 'decisionpath'
-      ? 'Slide the application toward the filter, throw the threshold lever, and pull the fork between approval and burden. Each gesture reinforces one stage of the matched-application audit.'
-      : spec.kind === 'thresholdaudit'
-      ? 'Feed the compression hopper, adjust the vernier cutoff gate, and balance prediction against lived context on the scale. Each gesture unpacks the mechanics of algorithmic gatekeeping.'
-      : '';
-    var rotateHelp = renderAsset
+    var gestureHelpMap = {
+      startermap: 'Advance the everyday tool to the examination table, expose the implicit design assumption, and log your first Personal Cartography entry.',
+      mechanismatch: 'Advance the tenancy dossier toward the lens, sweep the inspection lens across credit scoring proxies, and engage the mechanism diagnostics gear. Each gesture unpacks the chain from historical redlining to automated denial.',
+      decisionpath: 'Feed the matched application into the intake terminal, throw the name-proxy scoring switch, and divert the outcome track. Each gesture exposes how names turn identical qualifications into divergent institutional treatment.',
+      defaultboard: 'Toggle the speech dialect preset, calibrate the credit baseline slider, and tune sensor exposure. Each gesture tests whether an exclusion is an incidental glitch or a systemic design default.',
+      audit: 'Inspect the aggregate accuracy benchmark, disaggregate intersectional subgroups, and apply an equity audit mandate to uncover hidden disparities.',
+      surveillanceflow: 'Advance the traveler across the border checkpoint, trace flag propagation through linked databases, and challenge the administrative redress bottleneck.',
+      toolkit: 'Extract the training data and rules substrate, deploy the inference decision gate, and connect the institutional feedback loop to assemble the complete AI system anatomy.',
+      datastory: 'Transfer RHS health records to community custody, engage OCAP® access protocols, and seal the Indigenous data sovereignty boundary.',
+      promisefunnel: 'Inspect the helpful benevolent promise, tune the X-ray scanner to reveal the added carceral mechanism, and apply the structural power test.',
+      thresholdaudit: 'Feed the compression hopper, adjust the vernier cutoff gate, and balance prediction against lived context on the scale. Each gesture unpacks the mechanics of algorithmic gatekeeping.',
+      repairtable: 'Root local community digital stewards, mount autonomous rooftop mesh hardware, and shift governance authority from vendor patch to community repair.',
+      policydeck: 'Open the proposed Bill C-27 docket, magnify the statutory independence gap, and apply the parliamentary recommendation stamp.'
+    };
+    var gestureHelp = gestureHelpMap[spec.kind] || '';
+    var rotateHelp = (renderAsset || gestureHelp)
       ? gestureHelp
       : documentary
       ? 'Use the arrow buttons or a small horizontal drag to shift the viewpoint. The scene is an evidence environment, not a turntable or drag-and-drop task.'
@@ -3946,62 +3951,145 @@
     var shellKind = String(spec.kind || 'pipeline').replace(/[^a-z0-9_-]/gi, '').toLowerCase() || 'pipeline';
     var shellStyle = renderAsset ? 'realist' : (String(spec.visualStyle || 'diorama').replace(/[^a-z0-9_-]/gi, '').toLowerCase() || 'diorama');
     var holoDriven = !!(window.BFS218_HOLO && window.BFS218_HOLO.supports && window.BFS218_HOLO.supports(spec.kind));
-    var dragPositions = spec.kind === 'mechanismatch'
-      ? [[17.2, 75.2], [32.9, 56.7], [71.4, 46.9]]
-      : spec.kind === 'decisionpath'
-      ? [[20.5, 70.2], [50.5, 72.5], [70.5, 43.2]]
-      : spec.kind === 'thresholdaudit'
-      ? [[18.2, 74.0], [39.0, 68.0], [78.8, 64.0]]
-      : [];
+    var dragPositionsMap = {
+      startermap: [[20.0, 68.0], [50.0, 64.0], [80.0, 68.0]],
+      mechanismatch: [[18.5, 70.0], [49.5, 58.0], [80.5, 64.0]],
+      decisionpath: [[19.0, 68.0], [50.0, 66.0], [78.0, 52.0]],
+      defaultboard: [[20.0, 68.0], [50.0, 68.0], [80.0, 68.0]],
+      audit: [[20.0, 68.0], [50.0, 64.0], [80.0, 68.0]],
+      surveillanceflow: [[19.0, 68.0], [50.0, 64.0], [81.0, 68.0]],
+      toolkit: [[20.0, 68.0], [50.0, 66.0], [80.0, 68.0]],
+      datastory: [[20.0, 68.0], [50.0, 64.0], [80.0, 68.0]],
+      promisefunnel: [[20.0, 68.0], [50.0, 64.0], [80.0, 68.0]],
+      thresholdaudit: [[18.2, 74.0], [39.0, 68.0], [78.8, 64.0]],
+      repairtable: [[20.0, 68.0], [50.0, 64.0], [80.0, 68.0]],
+      policydeck: [[20.0, 68.0], [50.0, 64.0], [80.0, 68.0]]
+    };
+    var dragPositions = context === 'activity' ? (dragPositionsMap[spec.kind] || []) : [];
+    var hasInteractiveDrag = dragPositions.length > 0;
     var dragModes = ['predict', 'try', 'explain'];
     var dragIndex = Math.max(0, dragModes.indexOf(view));
     var dragStep = (spec.steps || [])[dragIndex] || [];
-    var dragCues = spec.kind === 'mechanismatch'
-      ? ['Drag right: file to lens', 'Drag sideways: trace the process', 'Drag sideways: turn the gear']
-      : spec.kind === 'decisionpath'
-      ? ['Drag right: application enters', 'Drag sideways: trace name filter', 'Drag sideways: compare outcomes']
-      : spec.kind === 'thresholdaudit'
-      ? ['Drag vertically: compress student context', 'Drag vertically: adjust cutoff gate', 'Drag sideways: weigh human recourse']
-      : ['Inspect object 1', 'Inspect object 2', 'Inspect object 3'];
-    var dragTypes = spec.kind === 'mechanismatch'
-      ? ['forward', 'sweep', 'turn']
-      : spec.kind === 'decisionpath'
-      ? ['forward', 'turn', 'sweep']
-      : spec.kind === 'thresholdaudit'
-      ? ['vertical', 'vertical', 'sweep']
-      : ['sweep', 'sweep', 'sweep'];
-    var dragResults = spec.kind === 'mechanismatch'
-      ? [
-          'You began with what happened. An unequal outcome matters even when no one intended harm.',
-          'You traced the process. Data, rules, defaults, proxies, and overlapping systems can reproduce the result.',
-          'You named the mechanism. The best match explains how the result is produced and why it can repeat.'
-        ]
-      : spec.kind === 'decisionpath'
-      ? [
-          'The selected application enters with the same current qualifications as the other two files.',
-          'This is the engineering choice. The system racializes the name as a proxy, compares it with biased past approvals, and applies a threshold.',
-          'This is amplification. The name-derived proxy turns the same current evidence into approval, added proof work, or denial.'
-        ]
-      : [
-          'Station 1: Feature compression hopper engaged. Multidimensional student context (work, caregiving, health) is crushed into a single scalar score cylinder.',
-          'Station 2: Vernier cutoff gate adjusted. Moving the micrometer line shows that the cutoff is an administrative policy choice, determining who enters the SUPPORT bin vs. who is dropped into EXCLUDED ATTRITION.',
-          'Station 3: Equity balance scale engaged. Human review and contextual evidence balance against automated predictive scores to provide recourse for excluded students.'
-        ];
-    var dragLayer = renderAsset ? '<div class="wk-native-drag-layer" aria-label="Direct manipulation controls">' + dragPositions.map(function (pos, i) {
+    var dragCuesMap = {
+      startermap: ['Drag right: pick everyday tool', 'Drag sideways: uncover hidden assumption', 'Drag sideways: record map entry'],
+      mechanismatch: ['Drag right: dossier to lens', 'Drag sideways: trace credit proxy', 'Drag sideways: engage mechanism gear'],
+      decisionpath: ['Drag right: applicant into intake', 'Drag vertically: throw name-proxy switch', 'Drag sideways: divert outcome track'],
+      defaultboard: ['Drag sideways: toggle dialect preset', 'Drag sideways: calibrate credit baseline', 'Drag vertically: adjust sensor exposure'],
+      audit: ['Drag right: inspect overall average', 'Drag sideways: disaggregate subgroups', 'Drag sideways: apply audit mandate'],
+      surveillanceflow: ['Drag right: cross checkpoint', 'Drag sideways: trace flag propagation', 'Drag sideways: test redress route'],
+      toolkit: ['Drag right: extract training data', 'Drag vertically: deploy decision gate', 'Drag sideways: connect feedback loop'],
+      datastory: ['Drag right: transfer RHS records', 'Drag sideways: engage OCAP® key', 'Drag sideways: seal sovereignty boundary'],
+      promisefunnel: ['Drag right: inspect helpful promise', 'Drag vertically: scan hidden mechanism', 'Drag sideways: test structural power'],
+      thresholdaudit: ['Drag vertically: compress student context', 'Drag vertically: adjust cutoff gate', 'Drag sideways: weigh human recourse'],
+      repairtable: ['Drag right: root community knowledge', 'Drag vertically: mount mesh antenna', 'Drag sideways: shift governance power'],
+      policydeck: ['Drag right: open Bill C-27 docket', 'Drag sideways: magnify statutory gap', 'Drag sideways: apply institutional remedy']
+    };
+    var dragCues = dragCuesMap[spec.kind] || ['Inspect object 1', 'Inspect object 2', 'Inspect object 3'];
+    var dragTypesMap = {
+      startermap: ['forward', 'sweep', 'sweep'],
+      mechanismatch: ['forward', 'sweep', 'turn'],
+      decisionpath: ['forward', 'vertical', 'sweep'],
+      defaultboard: ['sweep', 'sweep', 'vertical'],
+      audit: ['forward', 'sweep', 'sweep'],
+      surveillanceflow: ['forward', 'sweep', 'sweep'],
+      toolkit: ['forward', 'vertical', 'sweep'],
+      datastory: ['forward', 'sweep', 'sweep'],
+      promisefunnel: ['forward', 'vertical', 'sweep'],
+      thresholdaudit: ['vertical', 'vertical', 'sweep'],
+      repairtable: ['forward', 'vertical', 'sweep'],
+      policydeck: ['forward', 'sweep', 'sweep']
+    };
+    var dragTypes = dragTypesMap[spec.kind] || ['sweep', 'sweep', 'sweep'];
+    var dragResultsMap = {
+      startermap: [
+        'Station 1: Everyday tool selected. Ordinary systems (search bars, cameras, apps) carry design assumptions into routine life.',
+        'Station 2: Hidden assumption exposed. The tool treats dominant group experiences as normal and marginalized needs as edge cases.',
+        'Station 3: First map entry recorded. Noticing who is sorted, watched, or misread begins your Personal Cartography.'
+      ],
+      mechanismatch: [
+        'Station 1: Evidence dossier advanced. Oakwood tenancy records contain historical redlining and eviction flags. Treating past records as neutral inputs ensures past discrimination dictates present housing access.',
+        'Station 2: Optical inspection lens swept. Ruha Benjamin demonstrates that algorithms substitute geographic and credit proxies for racial identity, automating discrimination without requiring explicit racist intent.',
+        'Station 3: Mechanism diagnostics gear engaged. Matching outcome confirmed: racialized history enters the screener, technical proxies automate exclusion, and resulting denials appear objective.'
+      ],
+      decisionpath: [
+        'Station 1: Matched application intake engaged. All applicant files hold current qualifications, credit scores, and tenancy history identical. Any routing divergence stems solely from name-proxy treatment.',
+        'Station 2: Name-proxy scoring switch thrown. The system converts phonemic patterns into racialized proxies based on biased historical approvals, penalizing applicants before human review.',
+        'Station 3: Track fork divergence manifest. Three identical files diverge into three unequal institutional outcomes: fast-track approval, burdensome audit scrutiny, or automated rejection.'
+      ],
+      defaultboard: [
+        'Station 1: Speech dialect preset challenged. Speech models calibrated on Midwestern white speech penalize African American Vernacular English (AAVE), forcing marginalized speakers to carry the burden of adaptation.',
+        'Station 2: Credit baseline preset calibrated. Shifting the default from intergenerational wealth proxies to on-time rent and utility histories expands equitable access.',
+        'Station 3: Sensor dynamic range adjusted. Default camera sensors fail on darker skin tones without specialized exposure calibration (Buolamwini & Gebru, 2018). Benjamin\'s systemic test passed.'
+      ],
+      audit: [
+        'Station 1: Aggregate accuracy benchmark inspected. High overall accuracy scores can quietly conceal massive error rates in minority demographic slices.',
+        'Station 2: Intersectional subgroup disaggregation complete. Error rates spike dramatically for darker-skinned women, proving that average metrics hide intersectional harms.',
+        'Station 3: Equity audit mandate applied. Auditing across combined axes of race and gender forces developers to retrain models and correct disproportionate failure modes.'
+      ],
+      surveillanceflow: [
+        'Station 1: Border checkpoint crossed. Watchlist algorithms create false-positive flags on common names, disproportionately affecting racialized travelers.',
+        'Station 2: Flag propagation traced. An unverified security flag instantly replicates across police, border, and intelligence databases without judicial oversight.',
+        'Station 3: Administrative redress bottleneck exposed. Opaque recourse mechanisms force innocent families to spend years petitioning for removal without access to evidence.'
+      ],
+      toolkit: [
+        'Station 1: Data and rules substrate placed. Kate Crawford and Vladan Joler emphasize that AI systems are constructed on extracted labor, biased historical records, and arbitrary classification boundaries.',
+        'Station 2: Algorithmic gate deployed. Inference models convert statistical correlations into consequential institutional life decisions (hiring, housing, bail, policing).',
+        'Station 3: Whole-system anatomy complete. Harm does not stem from a single rogue component; it is produced by the interlocking chain of data, rules, deployment, and broken feedback loops.'
+      ],
+      datastory: [
+        'Station 1: RHS health records transferred to community custody. First Nations Information Governance Centre (FNIGC): communities retain collective ownership of their demographic and health data.',
+        'Station 2: OCAP® access protocols enforced. Access to published reports does not confer ownership or secondary research rights. Continuous community consent is mandatory.',
+        'Station 3: Indigenous Data Sovereignty defended. Governance authority returned to Indigenous nations. OCAP® principles protect community self-determination against extractive research practices.'
+      ],
+      promisefunnel: [
+        'Station 1: Helpful benevolent promise acknowledged. Virginia Eubanks and Ruha Benjamin remind us: keep the genuine benefit in view. Technological benevolence always begins with a real, appealing promise of help.',
+        'Station 2: Hidden carceral mechanism exposed. The digital monitor expands state surveillance into private family homes, imposes exorbitant daily rental fees, and triggers automated re-arrest for minor glitches.',
+        'Station 3: Structural power test applied. A benefit does not prove structural repair. When the vulnerable person has no power to refuse surveillance or alter the underlying conditions, the benevolence is punitive.'
+      ],
+      thresholdaudit: [
+        'Station 1: Feature compression hopper engaged. Multidimensional student realities (work, caregiving, health) flattened into a single scalar score cylinder.',
+        'Station 2: Vernier cutoff gate adjusted. Moving the micrometer line shows that the cutoff is an administrative policy choice, determining who enters the SUPPORT bin vs. who is dropped into EXCLUDED ATTRITION.',
+        'Station 3: Equity balance scale engaged. Human review and contextual evidence balance against automated predictive scores to provide recourse for excluded students.'
+      ],
+      repairtable: [
+        'Station 1: Community Digital Stewards rooted. Detroit Community Technology Project (DCTP): Community residents are trained as infrastructure designers, educators, and stewards of neighborhood wireless mesh.',
+        'Station 2: Autonomous mesh hardware deployed. Physical infrastructure built and owned by residents. Rooftop solar-powered mesh nodes provide resilient local connectivity independent of corporate telecom gatekeepers.',
+        'Station 3: Governance power shift reconstructed. Transformative repair achieved: residents hold governance authority through Community Technology Agreements, safeguarding privacy and preventing corporate exploitation.'
+      ],
+      policydeck: [
+        'Station 1: Bill C-27 / AIDA proposed draft inspected. Attard-Frost (2023): AIDA was a proposed federal framework that died on the order paper. Analysing its argued gaps reveals key structural challenges in AI governance.',
+        'Station 2: Institutional conflict of interest exposed. Housing the AI and Data Commissioner within the Department of Industry (ISED) compromises regulatory independence by subordinating human rights protection to commercial promotion.',
+        'Station 3: Statutory recommendation matched. Policy remedy aligned: an Independent Parliamentary AI Commissioner with binding investigative powers, mandatory public consultation, and enforceable human rights protections.'
+      ]
+    };
+    var dragResults = dragResultsMap[spec.kind] || [
+      'Station 1 explored. Inspect the initial inputs and historical assumptions.',
+      'Station 2 explored. Trace the institutional mechanism and proxy substitutions.',
+      'Station 3 explored. Evaluate the consequences, recourse pathways, and governance responses.'
+    ];
+    var dragLayer = (renderAsset || hasInteractiveDrag) ? '<div class="wk-native-drag-layer" aria-label="Direct manipulation controls">' + dragPositions.map(function (pos, i) {
       var step = (spec.steps || [])[i] || [];
       var keyboard = ' Press Enter, Space, or Arrow keys for the same action with a keyboard.';
       var isCutoffGate = spec.kind === 'thresholdaudit' && i === 1;
       var bladeHtml = isCutoffGate ? '<span class="wk-cutoff-gate-blade" aria-hidden="true"><span class="wk-gate-line"></span><span class="wk-gate-tag">CUTOFF: 0.65 BASELINE</span></span>' : '';
       return '<button type="button" class="wk-native-drag-handle" data-drag-view="' + dragModes[i] + '" data-drag-index="' + i + '" data-drag-type="' + dragTypes[i] + '" data-drag-cue="' + esc(dragCues[i]) + '" data-drag-result="' + esc(dragResults[i]) + '" aria-label="Step ' + (i + 1) + '. ' + esc(dragCues[i]) + '. ' + esc(step[1] || '') + esc(keyboard) + '" aria-pressed="' + (dragModes[i] === view) + '" style="left:' + pos[0] + '%;top:' + pos[1] + '%"><span class="wk-handle-num">' + (i + 1) + '</span>' + bladeHtml + '</button>';
     }).join('') + '</div><span class="wk-gesture-status" data-gesture-status><b>Step ' + (dragIndex + 1) + ': ' + esc(dragCues[dragIndex] || dragStep[0] || spec.title) + '</b><small>' + esc(dragStep[1] || 'Use this object to inspect the process.') + '</small></span>' : '';
-    var renderMarkup = renderAsset ? '<img class="wk-model-render" src="' + esc(renderAsset) + '" alt="" aria-hidden="true" decoding="async"><span class="wk-render-cue" aria-hidden="true"></span>' + dragLayer + '<div class="wk-shape-instruction"><span data-gesture-progress>Drag is optional</span><button type="button" class="wk-gesture-reset">Reset</button></div>' : '';
-    var renderedPurpose = spec.kind === 'mechanismatch'
-      ? 'Use the guided housing case above. It shows how racialized history can enter a technical process and return as a neutral-looking result. The movable file, lens, and gear are optional ways to inspect that chain.'
-      : spec.kind === 'decisionpath'
-      ? 'Use the matched-application audit above. It shows how Ali Khan, Tyrone Smith, and Christopher Parker receive different treatment after the system racializes their names as proxies. The movable file, lever, and fork are optional ways to inspect that chain.'
-      : spec.kind === 'thresholdaudit'
-      ? 'Use the Policy Sieve and Equity Balance apparatus above. It demonstrates how feature compression in the intake hopper and administrative thresholds at the cutoff gate can deny support to at-risk students, while the balance scale provides essential human recourse.'
-      : 'Use the model controls above to explore the three stages of this system.';
+    var renderMarkup = renderAsset ? '<img class="wk-model-render" src="' + esc(renderAsset) + '" alt="" aria-hidden="true" decoding="async"><span class="wk-render-cue" aria-hidden="true"></span>' + dragLayer + '<div class="wk-shape-instruction"><span data-gesture-progress>Drag is optional</span><button type="button" class="wk-gesture-reset">Reset</button></div>' : (hasInteractiveDrag ? dragLayer + '<div class="wk-shape-instruction"><span data-gesture-progress>Drag is optional</span><button type="button" class="wk-gesture-reset">Reset</button></div>' : '');
+    var renderedPurposeMap = {
+      startermap: 'Use the ordinary-system field table above to trace how routine tools carry hidden assumptions before making your first cartography entry.',
+      mechanismatch: 'Use the forensic evidence bench above. It shows how racialized history enters a technical screening process and returns as a neutral-looking result. The movable dossier, lens, and gear let you inspect that chain tactilely.',
+      decisionpath: 'Use the matched-application switchyard above. It shows how Ali Khan, Tyrone Smith, and Christopher Parker receive divergent institutional treatment after the system racializes their names as proxies.',
+      defaultboard: 'Use the default discrimination control room above. Toggle linguistic presets, credit baselines, and optical sensors to test whether systemic failures can be dismissed as incidental glitches.',
+      audit: 'Use the intersectional audit array above to disaggregate demographic categories and reveal how high average accuracy rates can hide severe disparate impact.',
+      surveillanceflow: 'Use the Canadian flag trail model above to follow how an airport watchlist flag replicates across linked federal databases while recourse channels remain blocked.',
+      toolkit: 'Use the system anatomy workbench above to deconstruct algorithmic black boxes into training data, mathematical rules, deployment gates, decision outcomes, and feedback loops.',
+      datastory: 'Use the First Nations RHS governance table above to explore how collective ownership, control, access, and possession (OCAP®) reshape data power dynamics.',
+      promisefunnel: 'Use the benevolence case X-ray bench above to keep genuine benefits in view while exposing how helpful framing can expand surveillance and shift punitive burdens.',
+      thresholdaudit: 'Use the Policy Sieve and Equity Balance apparatus above. It demonstrates how feature compression in the intake hopper and administrative thresholds at the cutoff gate can deny support to at-risk students, while the balance scale provides essential human recourse.',
+      repairtable: 'Use the Detroit Community Technology Project repair bench above to trace how community digital stewards build autonomous wireless infrastructure and establish local governance.',
+      policydeck: 'Use the AIDA legislative docket above to analyse proposed statutory gaps in Bill C-27 and match them to independent parliamentary oversight and human rights remedies.'
+    };
+    var renderedPurpose = renderedPurposeMap[spec.kind] || 'Use the model controls above to explore the three stages of this system.';
     if (documentary) {
       return '<div class="wk-model-frame wk-model-frame-story">'
         + visualControls(w, spec, context, view)
@@ -5337,6 +5425,184 @@
           }
         }
       }
+      function syncStarterMap(dragIdx) {
+        if (kind !== 'startermap') return;
+        var matchSection = document.querySelector('.activity-room-w1') || document;
+        if (dragIdx === 0) {
+          var firstPair = matchSection.querySelector('.act-pair, [onclick*="a|1|m|0"]');
+          if (firstPair) { try { firstPair.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {} }
+        } else if (dragIdx === 1) {
+          var firstBtn = matchSection.querySelector('button[onclick*="a|1|m|0"][onclick*=",0"]');
+          if (firstBtn) { try { firstBtn.click(); } catch (e) {} }
+        } else if (dragIdx === 2) {
+          var secondBtn = matchSection.querySelector('button[onclick*="a|1|m|1"][onclick*=",1"]');
+          if (secondBtn) { try { secondBtn.click(); } catch (e) {} }
+        }
+      }
+      function syncMechanismMatch(dragIdx) {
+        if (kind !== 'mechanismatch') return;
+        state.act = state.act || {};
+        state.actResult = state.actResult || {};
+        var causalOutcomeBtn = document.querySelector('[data-causal-choice="outcome"]');
+        if (causalOutcomeBtn && dragIdx >= 1) {
+          try { causalOutcomeBtn.click(); } catch (e) {}
+        }
+        var matchSection = document.querySelector('.activity-room-w2') || document;
+        var firstMatchBtn = matchSection.querySelector('button[onclick*="a|2|m|0"]');
+        if (firstMatchBtn && dragIdx === 2) {
+          try { firstMatchBtn.click(); } catch (e) {}
+        }
+      }
+      function syncDecisionPath(dragIdx) {
+        if (kind !== 'decisionpath') return;
+        var auditSec = document.querySelector('.wk-applicant-audit');
+        if (auditSec) {
+          if (dragIdx === 0) {
+            var firstApp = auditSec.querySelector('[data-applicant-case="khan"]');
+            if (firstApp) { try { firstApp.click(); } catch (e) {} }
+          } else if (dragIdx === 1) {
+            var advBtn = auditSec.querySelector('.wk-applicant-next');
+            if (advBtn && !advBtn.disabled) { try { advBtn.click(); advBtn.click(); } catch (e) {} }
+          } else if (dragIdx === 2) {
+            var advBtn2 = auditSec.querySelector('.wk-applicant-next');
+            if (advBtn2 && !advBtn2.disabled) { try { advBtn2.click(); advBtn2.click(); advBtn2.click(); } catch (e) {} }
+          }
+        }
+        var scnSec = document.querySelector('.activity-room-w3') || document;
+        var scnBtn0 = scnSec.querySelector('button[onclick*="a|3|s|0"][onclick*=",1"]');
+        var scnBtn1 = scnSec.querySelector('button[onclick*="a|3|s|1"][onclick*=",1"]');
+        var scnBtn2 = scnSec.querySelector('button[onclick*="a|3|s|2"][onclick*=",1"]');
+        if (dragIdx === 0 && scnBtn0) { try { scnBtn0.click(); } catch (e) {} }
+        else if (dragIdx === 1 && scnBtn1) { try { scnBtn1.click(); } catch (e) {} }
+        else if (dragIdx === 2 && scnBtn2) { try { scnBtn2.click(); } catch (e) {} }
+      }
+      function syncSurveillanceFlow(dragIdx) {
+        if (kind !== 'surveillanceflow') return;
+        var trailSec = document.querySelector('.wk-canada-case-trail');
+        if (!trailSec) return;
+        if (dragIdx === 0) {
+          var tabs = trailSec.querySelectorAll('.wk-case-file-tab');
+          if (tabs[0]) { try { tabs[0].click(); } catch (e) {} }
+          var revealBtn0 = trailSec.querySelector('.wk-case-reveal');
+          if (revealBtn0) { try { revealBtn0.click(); } catch (e) {} }
+        } else if (dragIdx === 1) {
+          var revealBtn1 = trailSec.querySelector('.wk-case-reveal');
+          if (revealBtn1) { try { revealBtn1.click(); revealBtn1.click(); revealBtn1.click(); } catch (e) {} }
+        } else if (dragIdx === 2) {
+          var revealBtn2 = trailSec.querySelector('.wk-case-reveal');
+          while (revealBtn2) {
+            try { revealBtn2.click(); } catch (e) {}
+            revealBtn2 = trailSec.querySelector('.wk-case-reveal');
+          }
+          var claimBtns = trailSec.querySelectorAll('.wk-case-claim button');
+          if (claimBtns.length > 1) {
+            try { claimBtns[1].click(); } catch (e) {}
+          }
+        }
+      }
+      function syncDefaultBoard(dragIdx) {
+        if (kind !== 'defaultboard') return;
+        var lab = document.querySelector('.wk-default-lab');
+        if (!lab) return;
+        if (dragIdx === 0) {
+          var cases = lab.querySelectorAll('.wk-default-case');
+          if (cases.length > 1) { try { cases[1].click(); } catch (e) {} }
+        } else if (dragIdx === 1) {
+          var sw = lab.querySelector('.wk-default-switch');
+          if (sw) { try { sw.click(); } catch (e) {} }
+        } else if (dragIdx === 2) {
+          var systemicBtn = lab.querySelector('.wk-default-test button:last-of-type');
+          if (systemicBtn) { try { systemicBtn.click(); } catch (e) {} }
+        }
+      }
+      function syncSystemAnatomy(dragIdx) {
+        if (kind !== 'toolkit') return;
+        var lab = document.querySelector('.wk-anatomy-lab');
+        if (!lab) return;
+        var unplaced = lab.querySelectorAll('.wk-anatomy-part:not(.is-placed)');
+        if (dragIdx === 0) {
+          if (unplaced[0]) { try { unplaced[0].click(); } catch (e) {} }
+          if (unplaced[1]) { try { unplaced[1].click(); } catch (e) {} }
+        } else if (dragIdx === 1) {
+          if (unplaced[2]) { try { unplaced[2].click(); } catch (e) {} }
+          if (unplaced[3]) { try { unplaced[3].click(); } catch (e) {} }
+        } else if (dragIdx === 2) {
+          var remaining = lab.querySelectorAll('.wk-anatomy-part:not(.is-placed)');
+          remaining.forEach(function (btn) { try { btn.click(); } catch (e) {} });
+          var strongLens = lab.querySelector('.wk-anatomy-analysis button:last-of-type');
+          if (strongLens) { try { strongLens.click(); } catch (e) {} }
+        }
+      }
+      function syncRhsGovernance(dragIdx) {
+        if (kind !== 'datastory') return;
+        var lab = document.querySelector('.wk-rhs-lab');
+        if (!lab) return;
+        var cards = lab.querySelectorAll('.wk-rhs-principle button');
+        if (dragIdx === 0) {
+          if (cards[0]) { try { cards[0].click(); } catch (e) {} }
+          if (cards[1]) { try { cards[1].click(); } catch (e) {} }
+        } else if (dragIdx === 1) {
+          if (cards[2]) { try { cards[2].click(); } catch (e) {} }
+          if (cards[3]) { try { cards[3].click(); } catch (e) {} }
+        } else if (dragIdx === 2) {
+          var scopeBtns = lab.querySelectorAll('.wk-rhs-scope button');
+          if (scopeBtns.length > 1) { try { scopeBtns[1].click(); } catch (e) {} }
+        }
+      }
+      function syncBenevolenceCases(dragIdx) {
+        if (kind !== 'promisefunnel') return;
+        var lab = document.querySelector('.wk-benevolence-lab');
+        if (!lab) return;
+        var cases = lab.querySelectorAll('.wk-benevolence-case');
+        if (dragIdx === 0) {
+          var openBtn = cases[0] && cases[0].querySelector('.wk-benevolence-promise button');
+          if (openBtn) { try { openBtn.click(); } catch (e) {} }
+        } else if (dragIdx === 1) {
+          var openBtn2 = cases[1] && cases[1].querySelector('.wk-benevolence-promise button');
+          if (openBtn2) { try { openBtn2.click(); } catch (e) {} }
+        } else if (dragIdx === 2) {
+          var judgeBtns = lab.querySelectorAll('.wk-benevolence-judgement button:last-of-type');
+          judgeBtns.forEach(function (btn) { try { btn.click(); } catch (e) {} });
+        }
+      }
+      function syncDctpPowerShift(dragIdx) {
+        if (kind !== 'repairtable') return;
+        var lab = document.querySelector('.wk-dctp-lab');
+        if (!lab) return;
+        var roles = lab.querySelectorAll('.wk-dctp-choice');
+        if (dragIdx === 0) {
+          var btn0 = roles[0] && roles[0].querySelector('button:last-of-type');
+          var btn1 = roles[1] && roles[1].querySelector('button:last-of-type');
+          if (btn0) { try { btn0.click(); } catch (e) {} }
+          if (btn1) { try { btn1.click(); } catch (e) {} }
+        } else if (dragIdx === 1) {
+          var btn2 = roles[2] && roles[2].querySelector('button:last-of-type');
+          if (btn2) { try { btn2.click(); } catch (e) {} }
+        } else if (dragIdx === 2) {
+          var btn3 = roles[3] && roles[3].querySelector('button:last-of-type');
+          if (btn3) { try { btn3.click(); } catch (e) {} }
+        }
+      }
+      function syncAidaHearing(dragIdx) {
+        if (kind !== 'policydeck') return;
+        var lab = document.querySelector('.wk-aida-lab');
+        if (!lab) return;
+        var tabs = lab.querySelectorAll('.wk-aida-tabs button');
+        if (dragIdx === 0) {
+          if (tabs[0]) { try { tabs[0].click(); } catch (e) {} }
+        } else if (dragIdx === 1) {
+          if (tabs[2]) { try { tabs[2].click(); } catch (e) {} }
+        } else if (dragIdx === 2) {
+          var optBtns = lab.querySelectorAll('.wk-aida-docket section button');
+          var activeTab = lab.querySelector('.wk-aida-tabs button.on');
+          var currentTabIdx = activeTab ? Array.prototype.indexOf.call(tabs, activeTab) : 0;
+          if (currentTabIdx >= 0 && optBtns[currentTabIdx]) {
+            try { optBtns[currentTabIdx].click(); } catch (e) {}
+          } else if (optBtns[0]) {
+            try { optBtns[0].click(); } catch (e) {}
+          }
+        }
+      }
       if (kind === 'thresholdaudit' && typeof thPol === 'number' && nativeHandles[1]) {
         var initGate = nativeHandles[1];
         var initY = thPol === 0 ? -16 : (thPol === 2 ? 16 : 0);
@@ -5435,7 +5701,31 @@
           }
           var status = shell.querySelector('[data-gesture-status]');
           if (status && !button.hasAttribute('data-complete')) {
-            if (kind === 'thresholdaudit') {
+            if (kind === 'startermap') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Everyday Tool Advanced (+' + Math.round(x) + 'px)</b><small>Sliding ordinary tool to examination bench. Examining routine interface design and hidden assumptions.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Implicit Assumption Uncovered (' + Math.round(x) + 'px)</b><small>Tracing the design baseline: the tool presumes a standard user and renders others invisible or aberrant.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Personal Cartography Logged (' + Math.round(x) + 'px)</b><small>Recording initial cartography note: identifying who benefits, who is sorted, and what power dynamics are embedded.</small>';
+              }
+            } else if (kind === 'audit') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Benchmark Dataset Sweep (+' + Math.round(x) + 'px)</b><small>Inspecting aggregate accuracy benchmark. Overall high performance masks disparities in minority demographic slices.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Intersectional Slicing (' + Math.round(x) + 'px)</b><small>Disaggregating by gender and skin type: error rates soar up to 34.7% for darker-skinned females (Buolamwini & Gebru, 2018).</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Equity Mandate Applied (' + Math.round(x) + 'px)</b><small>Demanding intersectional accountability: commercial systems must be audited across compound demographic axes.</small>';
+              }
+            } else if (kind === 'surveillanceflow') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Border Checkpoint Advanced (+' + Math.round(x) + 'px)</b><small>Advancing traveler dossier. Opaque screening algorithms flag common or racialized names at port of entry.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Flag Propagation Traced (' + Math.round(x) + 'px)</b><small>Propagating watchlist token across Canadian databases (RCMP, CBSA, CSIS) without statutory transparency.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Redress Pathway Examined (' + Math.round(x) + 'px)</b><small>Testing administrative recourse: opaque evidence thresholds and structural delays leave affected individuals stranded.</small>';
+              }
+            } else if (kind === 'thresholdaudit') {
               if (dragIndex === '0') {
                 status.innerHTML = '<b>Station 1: Feature Compression Hopper</b><small>Crushing 14 multidimensional life factors (work, health, caregiving) into a single scalar score cylinder (0.64).</small>';
               } else if (dragIndex === '1') {
@@ -5448,6 +5738,70 @@
                 }
               } else if (dragIndex === '2') {
                 status.innerHTML = '<b>Station 3: Equity Balance Scale</b><small>Weighing qualitative appeals and contextual evidence against automated scores to provide human recourse.</small>';
+              }
+            } else if (kind === 'mechanismatch') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Housing Dossier Advanced (+' + Math.round(x) + 'px)</b><small>Sliding historical tenancy records to inspection lens. Redlining and past evictions enter the screener.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Optical Inspection Sweep (' + Math.round(x) + 'px)</b><small>Tracing the technical pipeline. Perceived race is substituted with geographic and credit proxies.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Mechanism Gear Engaged (' + Math.round(rotation) + '&deg;)</b><small>Matching outcome to the New Jim Code: reproducing historical exclusion under the guise of neutral data.</small>';
+              }
+            } else if (kind === 'decisionpath') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Matched Dossier Intake (+' + Math.round(x) + 'px)</b><small>Feeding identical application files into the screener. Income, credit, and tenancy records are strictly controlled.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Name-Proxy Scoring Switch (' + Math.round(y) + 'px)</b><small>Converting applicant names into racialized proxies based on biased historical approval training sets.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Track Fork Divergence (' + Math.round(x) + 'px)</b><small>Rerouting applicants: Christopher Parker &rarr; Fast-track Approval; Ali Khan &rarr; Extra Proof Audit; Tyrone Smith &rarr; Denial.</small>';
+              }
+            } else if (kind === 'defaultboard') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Speech Dialect Switch (' + Math.round(x) + 'px)</b><small>Testing voice recognition. Standard Midwestern accent passes; African American Vernacular English (AAVE) fails.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Credit Baseline Calibrated (' + Math.round(x) + 'px)</b><small>Shifting economic default from intergenerational wealth proxies to on-time rent payment histories.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Sensor Exposure Tuning (' + Math.round(y) + 'px)</b><small>Adjusting optical dynamic range. Default camera sensors fail on dark skin tones without custom calibration.</small>';
+              }
+            } else if (kind === 'toolkit') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Data & Rules Substrate (+' + Math.round(x) + 'px)</b><small>Extracting training corpora. Historical records are not neutral facts; they encode past institutional exclusions.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Algorithmic Gate Deployed (' + Math.round(y) + 'px)</b><small>Inference engine converting multidimensional human lives into binary administrative triage.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Feedback Circuit Connected (' + Math.round(x) + 'px)</b><small>Testing institutional recourse. Without mandatory appeal pathways, algorithmic errors become permanent.</small>';
+              }
+            } else if (kind === 'datastory') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: RHS Dossier Custody (+' + Math.round(x) + 'px)</b><small>Moving First Nations health records from colonial extraction to collective community authority.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: OCAP&reg; Protocol Token (' + Math.round(x) + 'px)</b><small>Enforcing Ownership, Control, Access, and Possession. External access requires continuous community consent.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Sovereignty Boundary Sealed (' + Math.round(x) + 'px)</b><small>Defending Indigenous Data Sovereignty: distinguishing community-led governance from corporate ethics checkboxes.</small>';
+              }
+            } else if (kind === 'promisefunnel') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Benevolent Promise Inspected (+' + Math.round(x) + 'px)</b><small>Electronic monitors promise home release instead of jail: a genuine, tangible benefit for families.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: X-Ray Scanner Beam (' + Math.round(y) + 'px)</b><small>Penetrating benevolent rhetoric: monitors convert the home into a prison and impose punitive user fees.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Power & Burden Test (' + Math.round(x) + 'px)</b><small>Weighing structural reality: an intervention is not a repair if the vulnerable person cannot refuse surveillance.</small>';
+              }
+            } else if (kind === 'repairtable') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Community Digital Stewards Rooted (+' + Math.round(x) + 'px)</b><small>Deploying Detroit Digital Stewards: replacing external telecom consultants with neighborhood experts.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Rooftop Mesh Node Mounted (' + Math.round(y) + 'px)</b><small>Building autonomous community infrastructure: hardware owned and maintained by local residents.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Governance Authority Shifted (' + Math.round(x) + 'px)</b><small>Transferring network rules to Community Agreements: true repair alters who holds structural power.</small>';
+              }
+            } else if (kind === 'policydeck') {
+              if (dragIndex === '0') {
+                status.innerHTML = '<b>Station 1: Bill C-27 Docket Inspected (+' + Math.round(x) + 'px)</b><small>Opening the proposed AIDA text: historical case study of corporate capture and procedural gaps.</small>';
+              } else if (dragIndex === '1') {
+                status.innerHTML = '<b>Station 2: Statutory Gap Magnified (' + Math.round(x) + 'px)</b><small>Exposing Gap 3: AI Commissioner housed within ISED Ministry lacks statutory independence.</small>';
+              } else if (dragIndex === '2') {
+                status.innerHTML = '<b>Station 3: Institutional Remedy Applied (' + Math.round(x) + 'px)</b><small>Applying Attard-Frost recommendation: establish an Independent Parliamentary AI Commissioner with audit powers.</small>';
               }
             } else if (dragType === 'vertical' && dragIndex === '1') {
               if (y < -12) {
@@ -5467,7 +5821,45 @@
           var result = button.getAttribute('data-drag-result') || 'The model changed. Read the explanation below.';
           var header = 'Object explored';
           var dragIndex = button.getAttribute('data-drag-index');
-          if (kind === 'thresholdaudit') {
+          if (kind === 'startermap') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Everyday Tool Examined';
+              result = 'Routine technologies are not neutral instruments. Search bars, cameras, and web forms encode unexamined social assumptions into daily life.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Hidden Assumption Exposed';
+              result = 'Systemic design default revealed: standard interfaces treat dominant user groups as default while penalizing or excluding alternative experiences.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Personal Cartography Logged';
+              result = 'Your first cartographic entry is active. Critical mapping begins by noticing who is categorized, monitored, or excluded by ordinary systems.';
+            }
+            syncStarterMap(Number(dragIndex));
+            persist();
+          } else if (kind === 'audit') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Aggregate Metric Inspected';
+              result = 'Commercial systems boast 90%+ aggregate accuracy. Joy Buolamwini and Timnit Gebru showed that headline averages routinely conceal catastrophic subgroup failures.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Intersectional Disparities Exposed';
+              result = 'Gender Shades benchmark: lighter males achieve 99% accuracy while darker females suffer up to 34.7% error rates across IBM, Microsoft, and Face++.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Intersectional Mandate Enforced';
+              result = 'Auditing across compound axes (race and gender together) is mandatory. Without intersectional analysis, algorithmic bias remains invisible to aggregate testing.';
+            }
+            persist();
+          } else if (kind === 'surveillanceflow') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Border Flag Created';
+              result = 'Watchlist algorithms generate false positives on common and racialized names, initiating an opaque chain of automated security scrutiny.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Flag Replicated Across Databases';
+              result = 'Border flags propagate automatically into intelligence, policing, and international databases without judicial review or corroborating evidence.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Administrative Recourse Blocked';
+              result = 'Canadian case analysis reveals that algorithmic redress bottlenecks deny individuals meaningful access to evidence, making administrative correction nearly impossible.';
+            }
+            syncSurveillanceFlow(Number(dragIndex));
+            persist();
+          } else if (kind === 'thresholdaudit') {
             var y = Number(button.getAttribute('data-drag-y')) || 0;
             if (dragIndex === '0') {
               header = 'Station 1: Feature Compression Hopper';
@@ -5488,6 +5880,110 @@
               header = 'Recourse Activated: Human Context Restored';
               result = 'Devlin (2023) notes that inequality without the algorithm requires human oversight, appeal pathways, and administrative accountability to correct automated sorting errors.';
             }
+          } else if (kind === 'mechanismatch') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Unequal Outcome Documented';
+              result = 'Oakwood tenancy records contain historical redlining and eviction flags. Treating past records as neutral inputs ensures past discrimination dictates present housing access.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: New Jim Code Mechanism Traced';
+              result = 'Ruha Benjamin demonstrates that algorithms substitute geographic and credit proxies for racial identity, automating discrimination without requiring explicit racist intent.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Critical Match Confirmed';
+              result = 'Outcome confirmed: racialized history enters the screener, technical proxies automate exclusion, and resulting denials appear objective. Synchronized with matching activity below.';
+            }
+            syncMechanismMatch(Number(dragIndex));
+            persist();
+          } else if (kind === 'decisionpath') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Identical Qualifications Controlled';
+              result = 'All applicants share identical verified income, clean rental histories, and stellar references. Any divergence in routing stems entirely from algorithmic proxy treatment.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Name Racialization Active';
+              result = 'Phonemic patterns in applicant names are converted into racial proxies, activating biased historical approval thresholds. Synchronized with the audit stages below.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Divergent Routes Manifest';
+              result = 'Identical files diverge into three unequal paths: automatic approval, burdensome documentation demands, and automated rejection. Audit findings unlocked below.';
+            }
+            syncDecisionPath(Number(dragIndex));
+            persist();
+          } else if (kind === 'defaultboard') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Linguistic Default Challenged';
+              result = 'Speech models calibrated on Midwestern white speech penalize African American Vernacular English (AAVE), forcing marginalized speakers to carry the burden of adaptation.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Economic Default Overturned';
+              result = 'Default credit algorithms require intergenerational wealth profiles. Challenging the default incorporates on-time rent and utility payments.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Benjamin\'s Systemic Test Passed';
+              result = 'The failure is not an incidental glitch; it is a standing design preset that repeatedly privileges the default user and penalizes the rest.';
+            }
+            syncDefaultBoard(Number(dragIndex));
+            persist();
+          } else if (kind === 'toolkit') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Data & Rules Substrate Placed';
+              result = 'Kate Crawford and Vladan Joler emphasize that AI systems are constructed on extracted labor, biased historical records, and arbitrary classification boundaries.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Algorithmic Deployment Connected';
+              result = 'Deployment transforms statistical correlations into consequential institutional life decisions (hiring, housing, bail, policing).';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Whole-System Anatomy Complete';
+              result = 'The harm is not caused by one bad actor; it is produced by the interlocking chain of data, rules, deployment, and broken feedback loops.';
+            }
+            syncSystemAnatomy(Number(dragIndex));
+            persist();
+          } else if (kind === 'datastory') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Collective Ownership Established';
+              result = 'First Nations Information Governance Centre (FNIGC): First Nations communities retain collective ownership of their cultural, demographic, and health data.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: OCAP® Access Protocols Enforced';
+              result = 'Access to published research reports does not grant external entities ownership or secondary data rights. Continuous community consent is mandatory.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Indigenous Data Sovereignty Protected';
+              result = 'Governance authority returned to Indigenous nations. OCAP® principles protect community self-determination against extractive research practices.';
+            }
+            syncRhsGovernance(Number(dragIndex));
+            persist();
+          } else if (kind === 'promisefunnel') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Helpful Promise Acknowledged';
+              result = 'Virginia Eubanks and Ruha Benjamin remind us: keep the genuine benefit in view. Technological benevolence always begins with a real, appealing promise of help.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Hidden Carceral Mechanism Exposed';
+              result = 'The digital monitor expands state surveillance into private family homes, imposes exorbitant daily rental fees, and triggers automated re-arrest for minor glitches.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Structural Power Test Applied';
+              result = 'A benefit does not prove structural repair. When the vulnerable person has no power to refuse surveillance or alter the underlying conditions, the benevolence is punitive.';
+            }
+            syncBenevolenceCases(Number(dragIndex));
+            persist();
+          } else if (kind === 'repairtable') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Community Digital Stewards Rooted';
+              result = 'Detroit Community Technology Project (DCTP): Community residents are trained as infrastructure designers, educators, and stewards of neighborhood wireless mesh.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Autonomous Mesh Hardware Deployed';
+              result = 'Physical infrastructure built and owned by residents. Rooftop solar-powered mesh nodes provide resilient local connectivity independent of corporate telecom gatekeepers.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Governance Power Shift Reconstructed';
+              result = 'Transformative repair achieved: residents hold governance authority through Community Technology Agreements, safeguarding privacy and preventing corporate exploitation.';
+            }
+            syncDctpPowerShift(Number(dragIndex));
+            persist();
+          } else if (kind === 'policydeck') {
+            if (dragIndex === '0') {
+              header = 'Station 1: Bill C-27 / AIDA File Inspected';
+              result = 'Attard-Frost (2023): AIDA was a proposed federal framework that died on the order paper. Analysing its argued gaps reveals key structural challenges in AI governance.';
+            } else if (dragIndex === '1') {
+              header = 'Station 2: Institutional Conflict of Interest Exposed';
+              result = 'Housing the AI and Data Commissioner within the Department of Industry (ISED) compromises regulatory independence by subordinating human rights protection to commercial promotion.';
+            } else if (dragIndex === '2') {
+              header = 'Station 3: Statutory Recommendation Matched';
+              result = 'Policy remedy aligned: an Independent Parliamentary AI Commissioner with binding investigative powers, mandatory public consultation, and enforceable human rights protections.';
+            }
+            syncAidaHearing(Number(dragIndex));
+            persist();
           }
           if (status) {
             status.classList.add('is-complete');
@@ -5628,10 +6124,30 @@
       function resetGestures(e) {
         if (e) { e.preventDefault(); e.stopPropagation(); }
         nativeHandles.forEach(resetHandlePosition);
-        if (kind === 'thresholdaudit') {
+        if (kind === 'startermap') {
+          syncStarterMap(0);
+        } else if (kind === 'surveillanceflow') {
+          syncSurveillanceFlow(0);
+        } else if (kind === 'thresholdaudit') {
           syncThresholdPolicy(1);
-          persist();
+        } else if (kind === 'mechanismatch') {
+          syncMechanismMatch(0);
+        } else if (kind === 'decisionpath') {
+          syncDecisionPath(0);
+        } else if (kind === 'defaultboard') {
+          syncDefaultBoard(0);
+        } else if (kind === 'toolkit') {
+          syncSystemAnatomy(0);
+        } else if (kind === 'datastory') {
+          syncRhsGovernance(0);
+        } else if (kind === 'promisefunnel') {
+          syncBenevolenceCases(0);
+        } else if (kind === 'repairtable') {
+          syncDctpPowerShift(0);
+        } else if (kind === 'policydeck') {
+          syncAidaHearing(0);
         }
+        persist();
         if (holo && holo.resetManipulation) holo.resetManipulation();
         canvas.removeAttribute('data-dragged');
         canvas.removeAttribute('data-drag-target');

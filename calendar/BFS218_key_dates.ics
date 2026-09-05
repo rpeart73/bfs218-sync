@@ -1,10 +1,7 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//BFS218 Companion//Key Dates//EN
+PRODID:-//Seneca//BFS218 Fall 2026//EN
 CALSCALE:GREGORIAN
-METHOD:PUBLISH
-X-WR-CALNAME:BFS218 Synchronous Key Dates (Fall 2026)
-X-WR-TIMEZONE:America/Toronto
 BEGIN:VEVENT
 DTSTAMP:20260902T160000Z
 SEQUENCE:3
@@ -134,86 +131,6 @@ END:VEVENT
 BEGIN:VEVENT
 DTSTAMP:20260902T160000Z
 SEQUENCE:3
-UID:bfs218-sync-notebook-1-open@rpeart73.github.io
-DTSTART;VALUE=DATE:20260915
-DTEND;VALUE=DATE:20260916
-SUMMARY:BFS218: Live Systems Notebook Set 1 opens
-DESCRIPTION:Complete three private notes by October 18.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =map-exchange
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-hearing-preview@rpeart73.github.io
-DTSTART;VALUE=DATE:20260921
-DTEND;VALUE=DATE:20260922
-SUMMARY:BFS218: Canadian Technology Hearing pathways open
-DESCRIPTION:Choose one documented Canadian case. The full room opens Octo
- ber 13.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =case-file
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-hearing-full@rpeart73.github.io
-DTSTART;VALUE=DATE:20261013
-DTEND;VALUE=DATE:20261014
-SUMMARY:BFS218: Canadian Technology Hearing full room opens
-DESCRIPTION:Complete the evidence board and hearing preparation in Blackb
- oard.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =case-file
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-notebook-1-due@rpeart73.github.io
-DTSTART;VALUE=DATE:20261018
-DTEND;VALUE=DATE:20261019
-SUMMARY:BFS218: Live Systems Notebook Set 1 due (10 percent)
-DESCRIPTION:Three private notes are due by 11:59 p.m. Eastern in Blackboa
- rd.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =map-exchange
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218: Live Systems Notebook Set 1 due (10 percent) in 2 day
- s
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-decision-open@rpeart73.github.io
-DTSTART;VALUE=DATE:20261019
-DTEND;VALUE=DATE:20261020
-SUMMARY:BFS218: Decision Lab opens
-DESCRIPTION:Complete the scenario choices and reflection in Blackboard.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =compass-check
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-decision-due@rpeart73.github.io
-DTSTART;VALUE=DATE:20261023
-DTEND;VALUE=DATE:20261024
-SUMMARY:BFS218: Decision Lab due (20 percent)
-DESCRIPTION:Due by 11:59 p.m. Eastern in Blackboard.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =compass-check
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218: Decision Lab due (20 percent) in 2 days
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
 UID:bfs218-sync-study-week@rpeart73.github.io
 DTSTART;VALUE=DATE:20261026
 DTEND;VALUE=DATE:20261031
@@ -222,165 +139,101 @@ DESCRIPTION:Study Week runs October 26 to 30. No class\, new module\, or
  graded work is due.
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-repair-anchor@rpeart73.github.io
-DTSTART;VALUE=DATE:20261102
-DTEND;VALUE=DATE:20261103
-SUMMARY:BFS218: Design the Repair Studio anchor choice opens
-DESCRIPTION:Choose the diagnosed harm you will repair.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =repair
+UID:bfs218-sync-_27272607_1-release@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20260915T040100Z
+SUMMARY:BFS218: Live Systems Notebook: Set 1 opens (10%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272607_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-cartography-m1@rpeart73.github.io
-DTSTART;VALUE=DATE:20261102
-DTEND;VALUE=DATE:20261103
-SUMMARY:BFS218: Personal Cartography Milestone 1 opens
-DESCRIPTION:Begin the five-point route in Blackboard.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =cartography
+UID:bfs218-sync-_27272607_1-due@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261019T035902Z
+SUMMARY:BFS218: Live Systems Notebook: Set 1 due (10%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272607_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-notebook-2-open@rpeart73.github.io
-DTSTART;VALUE=DATE:20261103
-DTEND;VALUE=DATE:20261104
-SUMMARY:BFS218: Live Systems Notebook Set 2 opens
-DESCRIPTION:Complete three new private notes by November 29.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =map-exchange
+UID:bfs218-sync-_27375478_1-release@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261019T040100Z
+SUMMARY:BFS218: Decision Lab: Scenario Choices and Reflection opens (20%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27375478_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-hearing-due@rpeart73.github.io
-DTSTART;VALUE=DATE:20261106
-DTEND;VALUE=DATE:20261107
-SUMMARY:BFS218: Canadian Technology Hearing due (20 percent)
-DESCRIPTION:The evidence board\, hearing statement\, and follow-up respon
- se are due by 11:59 p.m. Eastern.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =case-file
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218: Canadian Technology Hearing due (20 percent) in 2 day
- s
-END:VALARM
+UID:bfs218-sync-_27375478_1-due@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261024T035900Z
+SUMMARY:BFS218: Decision Lab: Scenario Choices and Reflection due (20%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27375478_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-cartography-m2@rpeart73.github.io
-DTSTART;VALUE=DATE:20261116
-DTEND;VALUE=DATE:20261117
-SUMMARY:BFS218: Personal Cartography Milestone 2 opens
-DESCRIPTION:Develop the route across both halves of the course.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =cartography
+UID:bfs218-sync-_27272519_1-release@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261013T040100Z
+SUMMARY:BFS218: Canadian Technology Hearing opens (20%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272519_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-repair-open@rpeart73.github.io
-DTSTART;VALUE=DATE:20261123
-DTEND;VALUE=DATE:20261124
-SUMMARY:BFS218: Design the Repair Studio opens
-DESCRIPTION:Build the individual prototype and feedback revision.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =repair
+UID:bfs218-sync-_27272519_1-due@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261107T045900Z
+SUMMARY:BFS218: Canadian Technology Hearing due (20%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272519_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-notebook-2-due@rpeart73.github.io
-DTSTART;VALUE=DATE:20261129
-DTEND;VALUE=DATE:20261130
-SUMMARY:BFS218: Live Systems Notebook Set 2 due (10 percent)
-DESCRIPTION:Three new private notes are due by 11:59 p.m. Eastern in Blac
- kboard.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =map-exchange
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218: Live Systems Notebook Set 2 due (10 percent) in 2 day
- s
-END:VALARM
+UID:bfs218-sync-_27272710_1-release@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261103T050100Z
+SUMMARY:BFS218: Live Systems Notebook: Set 2 opens (10%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272710_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-cartography-final@rpeart73.github.io
-DTSTART;VALUE=DATE:20261130
-DTEND;VALUE=DATE:20261201
-SUMMARY:BFS218: Personal Cartography Milestone 3 and final area open
-DESCRIPTION:Complete the five-point route and final project.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =cartography
+UID:bfs218-sync-_27272710_1-due@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261130T045920Z
+SUMMARY:BFS218: Live Systems Notebook: Set 2 due (10%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272710_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-repair-due@rpeart73.github.io
-DTSTART;VALUE=DATE:20261204
-DTEND;VALUE=DATE:20261205
-SUMMARY:BFS218: Design the Repair Studio due (20 percent)
-DESCRIPTION:The individual design and rationale are due by 11:59 p.m. Eas
- tern.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =repair
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218: Design the Repair Studio due (20 percent) in 2 days
-END:VALARM
+UID:bfs218-sync-_27272587_1-release@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261123T050100Z
+SUMMARY:BFS218: Design the Repair Studio opens (20%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272587_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260902T160000Z
-SEQUENCE:3
-UID:bfs218-sync-cartography-due@rpeart73.github.io
-DTSTART;VALUE=DATE:20261211
-DTEND;VALUE=DATE:20261212
-SUMMARY:BFS218: Personal Cartography due (15 percent)
-DESCRIPTION:The final project is due by 11:59 p.m. Eastern in Blackboard.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =cartography
-BEGIN:VALARM
-TRIGGER:-P2D
-ACTION:DISPLAY
-DESCRIPTION:BFS218: Personal Cartography due (15 percent) in 2 days
-END:VALARM
+UID:bfs218-sync-_27272587_1-due@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261205T045900Z
+SUMMARY:BFS218: Design the Repair Studio due (20%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272587_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260904T160000Z
-SEQUENCE:1
-UID:bfs218-sync-final-reflection-open@rpeart73.github.io
-DTSTART;VALUE=DATE:20261130
-DTEND;VALUE=DATE:20261201
-SUMMARY:BFS218: Final Learning Reflection opens (5 percent)
-DESCRIPTION:Review the five closing prompts and begin planning your responses. Blackboard contains the official instructions and submission link.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =final-reflection
+UID:bfs218-sync-_27272588_1-release@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261130T050100Z
+SUMMARY:BFS218: Personal Cartography opens (15%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272588_1
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20260904T160000Z
-SEQUENCE:4
-UID:bfs218-sync-final-reflection-due@rpeart73.github.io
-DTSTART;VALUE=DATE:20261213
-DTEND;VALUE=DATE:20261214
-SUMMARY:BFS218: Final Learning Reflection due (5 percent)
-DESCRIPTION:Five short closing responses are due by 11:59 p.m. Eastern in Blackboard.
-URL:https://rpeart73.github.io/bfs218-sync/?screen=assignment-details&asg
- =final-reflection
-BEGIN:VALARM
-TRIGGER:-P1D
-ACTION:DISPLAY
-DESCRIPTION:BFS218: Final Learning Reflection due (5 percent) tomorrow
-END:VALARM
+UID:bfs218-sync-_27272588_1-due@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261212T045900Z
+SUMMARY:BFS218: Personal Cartography due (15%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272588_1
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-_27359435_1-release@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261130T050000Z
+SUMMARY:BFS218: Final Learning Reflection opens (5%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27359435_1
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-_27359435_1-due@seneca-assessments
+DTSTAMP:20260905T030000Z
+DTSTART:20261214T045900Z
+SUMMARY:BFS218: Final Learning Reflection due (5%)
+DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27359435_1
 END:VEVENT
 END:VCALENDAR

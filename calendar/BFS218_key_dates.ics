@@ -140,100 +140,135 @@ DESCRIPTION:Study Week runs October 26 to 30. No class\, new module\, or
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272607_1-release@seneca-assessments
-DTSTAMP:20260905T030000Z
+DTSTAMP:20260906T030000Z
 DTSTART:20260915T040100Z
 SUMMARY:BFS218: Live Systems Notebook: Set 1 opens (10%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272607_1
+DESCRIPTION:Released September 15\, 2026 at 12:01 a.m. Eastern. Due September 25\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends September 27\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272607_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272607_1-due@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261019T035902Z
+DTSTAMP:20260906T030000Z
+DTSTART:20260926T035900Z
 SUMMARY:BFS218: Live Systems Notebook: Set 1 due (10%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272607_1
+DESCRIPTION:Released September 15\, 2026 at 12:01 a.m. Eastern. Due September 25\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends September 27\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272607_1
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-_27272607_1-window-end@seneca-assessments
+DTSTAMP:20260906T030000Z
+DTSTART:20260928T035900Z
+SUMMARY:BFS218: Live Systems Notebook: Set 1 48-hour window ends\, 11:59 p.m. ET (10%)
+DESCRIPTION:Released September 15\, 2026 at 12:01 a.m. Eastern. Due September 25\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends September 27\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272607_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27375478_1-release@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261019T040100Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261008T040100Z
 SUMMARY:BFS218: Decision Lab: Scenario Choices and Reflection opens (20%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27375478_1
+DESCRIPTION:Released October 8\, 2026 at 12:01 a.m. Eastern. Due October 13\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends October 15\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27375478_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27375478_1-due@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261024T035900Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261014T035900Z
 SUMMARY:BFS218: Decision Lab: Scenario Choices and Reflection due (20%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27375478_1
+DESCRIPTION:Released October 8\, 2026 at 12:01 a.m. Eastern. Due October 13\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends October 15\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27375478_1
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-_27375478_1-window-end@seneca-assessments
+DTSTAMP:20260906T030000Z
+DTSTART:20261016T035900Z
+SUMMARY:BFS218: Decision Lab: Scenario Choices and Reflection 48-hour window ends\, 11:59 p.m. ET (20%)
+DESCRIPTION:Released October 8\, 2026 at 12:01 a.m. Eastern. Due October 13\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends October 15\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27375478_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272519_1-release@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261013T040100Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261008T040100Z
 SUMMARY:BFS218: Canadian Technology Hearing opens (20%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272519_1
+DESCRIPTION:Released October 8\, 2026 at 12:01 a.m. Eastern. Due October 20\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends October 22\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272519_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272519_1-due@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261107T045900Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261021T035900Z
 SUMMARY:BFS218: Canadian Technology Hearing due (20%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272519_1
+DESCRIPTION:Released October 8\, 2026 at 12:01 a.m. Eastern. Due October 20\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends October 22\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272519_1
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-_27272519_1-window-end@seneca-assessments
+DTSTAMP:20260906T030000Z
+DTSTART:20261023T035900Z
+SUMMARY:BFS218: Canadian Technology Hearing 48-hour window ends\, 11:59 p.m. ET (20%)
+DESCRIPTION:Released October 8\, 2026 at 12:01 a.m. Eastern. Due October 20\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends October 22\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272519_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272710_1-release@seneca-assessments
-DTSTAMP:20260905T030000Z
+DTSTAMP:20260906T030000Z
 DTSTART:20261103T050100Z
 SUMMARY:BFS218: Live Systems Notebook: Set 2 opens (10%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272710_1
+DESCRIPTION:Released November 3\, 2026 at 12:01 a.m. Eastern. Due November 13\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends November 15\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272710_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272710_1-due@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261130T045920Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261114T045900Z
 SUMMARY:BFS218: Live Systems Notebook: Set 2 due (10%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272710_1
+DESCRIPTION:Released November 3\, 2026 at 12:01 a.m. Eastern. Due November 13\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends November 15\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272710_1
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-_27272710_1-window-end@seneca-assessments
+DTSTAMP:20260906T030000Z
+DTSTART:20261116T045900Z
+SUMMARY:BFS218: Live Systems Notebook: Set 2 48-hour window ends\, 11:59 p.m. ET (10%)
+DESCRIPTION:Released November 3\, 2026 at 12:01 a.m. Eastern. Due November 13\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends November 15\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/journal/_27272710_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272587_1-release@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261123T050100Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261116T050100Z
 SUMMARY:BFS218: Design the Repair Studio opens (20%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272587_1
+DESCRIPTION:Released November 16\, 2026 at 12:01 a.m. Eastern. Due November 29\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends December 1\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272587_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272587_1-due@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261205T045900Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261130T045900Z
 SUMMARY:BFS218: Design the Repair Studio due (20%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272587_1
+DESCRIPTION:Released November 16\, 2026 at 12:01 a.m. Eastern. Due November 29\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends December 1\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272587_1
+END:VEVENT
+BEGIN:VEVENT
+UID:bfs218-sync-_27272587_1-window-end@seneca-assessments
+DTSTAMP:20260906T030000Z
+DTSTART:20261202T045900Z
+SUMMARY:BFS218: Design the Repair Studio 48-hour window ends\, 11:59 p.m. ET (20%)
+DESCRIPTION:Released November 16\, 2026 at 12:01 a.m. Eastern. Due November 29\, 2026 at 11:59 p.m. Eastern. 48-hour no-penalty window ends December 1\, 2026 at 11:59 p.m. Eastern Time (ET). Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272587_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272588_1-release@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261130T050100Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261126T050100Z
 SUMMARY:BFS218: Personal Cartography opens (15%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272588_1
+DESCRIPTION:Released November 26\, 2026 at 12:01 a.m. Eastern. Due December 11\, 2026 at 11:59 p.m. Eastern. No automatic 48-hour window. Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272588_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27272588_1-due@seneca-assessments
-DTSTAMP:20260905T030000Z
+DTSTAMP:20260906T030000Z
 DTSTART:20261212T045900Z
 SUMMARY:BFS218: Personal Cartography due (15%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272588_1
+DESCRIPTION:Released November 26\, 2026 at 12:01 a.m. Eastern. Due December 11\, 2026 at 11:59 p.m. Eastern. No automatic 48-hour window. Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27272588_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27359435_1-release@seneca-assessments
-DTSTAMP:20260905T030000Z
-DTSTART:20261130T050000Z
+DTSTAMP:20260906T030000Z
+DTSTART:20261207T050100Z
 SUMMARY:BFS218: Final Learning Reflection opens (5%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27359435_1
+DESCRIPTION:Released December 7\, 2026 at 12:01 a.m. Eastern. Due December 13\, 2026 at 11:59 p.m. Eastern. No automatic 48-hour window. Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27359435_1
 END:VEVENT
 BEGIN:VEVENT
 UID:bfs218-sync-_27359435_1-due@seneca-assessments
-DTSTAMP:20260905T030000Z
+DTSTAMP:20260906T030000Z
 DTSTART:20261214T045900Z
 SUMMARY:BFS218: Final Learning Reflection due (5%)
-DESCRIPTION:Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27359435_1
+DESCRIPTION:Released December 7\, 2026 at 12:01 a.m. Eastern. Due December 13\, 2026 at 11:59 p.m. Eastern. No automatic 48-hour window. Routine extension requests must arrive before the posted deadline. Complete this assessment in Blackboard. https://learn.senecapolytechnic.ca/ultra/courses/_789991_1/assessment/test/_27359435_1
 END:VEVENT
 END:VCALENDAR

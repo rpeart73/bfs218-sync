@@ -285,7 +285,7 @@ window.BFS218_HOWTO = {
   },
   "assignments": {
    "title": "How to use Starting Your Assignment",
-   "intro": "The six assessment guides cover seven graded components and build toward one Personal Cartography across the term. These pages explain the arc, the rooms, the marking, the dates, and the AI rules, so the blank page never wins.",
+   "intro": "The six assignment guides cover seven graded components and build toward one Personal Cartography across the term. These pages explain the arc, the rooms, the marking, the dates, and the AI rules, so the blank page never wins.",
    "steps": [
     {
      "do": "Read the overview first.",
@@ -359,7 +359,7 @@ window.BFS218_HOWTO = {
     },
     {
      "do": "Scan the term at a glance.",
-     "detail": "All six assessment guides are visible from day one. Live Systems Notebook sets are due October 18 and November 29; Decision Lab is due October 23; Canadian Technology Hearing is due November 6; Design the Repair Studio is due December 4; Personal Cartography is due December 11; and the Final Learning Reflection is due December 13. Blackboard controls access and remains the official source."
+     "detail": "All six assignment guides are visible from day one. Live Systems Notebook sets are due October 18 and November 29; Decision Lab is due October 23; Canadian Technology Hearing is due November 6; Design the Repair Studio is due December 4; Personal Cartography is due December 11; and the Final Learning Reflection is due December 13. Blackboard controls access and remains the official source."
     },
     {
      "do": "Subscribe on your phone.",

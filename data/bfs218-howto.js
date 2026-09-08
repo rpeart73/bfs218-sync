@@ -59,8 +59,8 @@ window.BFS218_HOWTO = {
      "detail": "Every activity room uses a different sequence: a 3D scene, decision, experiment, design comparison, or assembly bench. Follow the numbered route, then use Sets A, B, and C to check what you can explain. Confident misses are the most valuable thing to review."
     },
     {
-     "do": "Close with the reflection and Generate Your Weekly Notes.",
-     "detail": "Rate the same ideas you rated in Before you begin, write your reflection, then generate the Word file. It collects your week into one organized record on Seneca letterhead."
+     "do": "Carry the reflection question forward.",
+     "detail": "Carry the week's reflection question forward. A separate written response is not required. You may keep private notes and download them if useful."
     }
    ],
    "saves": "When browser storage is available, a temporary copy of ratings, notes, practice results, and reflections may remain on this device. Browser settings, private browsing, clearing site data, shared-device use, or changing devices can prevent or remove it. Generate Your Weekly Notes downloads a separate file; protect that file according to where you save it.",
@@ -285,7 +285,7 @@ window.BFS218_HOWTO = {
   },
   "assignments": {
    "title": "How to use Starting Your Assignment",
-   "intro": "The six assignment guides cover seven graded components and build toward one Personal Cartography across the term. These pages explain the arc, the rooms, the marking, the dates, and the AI rules, so the blank page never wins.",
+   "intro": "This page explains the seven graded assignments and helps you plan a starting point. Preview the guides here; use Blackboard for the full instructions, release conditions and submission.",
    "steps": [
     {
      "do": "Read the overview first.",
@@ -359,7 +359,7 @@ window.BFS218_HOWTO = {
     },
     {
      "do": "Scan the term at a glance.",
-     "detail": "All six assignment guides are visible from day one. Live Systems Notebook sets are due October 18 and November 29; Decision Lab is due October 23; Canadian Technology Hearing is due November 6; Design the Repair Studio is due December 4; Personal Cartography is due December 11; and the Final Learning Reflection is due December 13. Blackboard controls access and remains the official source."
+     "detail": "Check the calendar for each assignment's release date, due date and any no-penalty submission window. Blackboard controls when you can open and submit the assignment. The companion website remains available for preview."
     },
     {
      "do": "Subscribe on your phone.",
